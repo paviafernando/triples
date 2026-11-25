@@ -1,0 +1,16 @@
+{
+  "id": "triples",
+  "name": "Triples",
+  "emoji": "🏀",
+  "color": "#ff9f1c",
+  "group": "Destreza",
+  "order": 40,
+  "desc": "Concurso de triples con Curry, LeBron, Manu y tu propio cabezón. ¡Tirá con el celu de verdad!",
+  "tags": ["🏆 Concurso", "📱 Modo simulación", "👑 Modo princesa"],
+  "url": "https://triples-one.vercel.app",
+  "players": { "min": 1, "max": 8 },
+  "tv": "/?hub={code}",
+  "pad": "/?c={code}&hub={code}",
+  "solo": "/",
+  "offline": "/"
+}
