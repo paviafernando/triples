@@ -766,7 +766,7 @@ function updateHUD() {
 }
 function hintText() {
   if (!G) return '';
-  if (G.input === 'swipe') return IS_TOUCH ? 'Deslizá hacia arriba hasta la zona verde y soltá' : 'Arrastrá hacia arriba con el mouse · o usá el 0 / espacio';
+  if (G.input === 'swipe') return IS_TOUCH ? 'Tirá con un latigazo hacia arriba: rápido = fuerte, llená el anillo hasta la zona verde' : 'Arrastrá rápido hacia arriba con el mouse · o usá el 0 / espacio';
   if (G.input === 'meter') return IS_TOUCH ? 'Mantené apretado y soltá en la zona verde' : 'Apretá 0 para tirar y otra vez (o soltá) en la zona verde';
   return '';
 }
@@ -849,49 +849,46 @@ function renderGame(t) {
     ctx.fillStyle = m > 1 + z * 0.3 ? '#ff5a5a' : '#ffd23f'; ctx.fillRect(mx, fy, mw, my + mh - fy);
     ctx.fillStyle = '#fff'; ctx.fillRect(mx - 8, top - 2, mw + 16, 4);
   }
-  // guía de deslizar
-  if (G.input === 'swipe' && (G.phase === 'ready' || G.swipe)) {
-    var s0 = G.swipe ? G.swipe.y0 : h * 0.82, x0 = G.swipe ? G.swipe.x0 : w / 2, P0 = swipeP0(), bandH = h * 0.06;
-    var by = s0 - P0 * h;
-    ctx.fillStyle = 'rgba(60,196,124,.25)'; ctx.strokeStyle = 'rgba(60,196,124,.9)'; ctx.lineWidth = 3; ctx.setLineDash([10, 8]);
-    rrect(ctx, x0 - w * 0.09, by - bandH / 2, w * 0.18, bandH, 14); ctx.fill(); ctx.stroke(); ctx.setLineDash([]);
-    if (G.swipe && G.swipe.pts.length > 1) {
-      ctx.strokeStyle = 'rgba(255,255,255,.8)'; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.beginPath();
-      G.swipe.pts.forEach(function (q, i) { if (i) ctx.lineTo(q[0], q[1]); else ctx.moveTo(q[0], q[1]); }); ctx.stroke();
-    }
-    if (!G.swipe) Court.drawBallScreen(ctx, x0, s0, h * 0.045, t, isMoney(G.spot, G.ball), S.prefs.theme === 'princess');
+  // gesto de tiro (estela + anillo de potencia)
+  var dtF = Math.min(0.05, t - (G._lf || t)); G._lf = t;
+  if (G.input === 'swipe' && (G.phase === 'ready' || G.phase === 'set' || flick.busy())) {
+    var pr = S.prefs.theme === 'princess', mon = isMoney(G.spot, G.ball), pP = P();
+    flick.draw(ctx, dtF, { ballX: w / 2, ballY: h * 0.8, r: Math.min(w, h) * 0.055, fire: (pP.streak || 0) >= 3, zone: aimZone(),
+      drawBall: function (c2, x, y, r) { Court.drawBallScreen(c2, x, y, r, 0, mon, pr); } });
   }
+  G.aim = flick.preview();
+  document.body.classList.toggle('flicking', flick.active);
+  if (G.aim) { var sk0 = P().sk, D0 = DIFFS[G.diff]; G.aim.k = (1.25 - sk0.tiro / 100 * 0.5) * D0.help * (G.diff === 'facil' ? 0.8 : 1); }
 }
-function swipeP0() { return 0.36; }
+function aimZone() { return G.diff === 'facil' ? [0.72, 1.28] : G.diff === 'pro' ? [0.94, 1.06] : [0.88, 1.12]; }
+var flick = new Flick();
 
 /* ---------- toque / mouse en la cancha ---------- */
 cv.addEventListener('pointerdown', function (e) {
   ac(); if (!G || G.input === 'sim') return;
   var dpr = cv.width / cv.clientWidth, x = e.clientX * dpr, y = e.clientY * dpr;
-  if (G.input === 'swipe') { if (!canShoot()) return; G.swipe = { x0: x, y0: y, t0: performance.now(), pts: [[x, y]] }; try { cv.setPointerCapture(e.pointerId); } catch (er) {} }
+  if (G.input === 'swipe') { if (!canShoot()) return; flick.start(x, y, cv.height); try { cv.setPointerCapture(e.pointerId); } catch (er) {} }
   else { if (G.meter) { meterRelease(); meterTap = false; } else if (canShoot()) { meterStart(); meterTap = true; keyDownAt = performance.now(); } }
 });
 cv.addEventListener('pointermove', function (e) {
-  if (!G || !G.swipe) return; var dpr = cv.width / cv.clientWidth;
-  G.swipe.pts.push([e.clientX * dpr, e.clientY * dpr]); if (G.swipe.pts.length > 40) G.swipe.pts.shift();
-  if (G.phase === 'ready' && G.swipe.y0 - e.clientY * dpr > cv.height * 0.05) armShot();
+  if (!G || !flick.active) return; var dpr = cv.width / cv.clientWidth;
+  var evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+  for (var i = 0; i < evs.length; i++) flick.move(evs[i].clientX * dpr, evs[i].clientY * dpr);
+  if (G.phase === 'ready' && flick.y0 - e.clientY * dpr > cv.height * 0.05) armShot();
 });
-cv.addEventListener('pointerup', function (e) {
+function flickUp() {
+  if (!G || !flick.active) return false;
+  var r = flick.end();
+  if (!r) { if (G.phase === 'set') G.phase = 'ready'; return true; }
+  shootWith({ pe: r.pe, ae: r.ae, kind: 'swipe' });
+  return true;
+}
+cv.addEventListener('pointerup', function () {
   if (!G) return;
-  if (G.swipe) {
-    var dpr = cv.width / cv.clientWidth, sw = G.swipe, x = e.clientX * dpr, y = e.clientY * dpr; G.swipe = null;
-    var dy = (sw.y0 - y) / cv.height, dx = (x - sw.x0) / cv.height;
-    if (dy < 0.08 || performance.now() - sw.t0 > 2500) { if (G.phase === 'set') G.phase = 'ready'; return; }
-    var r = swipeInput(dy, dx);
-    shootWith({ pe: r.pe, ae: r.ae, kind: 'swipe' });
-    return;
-  }
+  if (flickUp()) return;
   if (G.meter && meterTap && performance.now() - keyDownAt > 200) { meterRelease(); meterTap = false; }
 });
-function swipeInput(dy, dx) {
-  var P0 = swipeP0(), dev = Math.atan2(dx, dy) * 180 / Math.PI;
-  return { pe: (dy - P0) / P0 * 0.075, ae: dev * 0.13 };
-}
+cv.addEventListener('pointercancel', function () { if (flick.active) { flick.cancel(); if (G && G.phase === 'set') G.phase = 'ready'; } });
 
 /* ---------- simulación con el celu en este mismo dispositivo ---------- */
 var simHold = null;
@@ -1162,19 +1159,29 @@ function startPad(c0) {
     });
   };
   // deslizar en el celu
-  var sw = null, area = $('#pSwipe');
-  area.addEventListener('pointerdown', function (e) { ac(); sw = { x: e.clientX, y: e.clientY, t: performance.now() }; try { area.setPointerCapture(e.pointerId); } catch (er) {} var b = area.querySelector('.ballx'); b.style.left = e.clientX - area.getBoundingClientRect().left + 'px'; b.style.top = (e.clientY - area.getBoundingClientRect().top - 45) + 'px'; b.style.bottom = 'auto'; placeBand(e.clientY); });
-  area.addEventListener('pointermove', function (e) { if (!sw) return; var b = area.querySelector('.ballx'), r = area.getBoundingClientRect(); b.style.left = e.clientX - r.left + 'px'; b.style.top = (e.clientY - r.top - 45) + 'px'; });
-  area.addEventListener('pointerup', function (e) {
-    if (!sw) return; var H = innerHeight, dy = (sw.y - e.clientY) / H, dx = (e.clientX - sw.x) / H, el = performance.now() - sw.t; sw = null;
-    var b = area.querySelector('.ballx'); b.style.top = ''; b.style.bottom = '16%'; b.style.left = '50%'; area.querySelector('.band').style.top = '';
-    if (dy < 0.06 || el > 1500) return;
-    var P0 = 0.3, dev = Math.atan2(dx, dy) * 180 / Math.PI;
+  var sw = null, area = $('#pSwipe'), pcv = $('#pSwipeCv'), pctx = pcv.getContext('2d'), pf = new Flick(), pLast = 0;
+  var pScale = function () { return pcv.width / pcv.clientWidth; };
+  var fitP = function () { var dpr = Math.min(2, devicePixelRatio || 1); pcv.width = Math.round(pcv.clientWidth * dpr); pcv.height = Math.round(pcv.clientHeight * dpr); };
+  var padLoop = function (now) {
+    if (!$('#pSwipe').classList.contains('hidden')) {
+      if (pcv.width !== Math.round(pcv.clientWidth * Math.min(2, devicePixelRatio || 1))) fitP();
+      var dt = Math.min(0.05, (now - (pLast || now)) / 1000); pLast = now;
+      pctx.clearRect(0, 0, pcv.width, pcv.height);
+      pf.draw(pctx, dt, { ballX: pcv.width / 2, ballY: pcv.height * 0.78, r: Math.min(pcv.width, pcv.height) * 0.09, fire: false, zone: [0.88, 1.12], drawBall: function (c2, x, y, r) { Court.drawBallScreen(c2, x, y, r, 0, false, false); } });
+    }
+    requestAnimationFrame(padLoop);
+  };
+  requestAnimationFrame(padLoop);
+  area.addEventListener('pointerdown', function (e) { ac(); var k = pScale(), r = pcv.getBoundingClientRect(); sw = 1; pf.start((e.clientX - r.left) * k, (e.clientY - r.top) * k, innerHeight * k); try { area.setPointerCapture(e.pointerId); } catch (er) {} });
+  area.addEventListener('pointermove', function (e) { if (!sw) return; var k = pScale(), r = pcv.getBoundingClientRect(), evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e]; for (var i = 0; i < evs.length; i++) pf.move((evs[i].clientX - r.left) * k, (evs[i].clientY - r.top) * k); });
+  area.addEventListener('pointerup', function () {
+    if (!sw) return; sw = null;
+    var res = pf.end(); if (!res) return;
     SFX.release(); vib(20);
-    send({ t: 'shot', kind: 'swipe', pe: (dy - P0) / P0 * 0.075, ae: dev * 0.13 });
+    send({ t: 'shot', kind: 'swipe', pe: res.pe, ae: res.ae });
   });
-  var placeBand = function (y) { var r = area.getBoundingClientRect(), band = area.querySelector('.band'); band.style.top = (y - r.top - 0.3 * innerHeight - band.offsetHeight / 2) + 'px'; };
-  (function () { var r = area.getBoundingClientRect(); })();
+  area.addEventListener('pointercancel', function () { sw = null; pf.cancel(); });
+  var placeBand = function () {};
   // botón (medidor en la tele)
   var pm = $('#pMeter');
   pm.addEventListener('pointerdown', function (e) { e.preventDefault(); ac(); vib(15); send({ t: 'press' }); });

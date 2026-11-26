@@ -110,6 +110,8 @@ var Arcade = (function () {
       if (nearRim) { drawFire(c, dt); Court.drawBallScreen(c, bs.x, bs.y, br, b.rot, b.money, princess); drawNet(c, true); }
       else { drawNet(c, false); drawFire(c, dt); Court.drawBallScreen(c, bs.x, bs.y, br, b.rot, b.money, princess); }
     } else { drawNet(c, false); if (onFire && box && (f === 1 || f === 2 || f === 3)) spawnFire(box.x + box.w * (f === 3 ? 0.62 : 0.75), box.y + box.h * (f === 3 ? 0.08 : 0.55), 18 * cam.s); drawFire(c, dt); }
+    // curva del tiro en vivo (Fácil completa, Normal un tramo, Pro nada)
+    if (G.aim && G.diff !== 'pro' && (G.phase === 'ready' || G.phase === 'set')) drawAim(c, G, princess);
     // destello al embocar
     var nk = Court.netKick ? Court.netKick() : 0;
     if (nk > 0.95 && netKickPrev <= 0.95) { flash = 1; shake = 0.6; }
@@ -123,6 +125,26 @@ var Arcade = (function () {
     var s = B2S({ x: n.x, y: n.y });
     var stretch = 1 + nk * 0.28;
     c.drawImage(A.imgs.net, s.x, s.y, n.w * cam.s, n.h * cam.s * stretch);
+  }
+  function drawAim(c, G, princess) {
+    var from = Court.handWorld(G.shooter), tgt = [RIM.x, RIM.y, RIM.z - 0.03];
+    var sol = Court.solveShot(from, tgt, (G.diff === 'facil' ? 54 : 50) * Math.PI / 180);
+    var v = sol.v * (1 + G.aim.pe * (G.aim.k || 1)), hv = v * Math.cos(sol.th), vy = v * Math.sin(sol.th);
+    var frac = G.diff === 'facil' ? 1 : 0.42, tEnd = 2.2, pts = [];
+    for (var t = 0.06; t < tEnd; t += 0.045) {
+      var p = [from[0] + Math.sin(sol.yaw) * hv * t, from[1] + vy * t - 4.905 * t * t, from[2] + Math.cos(sol.yaw) * hv * t];
+      if (p[1] < 0.2) break; pts.push(p);
+      if (vy - 9.81 * t < 0 && p[1] < RIM.y - 0.1) break;
+    }
+    var n = Math.max(2, Math.floor(pts.length * frac)), good = Math.abs(G.aim.pe * (G.aim.k || 1)) < 0.006;
+    for (var i = 0; i < n; i++) {
+      var s = B2S(W2B(pts[i])), k = 1 - i / n, rad = (3 + 5 * k) * cam.s * 1.4;
+      c.globalAlpha = 0.25 + 0.7 * k;
+      c.fillStyle = good ? '#3cff8a' : G.aim.power < 1 ? '#ffd23f' : '#ff6b6b';
+      c.beginPath(); c.arc(s.x, s.y, rad, 0, 7); c.fill();
+      c.strokeStyle = 'rgba(0,0,0,.5)'; c.lineWidth = 1.5; c.stroke();
+    }
+    c.globalAlpha = 1;
   }
   function spawnFire(x, y, r) { for (var i = 0; i < 3; i++) fire.push({ x: x + (Math.random() - 0.5) * r, y: y + (Math.random() - 0.5) * r, vx: (Math.random() - 0.5) * 40, vy: -60 - Math.random() * 80, life: 0.45, max: 0.45, r: r * (0.6 + Math.random() * 0.5) }); if (fire.length > 160) fire.splice(0, fire.length - 160); }
   function drawFire(c, dt) {

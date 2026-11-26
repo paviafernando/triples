@@ -111,6 +111,7 @@ body.teclas [data-k]::after{content:attr(data-k);position:absolute;top:-10px;lef
 #game>*+*{margin-top:0}
 #cv{position:absolute;top:0;left:0;width:100%;height:100%;touch-action:none;z-index:2}
 #gl{z-index:1}
+body.flicking #hint,body.flicking #pracBar,body.flicking #racks{opacity:0;transition:opacity .15s}
 #scan{position:absolute;top:0;left:0;right:0;bottom:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(rgba(0,0,0,.09) 0 1px,transparent 1px 3px);display:none}
 body.arcadeOn #scan{display:block}
 body.celebrating #hint,body.celebrating #pracBar,body.celebrating #racks,body.celebrating #stats,body.celebrating #hudTop{opacity:0;transition:opacity .3s}
@@ -197,7 +198,8 @@ body.princess .ov{background:rgba(70,20,70,.86)}
 #pSwipe{flex:1;border-radius:24px;background:rgba(0,0,0,.25);position:relative;touch-action:none;overflow:hidden;min-height:200px}
 #pSwipe .ballx{position:absolute;left:50%;bottom:16%;width:90px;height:90px;margin-left:-45px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ffa04a,#d4570f);box-shadow:inset 0 0 0 3px rgba(0,0,0,.3)}
 #pSwipe .band{position:absolute;left:50%;width:120px;margin-left:-60px;height:12%;border-radius:12px;background:rgba(60,196,124,.25);border:2px dashed rgba(60,196,124,.8)}
-#pSwipe p{position:absolute;bottom:8px;left:0;right:0;text-align:center;color:var(--soft);font-weight:800;margin:0}
+#pSwipeCv{position:absolute;top:0;left:0;width:100%;height:100%}
+#pSwipe p{position:absolute;bottom:8px;pointer-events:none;left:0;right:0;text-align:center;color:var(--soft);font-weight:800;margin:0}
 #pMeter{flex:1;border-radius:24px;background:var(--accent);color:var(--accentInk);font-size:40px;font-weight:900;display:flex;align-items:center;justify-content:center;touch-action:none}
 #pSim{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:24px;background:rgba(0,0,0,.25);text-align:center;padding:14px}
 #pSim>*+*{margin-top:12px}
@@ -328,7 +330,7 @@ body.princess::before{background:linear-gradient(rgba(120,30,100,.35),rgba(80,20
   <header><button class="ib hidden hubBtn" title="Todos los juegos">🏠</button><div class="me"><span class="dot" id="pDot"></span><span id="pAv" style="font-size:30px">🙂</span><span id="pName"></span></div></header>
   <div id="pStatus">Conectando con la tele…</div>
   <div id="pModes"></div>
-  <div id="pSwipe"><p>Deslizá la pelota hacia arriba y soltá en la zona verde</p><div class="band"></div><div class="ballx"></div></div>
+  <div id="pSwipe"><canvas id="pSwipeCv"></canvas><p>Latigazo hacia arriba: rápido = fuerte · llená el anillo hasta lo verde</p></div>
   <div id="pMeter" class="hidden">Mantené ✋</div>
   <div id="pSim" class="hidden"></div>
   <div id="pKeys"></div>
@@ -345,6 +347,7 @@ body.princess::before{background:linear-gradient(rgba(120,30,100,.35),rgba(80,20
 <script src="/js/sensors.js"></script>
 <script src="/js/icons.js"></script>
 <script src="/js/audio.js"></script>
+<script src="/js/flick.js"></script>
 <script src="/js/arcade.js"></script>
 <script src="/js/app.js"></script>
 </body>
