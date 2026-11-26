@@ -19,6 +19,8 @@ function toast(t, ms) { var e = $('#toast'); e.innerHTML = t; e.classList.add('s
 var KEY = 'triples-v1';
 var S = (function () { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } })();
 S.prefs = S.prefs || { theme: 'normal', sfx: true, crowd: true, voice: true };
+if (!S.prefs.cam) S.prefs.cam = 'arcade';
+window.T3 = window.T3 || {}; window.T3.style = S.prefs.cam;
 S.profiles = S.profiles || {};
 S.roster = S.roster || [];
 S.mode = S.mode || 'prac'; S.diff = S.diff || 'facil'; S.input = S.input || (IS_TOUCH ? 'swipe' : 'meter'); S.rival = S.rival || 'no'; S.rotate = S.rotate !== false;
@@ -199,6 +201,7 @@ if (standalone() || (!fsOk() && !isIOS())) $('#fsBtn').classList.add('hidden');
 /* ================= OPCIONES ================= */
 function applyPrefs() {
   document.body.classList.toggle('princess', S.prefs.theme === 'princess');
+  document.body.classList.toggle('arcade', S.prefs.cam === 'arcade');
   document.querySelector('meta[name=theme-color]').content = S.prefs.theme === 'princess' ? '#6a2a6a' : '#0b1026';
 }
 RENDER.opts = function () {
@@ -207,7 +210,8 @@ RENDER.opts = function () {
     ['theme', o.theme === 'princess' ? '👑 Modo princesa' : '🏀 Modo normal', true],
     ['sfx', o.sfx ? '🔊 Sonidos' : '🔇 Sonidos', o.sfx],
     ['crowd', o.crowd ? '🏟️ Público' : '🤫 Público', o.crowd],
-    ['voice', o.voice ? '🗣️ Voz' : '🤐 Voz', o.voice]
+    ['voice', o.voice ? '🗣️ Voz' : '🤐 Voz', o.voice],
+    ['cam', o.cam === 'arcade' ? '🕹️ Cámara arcade' : '📺 Cámara de atrás', true]
   ].map(function (x) { return '<button class="pill' + (x[2] ? ' on' : '') + '" data-opt="' + x[0] + '" data-k="' + (i++) + '">' + x[1] + '</button>'; }).join('') +
     (Sim.supported() && IS_TOUCH ? '<button class="pill" data-act="calib" data-k="5">📱 Calibrar simulación</button>' : '');
   $('#optInfo').textContent = S.prefs.theme === 'princess' ? 'En modo princesa la money ball es un arcoíris 🌈' : 'La money ball (la última de cada rack) es la blanca, azul y roja y vale 2.';
@@ -525,6 +529,7 @@ function shotResult(made, b, spot, idx, money) {
     Court.cheer(money ? 1 : 0.6); SFX.cheer(money ? 0.9 : 0.45);
     if (money) SFX.money();
     var txt = money ? '+2 💰' : b.swish ? '¡LIMPITA!' : b.board ? '¡De tablero!' : b.touched > 2 ? '¡Bailó y entró!' : '¡ADENTRO!';
+    if (p.streak === 3) { txt = '¡ESTÁ ON FIRE!'; }
     bigMsg(txt, money ? 'MONEY BALL' : p.streak >= 3 ? '🔥 ' + p.streak + ' seguidas' : '');
     ach(p, 'first'); if (money) ach(p, 'money'); if (p.streak >= 10) ach(p, 'streak10'); if (p.swishRun >= 5) ach(p, 'swish5'); if (G.lastIn && G.lastIn.kind === 'sim') ach(p, 'sim');
     if (G.diff === 'facil' && Math.random() < 0.35) say(pick(['¡Muy bien!', '¡Adentro!', '¡Golazo de tres!', '¡Genia!', '¡Qué tiro!']));
@@ -956,6 +961,7 @@ function act(a, el) {
     case 'resume': hideOv(); updateHUD(); break;
     case 'inputCycle': cycleGameInput(); if (ovOpen()) act('pause'); break;
     case 'toggleSfx': S.prefs.sfx = !S.prefs.sfx; save(); crowdAmb(S.prefs.sfx); act('pause'); break;
+    case 'toggleCam': S.prefs.cam = S.prefs.cam === 'arcade' ? 'tele' : 'arcade'; if (window.T3) T3.style = S.prefs.cam; save(); applyPrefs(); act('pause'); break;
     case 'toggleTheme': S.prefs.theme = S.prefs.theme === 'princess' ? 'normal' : 'princess'; save(); applyPrefs(); act('pause'); break;
     case 'quit': hideOv(); stopSimLocal(); crowdAmb(false); G = null; stack = []; show('start', false); break;
     case 'nextTurn': hideOv(); G.turn++; beginTurn(); break;
@@ -983,6 +989,7 @@ document.addEventListener('click', function (e) {
   if (d.av) { newAv = d.av; $('#avPrev').textContent = newAv; $$('#avs .avb').forEach(function (x) { x.classList.toggle('on', x === b); }); return; }
   if (d.mode) { S.mode = d.mode; save(); RENDER.mode(); SFX.key(); return; }
   if (d.diff) { S.diff = d.diff; save(); RENDER.mode(); SFX.key(); return; }
+  if (d.opt === 'cam') { S.prefs.cam = S.prefs.cam === 'arcade' ? 'tele' : 'arcade'; if (window.T3) T3.style = S.prefs.cam; save(); applyPrefs(); RENDER.opts(); SFX.key(); return; }
   if (d.opt) { var o = d.opt; if (o === 'theme') S.prefs.theme = S.prefs.theme === 'princess' ? 'normal' : 'princess'; else S.prefs[o] = !S.prefs[o]; save(); applyPrefs(); RENDER.opts(); SFX.key(); return; }
   if (d.pick) { pickSel[pickQ[pickI].id] = d.pick; SFX.key(); RENDER.pick(); return; }
   if (d.tab) { edTab = +d.tab; RENDER.edit(); return; }

@@ -5,13 +5,13 @@ import { Player, shotPoseFn, pickupPoseFn, CELEB3D } from './player.js';
 const D = { SKINS, HAIR_COLORS, EYE_COLORS, KIT_COLORS, SHOE_COLORS };
 const Q = new URLSearchParams(location.search);
 const LOW = Q.get('q') === 'low' || /SMART-TV|Tizen|Web0S|WebOS/i.test(navigator.userAgent);
-const T3 = window.T3 = { ready: false, low: LOW };
+const T3 = window.T3 = Object.assign(window.T3 || {}, { ready: false, low: LOW }); if (!T3.style) T3.style = 'arcade';
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, k) => a + (b - a) * k;
 
 let renderer, scene, camera, base, clips = [], courtMesh, courtTex, courtKey = '', ball, ballMats = {}, net, netKick = 0, rimMesh;
 let crowdBody, crowdHead, crowdData = [], ledTex, ledCtx, ledCv, racks = [], confetti, fxGroup, chalk, sprites = {};
-const players = new Map();
+const players = new Map(); const nearSide = [];
 let celebT0 = 0, celebOn = false, lastT = 0;
 
 /* ---------------- texturas pintadas a mano en canvas ---------------- */
@@ -111,7 +111,7 @@ function buildArena() {
   const seatMat = new THREE.MeshStandardMaterial({ color: '#25306b', roughness: 0.7 });
   const tiers = [];
   for (let r = 0; r < 10; r++) { const b = new THREE.Mesh(new THREE.BoxGeometry(40, 0.5 + r * 0.55, 0.85), r % 2 ? standMat : seatMat); b.position.set(0, (0.5 + r * 0.55) / 2, -5.4 - r * 0.85); scene.add(b); tiers.push({ y: 0.5 + r * 0.55, z: -5.4 - r * 0.85, side: 0 }); }
-  for (const sx of [-1, 1]) for (let r = 0; r < 8; r++) { const b = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.5 + r * 0.55, 24), r % 2 ? standMat : seatMat); b.position.set(sx * (10.2 + r * 0.85), (0.5 + r * 0.55) / 2, 6); scene.add(b); tiers.push({ y: 0.5 + r * 0.55, x: sx * (10.2 + r * 0.85), side: sx }); }
+  for (const sx of [-1, 1]) for (let r = 0; r < 8; r++) { const b = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.5 + r * 0.55, 24), r % 2 ? standMat : seatMat); b.position.set(sx * (10.2 + r * 0.85), (0.5 + r * 0.55) / 2, 6); scene.add(b); if (sx > 0) nearSide.push(b); tiers.push({ y: 0.5 + r * 0.55, x: sx * (10.2 + r * 0.85), side: sx }); }
   // público (instancias)
   const cols = ['#ff4d6d', '#ffd54d', '#3fa7ff', '#2fd27a', '#ffffff', '#b86bff', '#ff8a3d', '#1d428a', '#552583', '#fdb927', '#ce1141', '#111111'];
   const pos = [];
@@ -137,7 +137,7 @@ function buildArena() {
   const ledMat = new THREE.MeshBasicMaterial({ map: ledTex });
   const b1 = new THREE.Mesh(new THREE.BoxGeometry(18, 0.85, 0.15), [new THREE.MeshStandardMaterial({ color: '#111' }), new THREE.MeshStandardMaterial({ color: '#111' }), new THREE.MeshStandardMaterial({ color: '#111' }), new THREE.MeshStandardMaterial({ color: '#111' }), ledMat, new THREE.MeshStandardMaterial({ color: '#111' })]);
   b1.position.set(0, 0.45, -3.4); scene.add(b1);
-  for (const sx of [-1, 1]) { const b = new THREE.Mesh(new THREE.BoxGeometry(14, 0.85, 0.15), ledMat); b.position.set(sx * 9.0, 0.45, 6); b.rotation.y = -sx * Math.PI / 2; scene.add(b); }
+  for (const sx of [-1, 1]) { const b = new THREE.Mesh(new THREE.BoxGeometry(14, 0.85, 0.15), ledMat); b.position.set(sx * 9.0, 0.45, 6); b.rotation.y = -sx * Math.PI / 2; scene.add(b); if (sx > 0) nearSide.push(b); }
   // haces de luz del techo (efecto)
   const beamMat = new THREE.MeshBasicMaterial({ color: '#fff7d6', transparent: true, opacity: 0.045, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending });
   for (const [x, z] of [[-6, 2], [6, 2], [-4, 9], [4, 9], [0, -1]]) { const cone = new THREE.Mesh(new THREE.ConeGeometry(2.6, 16, 24, 1, true), beamMat); cone.position.set(x, 8, z); scene.add(cone);
@@ -229,8 +229,12 @@ function updateConfetti(dt) {
   confetti.instanceMatrix.needsUpdate = true;
 }
 function updateCrowd(t, cheer) {
+  const hideNear = T3._arc && !celebOn;
+  for (const o of nearSide) o.visible = !hideNear;
   for (let i = 0; i < crowdData.length; i++) {
-    const d = crowdData[i], j = cheer > 0.05 ? Math.abs(Math.sin(t * 8 * d.amp + d.ph)) * 0.35 * cheer : Math.sin(t * 1.2 + d.ph) * 0.02;
+    const d = crowdData[i];
+    if (hideNear && d.p[0] > 9) { _p.set(0, -20, 0); _m.compose(_p, _qq, _s); crowdBody.setMatrixAt(i, _m); crowdHead.setMatrixAt(i, _m); continue; }
+    const j = cheer > 0.05 ? Math.abs(Math.sin(t * 8 * d.amp + d.ph)) * 0.35 * cheer : Math.sin(t * 1.2 + d.ph) * 0.02;
     _e.set(0, d.face, 0); _qq.setFromEuler(_e);
     _p.set(d.p[0], d.p[1] + 0.36 + j, d.p[2]); _m.compose(_p, _qq, _s); crowdBody.setMatrixAt(i, _m);
     _p.y += 0.45; _m.compose(_p, _qq, _s); crowdHead.setMatrixAt(i, _m);
@@ -250,8 +254,12 @@ function getPlayer(look) {
 let lastShooter = null, prevSpotPos = null, moveFrom = null, resultSince = -1, lastPhase = '';
 T3.renderGame = function (G, P, t, w, h) {
   if (!T3.ready) return false;
+  const ARC = T3.style === 'arcade' && w >= h; T3._arc = ARC;
   const dt = lastT ? Math.min(0.05, t - lastT) : 0.016; lastT = t;
-  if (renderer.domElement.width !== Math.round(w) || renderer.domElement.height !== Math.round(h)) { renderer.setSize(w / renderer.getPixelRatio(), h / renderer.getPixelRatio(), false); }
+  const cssW = renderer.domElement.clientWidth || w, cssH = renderer.domElement.clientHeight || h;
+  const pr = ARC ? Math.min(1, (LOW ? 300 : 380) / Math.min(cssW, cssH)) : Math.min(LOW ? 1 : 1.75, devicePixelRatio || 1);
+  renderer.domElement.style.imageRendering = ARC ? 'pixelated' : 'auto'; document.body.classList.toggle('arcadeOn', ARC);
+  if (Math.abs(renderer.getPixelRatio() - pr) > 0.001 || Math.abs(renderer.domElement.width - Math.round(cssW * pr)) > 1 || Math.abs(renderer.domElement.height - Math.round(cssH * pr)) > 1) { renderer.setPixelRatio(pr); renderer.setSize(cssW, cssH, false); }
   const princess = document.body.classList.contains('princess');
   const key = G.diff + (princess ? 'p' : 'n');
   if (key !== courtKey) { courtKey = key; if (courtTex) courtTex.dispose(); courtTex = woodCourt(G.diff, princess); courtMesh.material.map = courtTex; courtMesh.material.needsUpdate = true; placeRacks(G.diff); scene.background.set(princess ? '#3a1840' : '#0a0f24'); scene.fog.color.set(princess ? '#3a1840' : '#0a0f24'); drawLed(princess ? '👑 TRIPLES · MODO PRINCESA · 🌈 · ' : '🏀 TRIPLES · CONCURSO DE TRIPLES · PF JUEGOS · '); }
@@ -291,6 +299,8 @@ T3.renderGame = function (G, P, t, w, h) {
   else { pl.play('idle', 0.3); }
   if (celebOn) poseFn = celebPose(pl, t);
   else if (ph !== 'result' && ph !== 'moving' && pl.curName !== 'idle') pl.play('idle', 0.3);
+  if (!pl.head.userData.bs) pl.head.userData.bs = pl.head.scale.x;
+  pl.head.scale.setScalar(pl.head.userData.bs * (ARC && !celebOn ? 1.4 : 1));
   pl.update(dt, poseFn, t);
   // pelota: en la mano o en el aire
   const b = Court.ball(), hasB = G.shooter.hasBall || ph === 'set' || (ph === 'shoot');
@@ -319,18 +329,44 @@ T3.renderGame = function (G, P, t, w, h) {
     camera.lookAt(px, 1.25 * pl.s, pz);
     updateFx(pl, t - celebT0);
   } else {
+    const portrait = w < h;
+    if (ARC) {
+      // como NBA Jam: cámara de transmisión al costado de la cancha, lente largo, sigue un poco al tirador
+      const camZ = portrait ? (pz * 0.5 + 0.2) : lerp(3.4, pz * 0.55 + 1.2, 0.5), far = portrait ? 22 : 13.5;
+      camera.position.set(far, portrait ? 7.5 : 5.0, camZ + (portrait ? 0 : 0.5));
+      camera.lookAt(px * 0.35, portrait ? 2.3 : 1.9, camZ - 0.1);
+    } else {
     // cámara detrás del tirador, un poco al costado, mirando hacia el aro (sigue al jugador cuando cambia de posición)
-    const l = Math.hypot(px, pz) || 1, dx = px / l, dz = pz / l, sx = dz, sz = -dx, portrait = w < h;
+    const l = Math.hypot(px, pz) || 1, dx = px / l, dz = pz / l, sx = dz, sz = -dx;
     const back = portrait ? 3.9 : 3.3, sideOff = portrait ? 0.55 : 1.0, k = portrait ? 0.42 : 0.5;
     camera.position.set(px + dx * back + sx * sideOff, portrait ? 2.55 : 2.35, pz + dz * back + sz * sideOff);
     camera.lookAt(px * (1 - k), portrait ? 2.25 : 2.1, pz * (1 - k));
+    }
     fxGroup.visible = false;
   }
-  const asp = w / h; camera.aspect = asp; camera.fov = asp >= 1 ? 50 : 64; camera.updateProjectionMatrix();
+  const asp = w / h; camera.aspect = asp;
+  camera.fov = celebOn ? (asp >= 1 ? 50 : 64) : ARC ? 38 : (asp >= 1 ? 50 : 64); camera.updateProjectionMatrix();
+  updateFire(dt, G, P, b, hasB);
   renderer.render(scene, camera);
   return true;
 };
 T3.handWorld = function () { return T3._hand ? [T3._hand.x, T3._hand.y, T3._hand.z] : null; };
+
+/* ---------------- pelota en llamas (on fire) ---------------- */
+let fireTex = null; const flames = [];
+function fireTexture() { const cv = document.createElement('canvas'); cv.width = cv.height = 64; const c = cv.getContext('2d'); const g = c.createRadialGradient(32, 32, 2, 32, 32, 30); g.addColorStop(0, 'rgba(255,255,220,1)'); g.addColorStop(0.3, 'rgba(255,200,40,.95)'); g.addColorStop(0.65, 'rgba(255,90,10,.6)'); g.addColorStop(1, 'rgba(200,20,0,0)'); c.fillStyle = g; c.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(cv); }
+function updateFire(dt, G, P, b, hasB) {
+  const onFire = !celebOn && P && (P.streak || 0) >= 3 && ball.visible;
+  if (!fireTex) fireTex = fireTexture();
+  if (onFire) for (let i = 0; i < 3; i++) {
+    let f = flames.find(x => x.life <= 0);
+    if (!f) { if (flames.length > 90) break; const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: fireTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })); scene.add(sp); f = { sp, life: 0 }; flames.push(f); }
+    f.life = 0.35 + Math.random() * 0.25; f.max = f.life; f.sp.visible = true;
+    f.sp.position.copy(ball.position).add(new THREE.Vector3((Math.random() - 0.5) * 0.12, (Math.random() - 0.5) * 0.12, (Math.random() - 0.5) * 0.12));
+    f.v = new THREE.Vector3((Math.random() - 0.5) * 0.3, 0.6 + Math.random() * 0.6, (Math.random() - 0.5) * 0.3);
+  }
+  for (const f of flames) { if (f.life <= 0) { f.sp.visible = false; continue; } f.life -= dt; const k = f.life / f.max; f.sp.position.addScaledVector(f.v, dt); f.sp.scale.setScalar(0.12 + (1 - k) * 0.28); f.sp.material.opacity = k; }
+}
 
 /* ---------------- festejos ---------------- */
 let celebLook = null;
