@@ -109,7 +109,9 @@ body.teclas [data-k]::after{content:attr(data-k);position:absolute;top:-10px;lef
 /* juego */
 #game{padding:0;justify-content:flex-start}
 #game>*+*{margin-top:0}
-#cv{position:absolute;top:0;left:0;width:100%;height:100%;touch-action:none}
+#cv{position:absolute;top:0;left:0;width:100%;height:100%;touch-action:none;z-index:2}
+#gl{z-index:1}
+body.celebrating #hint,body.celebrating #pracBar,body.celebrating #racks,body.celebrating #stats,body.celebrating #hudTop{opacity:0;transition:opacity .3s}
 .hud{position:absolute;z-index:5;pointer-events:none}
 #hudL{top:1.6vmin;left:1.6vmin;display:flex;align-items:center;pointer-events:auto}
 #hudL>*+*{margin-left:1.2vmin}
@@ -319,5 +321,6 @@ body.princess .ov{background:rgba(70,20,70,.86)}
 <script src="/js/court.js"></script>
 <script src="/js/sensors.js"></script>
 <script src="/js/app.js"></script>
+<script type="module" src="/js/t3/scene.js"></script>
 </body>
 </html>

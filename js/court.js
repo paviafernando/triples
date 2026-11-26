@@ -64,6 +64,11 @@ var Court = (function () {
     cam.f = vnorm(vsub(cam.tgt, cam.eye)); cam.r = vnorm(vcross(cam.f, [0, 1, 0])); cam.u = vcross(cam.r, cam.f);
   }
   C.camMoving = function () { return camT < 1; };
+  C.camProgress = function () { return ease(camT); };
+  C.camState = function () { return { eye: cam.eye, tgt: cam.tgt }; };
+  C.netKick = function () { return netKick; };
+  C.rimShake = function () { return rimShake; };
+  C.cheerLevel = function () { return cheer; };
   function toCam(p) { var d = vsub(p, cam.eye); return [vdot(d, cam.r), vdot(d, cam.u), vdot(d, cam.f)]; }
   function proj(p) { var q = toCam(p); if (q[2] < 0.05) return null; return [cam.cx + q[0] * cam.F / q[2], cam.cy - q[1] * cam.F / q[2], q[2]]; }
   C.proj = proj;
@@ -176,14 +181,13 @@ var Court = (function () {
     if ((b.made || b.missed) && (b.floor >= 2 || b.t > 3.2) && !b.done) { b.done = true; if (events.done) events.done(b); }
   }
 
-  C.step = function (dt) { updCam(dt); stepBall(dt); netK += dt; netKick = Math.max(0, netKick - dt * 1.6); rimShake = Math.max(0, rimShake - dt * 4); };
+  C.step = function (dt) { updCam(dt); cheer = Math.max(0, cheer - dt * 0.5); stepBall(dt); netK += dt; netKick = Math.max(0, netKick - dt * 1.6); rimShake = Math.max(0, rimShake - dt * 4); };
 
   /* ---------------- dibujo ---------------- */
   var cheer = 0; C.cheer = function (k) { cheer = Math.max(cheer, k || 1); };
   C.render = function (c, w, h, t, S) {
     cam.w = w; cam.h = h; cam.cx = w / 2; cam.cy = h * (w > h ? 0.4 : 0.46); cam.F = w > h ? h * 0.98 : Math.min(w * 1.25, h * 1.25);
     var princess = S.princess;
-    cheer = Math.max(0, cheer - 0.008);
     // fondo del estadio
     var g = c.createLinearGradient(0, 0, 0, h);
     g.addColorStop(0, princess ? '#3a1840' : '#0b1026'); g.addColorStop(0.55, princess ? '#6a2a6a' : '#1b2350'); g.addColorStop(1, princess ? '#2a1030' : '#0b1026');
@@ -353,6 +357,7 @@ var Court = (function () {
 
   /* Convierte un punto de pantalla del tirador a mundo (aprox.) para soltar la pelota desde la mano */
   C.handWorld = function (sh) {
+    if (window.T3 && window.T3.ready && window.T3.handWorld) { var hw = window.T3.handWorld(); if (hw) return hw; }
     var B = bodyOf(sh.look), s = sh.pos, dir = vnorm([-s[0], 0, -s[2]]);
     var hgt = (sh.look.height / 100) * 1.2 + 0.25 + (sh.pose && sh.pose.jump ? sh.pose.jump * 0.2 : 0);
     return vadd(vadd(s, vmul(dir, 0.25)), [0, hgt, 0]);

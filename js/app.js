@@ -121,7 +121,7 @@ function scopeEl() {
 }
 function pressDigit(dig) {
   document.body.classList.add('teclas');
-  if (!$('#celeb').classList.contains('hidden')) { if (dig === '0') endCeleb(); return true; }
+  if (celeb) { if (dig === '0') endCeleb(); return true; }
   var sc = scopeEl(); if (!sc) return false;
   if (cur === 'game' && !ovOpen() && $('#calib').classList.contains('hidden')) { if (gameDigit(dig)) return true; }
   var b = Array.prototype.slice.call(sc.querySelectorAll('[data-k="' + dig + '"]')).filter(function (el) { return el.offsetParent !== null && !el.disabled; })[0];
@@ -129,7 +129,7 @@ function pressDigit(dig) {
   return false;
 }
 function pressBack() {
-  if (!$('#celeb').classList.contains('hidden')) { endCeleb(); return; }
+  if (celeb) { endCeleb(); return; }
   if (!$('#calib').classList.contains('hidden')) { closeCalib(); return; }
   if (ovOpen()) { var c = $('#ov [data-act="resume"]'); if (c) c.click(); return; }
   if (cur === 'game') { act('pause'); return; }
@@ -162,7 +162,7 @@ document.addEventListener('keydown', function (e) {
   var dig = /^[0-9]$/.test(k) ? k : (kc >= 48 && kc <= 57) ? String(kc - 48) : (kc >= 96 && kc <= 105) ? String(kc - 96) : '';
   if (dig) {
     e.preventDefault();
-    if (cur === 'game' && dig === '0' && !ovOpen() && $('#celeb').classList.contains('hidden')) { if (!e.repeat) shootKeyDown(); return; }
+    if (cur === 'game' && dig === '0' && !ovOpen() && !celeb) { if (!e.repeat) shootKeyDown(); return; }
     if (!e.repeat) pressDigit(dig); return;
   }
   if (k === ' ' && cur === 'game' && !ovOpen()) { e.preventDefault(); if (!e.repeat) shootKeyDown(); return; }
@@ -300,6 +300,7 @@ RENDER.pick = function () {
   $$('#pgrid canvas').forEach(function (cv) { portrait(cv, playerLook(p.id, cv.getAttribute('data-face'))); });
 };
 function portrait(cv, look, bg) {
+  if (window.T3 && T3.ready && T3.portrait(cv, look)) return;
   var c = cv.getContext('2d'), w = cv.width, h = cv.height; c.clearRect(0, 0, w, h);
   c.save(); c.beginPath(); c.arc(w / 2, h / 2, w / 2, 0, 7); c.clip();
   c.fillStyle = bg || 'rgba(255,255,255,.14)'; c.fillRect(0, 0, w, h);
@@ -378,8 +379,16 @@ function edCycle(key, dir) {
   save(); SFX.key(); RENDER.edit();
 }
 function sizeEdCanvas() { var cv = $('#edCv'), r = cv.parentNode.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = Math.max(10, r.width * dpr); cv.height = Math.max(10, r.height * dpr); }
+var edLast = 0;
 function drawEditor(now) {
   var pr = S.profiles[edPid]; if (!pr) return;
+  var dtE = edLast ? Math.min(0.05, (now - edLast) / 1000) : 0.016; edLast = now;
+  if (window.T3 && T3.ready) {
+    $('#edCv').style.visibility = 'hidden';
+    var tE = (now - edT0) / 1000; if (edCeleb && tE > 6) edCeleb = false;
+    T3.editor($('#edPrev'), pr.look, edCeleb ? tE : null, dtE, edTab === 3 && Math.floor(tE / 3) % 2 === 1);
+    return;
+  }
   var cv = $('#edCv'), c = cv.getContext('2d'), w = cv.width, h = cv.height;
   c.clearRect(0, 0, w, h);
   var t = (now - edT0) / 1000;
@@ -396,6 +405,7 @@ function drawEditor(now) {
 /* ================= PARTIDA ================= */
 var G = null;
 var cv = $('#cv'), ctx = cv.getContext('2d');
+document.addEventListener('t3ready', function () { if (RENDER[cur] && cur !== 'game') RENDER[cur](); if (G) portrait($('#hudPortrait'), P().look); });
 function sizeCanvas() { var dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = Math.round(cv.clientWidth * dpr); cv.height = Math.round(cv.clientHeight * dpr); }
 window.addEventListener('resize', function () { if (cur === 'game') sizeCanvas(); if (cur === 'edit') sizeEdCanvas(); });
 
@@ -441,7 +451,7 @@ function isMoney(spot, idx) { var r = G.racks[spot]; return r.money || idx === 4
 function pickupTime() { var r = P().sk.ritmo; return G.mode === 'conc' ? 0.95 - r / 100 * 0.6 : 0.6; }
 
 /* ---------- entrada del tiro ---------- */
-function canShoot() { return G && cur === 'game' && G.phase === 'ready' && !ovOpen() && $('#celeb').classList.contains('hidden'); }
+function canShoot() { if (G && G.phase === 'pickup' && cur === 'game' && !ovOpen() && !celeb) { G.phase = 'ready'; G.shooter.hasBall = true; G.shooter.money = isMoney(G.spot, G.ball); } return G && cur === 'game' && G.phase === 'ready' && !ovOpen() && !celeb; }
 function armShot() { if (!canShoot()) return false; G.phase = 'set'; G.setT = 0; return true; }
 // medidor (control remoto / teclado / botón sostenido)
 function meterStart() {
@@ -503,7 +513,7 @@ function shootWith(inp) {
 function shotResult(made, b, spot, idx, money) {
   var p = P(), pr = S.profiles[p.id];
   var rack = G.racks[spot];
-  rack.res[idx] = made ? (money ? 'm' : 'ok') : 'no';
+  rack.res[idx] = made ? (money ? 'm' : 'ok') : 'no'; G.lastMade = made;
   rack.left = Math.max(0, 4 - idx);
   p.att++;
   var pts = made ? (money ? 2 : 1) : 0;
@@ -569,7 +579,7 @@ function afterRack() {
   updateHUD(); broadcast();
 }
 function moveTo(i) {
-  G.spot = i; G.ball = 0; G.racks[i].res = []; G.racks[i].left = 5;
+  G.prevSpot = G.spot; G.spot = i; G.ball = 0; G.racks[i].res = []; G.racks[i].left = 5;
   G.shooter.pos = Court.spotPos(i, G.diff); G.shooter.hasBall = false;
   Court.setSpot(i, G.diff, false); Court.clearBall();
   G.phase = 'moving'; G.phaseT = 0; updateHUD();
@@ -649,7 +659,9 @@ function startCeleb(p, done) {
   G.phase = 'celeb';
   var look = p.look;
   celeb = { look: look, t0: performance.now(), done: done, name: CELEBS[look.celeb] ? CELEBS[look.celeb].n : '' };
-  $('#celeb').classList.remove('hidden'); $('#celebTxt').classList.remove('hidden');
+  document.body.classList.add('celebrating');
+  if (window.T3 && T3.ready) T3.celebrate(true, look); else $('#celeb').classList.remove('hidden');
+  $('#celebTxt').classList.remove('hidden');
   $('#celebTxt').innerHTML = '¡RACK PERFECTO!<small>' + (CELEBS[look.celeb] ? CELEBS[look.celeb].e + ' ' + celeb.name : '') + '</small>';
   var cc = $('#celeb'), dpr = Math.min(2, window.devicePixelRatio || 1); cc.width = innerWidth * dpr; cc.height = innerHeight * dpr;
   SFX.cheer(1.4); setTimeout(function () { SFX.win(); }, 200); confetti(100);
@@ -659,13 +671,16 @@ function startCeleb(p, done) {
 }
 function endCeleb() {
   if (!celeb) return; var d = celeb.done; celeb = null;
+  document.body.classList.remove('celebrating');
+  if (window.T3 && T3.ready) T3.celebrate(false);
   $('#celeb').classList.add('hidden'); $('#celebTxt').classList.add('hidden');
   if (d) d();
 }
 function drawCeleb(now) {
   if (!celeb) return;
   var cc = $('#celeb'), c = cc.getContext('2d'), w = cc.width, h = cc.height, t = (now - celeb.t0) / 1000;
-  if (t > 3.6) { endCeleb(); return; }
+  if (t > (window.T3 && T3.ready ? 4.2 : 3.6)) { endCeleb(); return; }
+  if (window.T3 && T3.ready) return;
   var pr = S.prefs.theme === 'princess';
   var g = c.createRadialGradient(w / 2, h * 0.55, 10, w / 2, h * 0.55, Math.max(w, h) * 0.7);
   g.addColorStop(0, pr ? '#ffd1ea' : '#3d55b8'); g.addColorStop(1, pr ? '#6a2a6a' : '#070b1d'); c.fillStyle = g; c.fillRect(0, 0, w, h);
@@ -764,8 +779,13 @@ function stepGame(dt) {
 }
 function renderGame(t) {
   var w = cv.width, h = cv.height;
-  var rk = G.racks.map(function (r, i) { return { left: i === G.spot ? Math.max(0, 5 - G.ball - (G.shooter.hasBall || G.phase === 'set' ? 1 : 0) - (G.phase === 'shoot' || G.phase === 'flight' || G.phase === 'result' ? 1 : 0)) : (r.res.length ? 0 : 5), money: r.money }; });
-  Court.render(ctx, w, h, t, { princess: S.prefs.theme === 'princess', diff: G.diff, racks: rk, spot: G.spot, shooter: G.shooter });
+  if (window.T3 && T3.ready && T3.renderGame(G, P(), t, w, h)) {
+    ctx.clearRect(0, 0, w, h);
+    G.shooter.ballScreen = null;
+  } else {
+    var rk = G.racks.map(function (r, i) { return { left: i === G.spot ? Math.max(0, 5 - G.ball - (G.shooter.hasBall || G.phase === 'set' ? 1 : 0) - (G.phase === 'shoot' || G.phase === 'flight' || G.phase === 'result' ? 1 : 0)) : (r.res.length ? 0 : 5), money: r.money }; });
+    Court.render(ctx, w, h, t, { princess: S.prefs.theme === 'princess', diff: G.diff, racks: rk, spot: G.spot, shooter: G.shooter });
+  }
   // medidor
   var sb = G.shooter.ballScreen;
   if (G.meter || (G.input === 'meter' && G.phase === 'ready')) {
@@ -811,7 +831,7 @@ cv.addEventListener('pointerup', function (e) {
   if (G.swipe) {
     var dpr = cv.width / cv.clientWidth, sw = G.swipe, x = e.clientX * dpr, y = e.clientY * dpr; G.swipe = null;
     var dy = (sw.y0 - y) / cv.height, dx = (x - sw.x0) / cv.height;
-    if (dy < 0.08 || performance.now() - sw.t0 > 1500) { if (G.phase === 'set') G.phase = 'ready'; return; }
+    if (dy < 0.08 || performance.now() - sw.t0 > 2500) { if (G.phase === 'set') G.phase = 'ready'; return; }
     var r = swipeInput(dy, dx);
     shootWith({ pe: r.pe, ae: r.ae, kind: 'swipe' });
     return;
