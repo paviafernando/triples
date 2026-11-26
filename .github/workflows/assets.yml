@@ -1,0 +1,32 @@
+name: Traer sonidos y voz
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['tools/assets/**', '.github/workflows/assets.yml']
+permissions:
+  contents: write
+jobs:
+  assets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Herramientas
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
+          pip install -q piper-tts
+      - name: Sonidos CC0 de Freesound
+        run: python tools/assets/fetch_sounds.py || echo "falló sonidos" >> assets/_log_sonidos.txt
+      - name: Voz del locutor (Piper es_AR)
+        run: python tools/assets/make_voice.py || echo "falló voz" >> assets/_log_voz.txt
+      - name: Guardar en el repo
+        if: always()
+        run: |
+          git config user.name "triples-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add assets
+          git commit -m "Assets: sonidos CC0 y voz del locutor (automático)" || echo "nada nuevo"
+          git push

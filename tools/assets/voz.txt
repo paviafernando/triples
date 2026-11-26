@@ -1,0 +1,37 @@
+# id | frase  (voz neuronal es_AR "daniela" de Piper; editar y volver a correr el workflow)
+bienvenida | ¡Bienvenidos al concurso de triples!
+ya | ¡Ya! ¡Arranca el reloj!
+adentro | ¡Adentro!
+adentro2 | ¡Triple!
+adentro3 | ¡Qué tiro!
+limpita | ¡Limpita! ¡Ni tocó el aro!
+tablero | ¡De tablero!
+bailo | ¡Bailó y entró!
+money | ¡Money ball! ¡Vale doble!
+fuego | ¡Está on fire!
+racha | ¡Imparable!
+casi | ¡Uy, casi!
+corta | Quedó corta.
+larga | Se pasó.
+rack | ¡Rack perfecto!
+diez | ¡Últimos diez segundos!
+tiempo | ¡Tiempo!
+record | ¡Nuevo récord!
+muybien | ¡Muy bien!
+genia | ¡Genia!
+moneyrack | Elegí tu rack de money balls.
+siguiente | ¡Siguiente tirador!
+gano | ¡Y el campeón del concurso es…!
+otra | ¿Jugamos otra?
+curry | Stephen Curry
+doncic | Luka Dóncich
+lebron | LeBron James
+jordan | Michael Jordan
+kobe | Kobe Bryant
+shaq | Shaquille O'Neal
+manu | Manu Ginóbili
+bird | Larry Bird
+turno | Le toca a
+nombre_emi | Emi
+nombre_papa | Papá
+nombre_mama | Mamá

@@ -1,0 +1,17 @@
+{
+  "_info": "Búsquedas en Freesound. El workflow baja solo sonidos con licencia CC0 (dominio público) y anota los créditos.",
+  "swish":    ["basketball swish", "swish net", "net swish basketball"],
+  "aro":      ["basketball rim", "basketball hitting rim", "hoop rim hit"],
+  "tablero":  ["basketball backboard", "backboard bank"],
+  "pique":    ["basketball bounce", "basketball dribble single"],
+  "chicharra":["basketball buzzer", "game buzzer", "scoreboard buzzer"],
+  "festejo":  ["crowd cheer arena", "stadium crowd cheering", "crowd cheer"],
+  "uhh":      ["crowd ooh", "crowd aww", "crowd disappointed"],
+  "ambiente": ["basketball arena crowd ambience", "indoor stadium crowd ambience", "crowd murmur arena"],
+  "aplauso":  ["crowd applause", "applause stadium"],
+  "lanzar":   ["whoosh swing", "ball throw whoosh", "fast whoosh"],
+  "bocina":   ["air horn", "stadium horn"],
+  "organo":   ["stadium organ charge", "organ charge"],
+  "moneda":   ["coin pickup", "coins collect"],
+  "click":    ["ui click", "button pop"]
+}
