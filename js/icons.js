@@ -15,7 +15,9 @@
   var SKIP = { SCRIPT: 1, STYLE: 1, TEXTAREA: 1, INPUT: 1, OPTION: 1, TITLE: 1, CANVAS: 1 };
   window.ICON = function (k) { return '/assets/ui/' + k + '.webp'; };
   function swap(node) {
-    var t = node.nodeValue; RE.lastIndex = 0; if (!t || !RE.test(t)) return;
+    var t = node.nodeValue;
+    if (t && window.LANG === 'en' && !node.__en) { var tt = T(t); node.__en = 1; if (tt !== t) { node.nodeValue = tt; t = tt; } }
+    RE.lastIndex = 0; if (!t || !RE.test(t)) return;
     var p = node.parentNode; if (!p || SKIP[p.nodeName] || (p.closest && p.closest('[data-noicon]'))) return;
     var frag = document.createDocumentFragment(), last = 0; RE.lastIndex = 0; var m;
     while ((m = RE.exec(t))) {
@@ -41,6 +43,7 @@
     busy = false;
   }).observe(document.body, { childList: true, subtree: true, characterData: true });
   walk(document.body);
+  if (window.LANG === 'en') { var ph = document.querySelectorAll('[placeholder],[title]'); for (var i = 0; i < ph.length; i++) { if (ph[i].placeholder) ph[i].placeholder = T(ph[i].placeholder); if (ph[i].title) ph[i].title = T(ph[i].title); } }
   // pelotas dibujadas para la cancha
   var BALLS = window.BALL_IMGS = {};
   ['pelota', 'pelota_money', 'pelota_arcoiris', 'pelota_fuego'].forEach(function (k) { var im = new Image(); im.onload = function () { BALLS[k] = im; }; im.src = ICON(k); });

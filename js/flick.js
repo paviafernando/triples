@@ -117,6 +117,7 @@ Flick.prototype.draw = function (c, dt, o) {
     c.shadowBlur = 0; c.font = '900 ' + Math.round(r * 0.75) + 'px Impact, "Arial Black", sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
     c.fillStyle = col; c.strokeStyle = 'rgba(0,0,0,.6)'; c.lineWidth = 4;
     var lbl = pw < 0.35 ? '' : good ? '¡JUSTO!' : pw < z[0] ? 'MÁS' : '¡FUERTE!';
+    if (lbl && window.T) lbl = T(lbl);
     if (lbl) { var ly = cy - R - r * 0.9; c.strokeText(lbl, cx, ly); c.fillText(lbl, cx, ly); }
     c.restore();
   }

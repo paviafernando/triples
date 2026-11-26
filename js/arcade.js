@@ -79,11 +79,24 @@ var Arcade = (function () {
     for (var i = 0; i < 5; i++) {
       if (i !== G.spot || G.phase === 'moving') continue;
       var r = G.racks[i], left = i === G.spot ? Math.max(0, 5 - G.ball - (G.shooter.hasBall || G.phase === 'set' ? 1 : 0) - (G.phase === 'shoot' || G.phase === 'flight' || G.phase === 'result' ? 1 : 0)) : (r.res.length ? 0 : 5);
-      var s5 = Court.spotPos(i, G.diff), rb = W2B([s5[0] - 0.9, 0, s5[2] + 0.75]), rs = B2S(rb), scl = rb.s * cam.s, rp = rb.ppm * scl;
-      c.strokeStyle = 'rgba(200,210,235,.9)'; c.lineWidth = Math.max(2, 0.04 * rp); c.lineCap = 'round';
-      var rw = 0.9 * rp, rh = 0.75 * rp;
-      c.beginPath(); c.moveTo(rs.x - rw / 2, rs.y); c.lineTo(rs.x - rw / 2, rs.y - rh); c.lineTo(rs.x + rw / 2, rs.y - rh); c.lineTo(rs.x + rw / 2, rs.y); c.stroke();
-      for (var bI = 0; bI < 5; bI++) { if (bI < 5 - left) continue; var money = r.money || bI === 0; Court.drawBallScreen(c, rs.x - rw / 2 + (bI + 0.5) * rw / 5, rs.y - rh - 0.12 * rp, 0.12 * rp, bI, money, princess); }
+      // rack en el mundo: perpendicular a la línea tirador-aro, detrás del tirador; se proyecta con su perspectiva real
+      var s5 = Court.spotPos(i, G.diff), L5 = Math.hypot(s5[0], s5[2]) || 1, dx5 = s5[0] / L5, dz5 = s5[2] / L5;
+      // el rack va al costado del tirador, alineado hacia el aro: de frente se ve de perfil (pelotas en fila) y en las esquinas de punta (se tapan)
+      var ox = dz5, oz = -dx5; if (ox > 0) { ox = -ox; oz = -oz; }        // costado lejos de la cámara
+      var sdx = dx5, sdz = dz5;
+      var cx5 = s5[0] + ox * 0.85 + dx5 * 0.35, cz5 = s5[2] + oz * 0.85 + dz5 * 0.35, HB = 0.24, rad = 0.12, hgt = 0.82;
+      var end = function (k, y) { return B2S(W2B([cx5 + sdx * k, y, cz5 + sdz * k])); };
+      var scl5 = W2B([cx5, 0, cz5]).ppm * W2B([cx5, 0, cz5]).s * cam.s;
+      c.strokeStyle = 'rgba(200,210,235,.9)'; c.lineWidth = Math.max(2, 0.035 * scl5); c.lineCap = 'round';
+      [-0.6, 0.6].forEach(function (k) { var f = end(k, 0), t2 = end(k, hgt); c.beginPath(); c.moveTo(f.x, f.y); c.lineTo(t2.x, t2.y); c.stroke(); });
+      var a1 = end(-0.6, hgt), a2 = end(0.6, hgt); c.beginPath(); c.moveTo(a1.x, a1.y); c.lineTo(a2.x, a2.y); c.stroke();
+      // pelotas de la más lejana a la más cercana a la cámara; la que se agarra último (índice 4) es la money ball
+      var order = [0, 1, 2, 3, 4].map(function (bI) { var k = (bI - 2) * HB; return { bI: bI, k: k, d: cx5 + sdx * k }; }).sort(function (A1, B1) { return A1.d - B1.d; });
+      order.forEach(function (o5) {
+        if (o5.bI < 5 - left) return;
+        var money = r.money || o5.bI === 4, wp = W2B([cx5 + sdx * o5.k, hgt + rad, cz5 + sdz * o5.k]), sp5 = B2S(wp);
+        Court.drawBallScreen(c, sp5.x, sp5.y, rad * wp.ppm * wp.s * cam.s * 1.05, o5.bI * 1.3, money, princess);
+      });
     }
 
     // tirador

@@ -1,0 +1,37 @@
+# id | frase. Entre corchetes van indicaciones de emoción para ElevenLabs v3 ([excited], [shouting]...).
+bienvenida | [excited] Welcome to the three-point contest!
+ya | [shouting] Ready... GO!
+adentro | [excited] BANG!
+adentro2 | [shouting] FROM DOWNTOWN!
+adentro3 | [shouting] BOOM SHAKALAKA!
+limpita | [excited] Nothing but net!
+tablero | [excited] Off the glass!
+bailo | [excited] It rattles in!
+money | [shouting] MONEY BALL! That's two!
+fuego | [shouting] HE'S ON FIRE!
+racha | [shouting] UNSTOPPABLE!
+casi | [disappointed] Ohhh, so close!
+corta | Short!
+larga | Too long!
+rack | [shouting] PERFECT RACK! Are you kidding me?!
+diez | [excited] Ten seconds left!
+tiempo | [excited] TIME!
+record | [shouting] NEW RECORD!
+muybien | [excited] Yes!
+genia | [excited] What a shooter!
+moneyrack | Pick your money ball rack!
+siguiente | Next shooter!
+gano | [excited] And the winner is...
+otra | One more?
+curry | Steph Curry!
+doncic | Luka Doncic!
+lebron | LeBron James!
+jordan | Michael Jordan!
+kobe | Kobe Bryant!
+shaq | Shaquille O'Neal!
+manu | Manu Ginobili!
+bird | Larry Bird!
+turno | Up next...
+nombre_emi | Emi!
+nombre_papa | Dad!
+nombre_mama | Mom!

@@ -18,16 +18,13 @@ jobs:
       - name: Herramientas
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
-          pip install -q piper-tts
       - name: Sonidos CC0 de Freesound
-        run: [ -f assets/sfx/candidatos/swish_1.mp3 ] || python tools/assets/fetch_sounds.py tools/assets/sonidos.json assets/sfx/candidatos 4 || true
+        run: |
+          [ -f assets/sfx/candidatos/swish_1.mp3 ] || python tools/assets/fetch_sounds.py tools/assets/sonidos.json assets/sfx/candidatos 4 || true
       - name: Locutores grabados (Freesound CC0 / CC-BY)
         run: rm -rf assets/locutor/candidatos && python tools/assets/fetch_sounds.py tools/assets/locutor.json assets/locutor/candidatos 4 by || true
       - name: Voces de anuncio de Kenney (CC0)
         run: mkdir -p assets/locutor && python tools/assets/kenney.py; cat assets/locutor/_log_kenney.txt || true
-      - name: Voz del locutor (Piper es_AR)
-        run: |
-          if [ ! -f assets/voz/adentro.mp3 ] || git diff --name-only HEAD~1 HEAD | grep -q voz.txt; then python tools/assets/make_voice.py || echo "falló voz" >> assets/_log_voz.txt; fi
       - name: Guardar en el repo
         if: always()
         run: |

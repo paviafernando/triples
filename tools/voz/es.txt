@@ -1,0 +1,37 @@
+# id | frase (relator rioplatense, bien gritado)
+bienvenida | [excited] ¡Bienvenidos al concurso de triples!
+ya | [shouting] ¡Preparados... YA!
+adentro | [excited] ¡ADENTRO!
+adentro2 | [shouting] ¡DE TRES! ¡DE TRES!
+adentro3 | [shouting] ¡QUÉ TIRO, POR DIOS!
+limpita | [excited] ¡Limpita! ¡Ni tocó el aro!
+tablero | [excited] ¡De tablero!
+bailo | [excited] ¡Bailó en el aro y entró!
+money | [shouting] ¡MONEY BALL! ¡Vale doble!
+fuego | [shouting] ¡ESTÁ PRENDIDO FUEGO!
+racha | [shouting] ¡NO LO PARA NADIE!
+casi | [disappointed] ¡Uhhh, casi!
+corta | ¡Corta!
+larga | ¡Larga!
+rack | [shouting] ¡RACK PERFECTO! ¡Increíble!
+diez | [excited] ¡Últimos diez segundos!
+tiempo | [excited] ¡TIEMPO!
+record | [shouting] ¡NUEVO RÉCORD!
+muybien | [excited] ¡Muy bien!
+genia | [excited] ¡Qué tirador!
+moneyrack | ¡Elegí tu rack de money balls!
+siguiente | ¡Siguiente tirador!
+gano | [excited] Y el campeón es...
+otra | ¿Otra?
+curry | ¡Stephen Curry!
+doncic | ¡Luka Dóncich!
+lebron | ¡LeBron James!
+jordan | ¡Michael Jordan!
+kobe | ¡Kobe Bryant!
+shaq | ¡Shaquille O'Neal!
+manu | ¡Manu Ginóbili!
+bird | ¡Larry Bird!
+turno | Le toca a...
+nombre_emi | ¡Emi!
+nombre_papa | ¡Papá!
+nombre_mama | ¡Mamá!

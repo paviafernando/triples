@@ -88,7 +88,7 @@ function vozBuf(id) {
   if (VOZ[id] !== undefined) return VOZ[id];
   VOZ[id] = null;
   if (!ac() || vozAvail.indexOf(id) < 0) return null;
-  fetch('/assets/voz/' + id + '.mp3').then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); }).then(function (b) { return new Promise(function (res, rej) { AC.decodeAudioData(b, res, rej); }); }).then(function (buf) { VOZ[id] = buf; }).catch(function () { VOZ[id] = false; });
+  fetch('/assets/voz/' + LANG + '/' + id + '.mp3').then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); }).then(function (b) { return new Promise(function (res, rej) { AC.decodeAudioData(b, res, rej); }); }).then(function (buf) { VOZ[id] = buf; }).catch(function () { VOZ[id] = false; });
   return null;
 }
 function nameClip(n) { var k = 'nombre_' + String(n || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, ''); return vozAvail.indexOf(k) >= 0 ? k : null; }
@@ -113,6 +113,7 @@ function vozNext() {
     src.onended = function () { setTimeout(vozNext, 60); }; src.start();
   })();
 }
+fetch('/assets/voz/' + LANG + '/index.json').then(function (r) { return r.ok ? r.json() : []; }).then(function (l) { vozAvail = l || []; if (AC) vozAvail.forEach(function (id) { vozBuf(id); }); }).catch(function () {});
 document.addEventListener('pointerdown', function () { if (ac()) vozAvail.forEach(function (id) { vozBuf(id); }); }, { once: true });
 var voice = null;
 function say(t, rate) {
@@ -249,9 +250,10 @@ RENDER.opts = function () {
     ['sfx', o.sfx ? '🔊 Sonidos' : '🔇 Sonidos', o.sfx],
     ['crowd', o.crowd ? '🏟️ Público' : '🤫 Público', o.crowd],
     ['music', o.music ? '🎶 Música' : '🔇 Música', o.music],
+    ['lang', LANG === 'en' ? '🌐 English' : '🌐 Español', true],
     ['voice', o.voice ? '🗣️ Voz' : '🤐 Voz', o.voice]
   ].map(function (x) { return '<button class="pill' + (x[2] ? ' on' : '') + '" data-opt="' + x[0] + '" data-k="' + (i++) + '">' + x[1] + '</button>'; }).join('') +
-    (Sim.supported() && IS_TOUCH ? '<button class="pill" data-act="calib" data-k="5">📱 Calibrar simulación</button>' : '');
+    (Sim.supported() && IS_TOUCH ? '<button class="pill" data-act="calib" data-k="7">📱 Calibrar simulación</button>' : '');
   $('#optInfo').textContent = S.prefs.theme === 'princess' ? 'En modo princesa la money ball es un arcoíris 🌈' : 'La money ball (la última de cada rack) es la blanca, azul y roja y vale 2.';
 };
 
@@ -1031,6 +1033,7 @@ document.addEventListener('click', function (e) {
   if (d.av) { newAv = d.av; $('#avPrev').textContent = newAv; $$('#avs .avb').forEach(function (x) { x.classList.toggle('on', x === b); }); return; }
   if (d.mode) { S.mode = d.mode; save(); RENDER.mode(); SFX.key(); return; }
   if (d.diff) { S.diff = d.diff; save(); RENDER.mode(); SFX.key(); return; }
+  if (d.opt === 'lang') { setLang(LANG === 'en' ? 'es' : 'en'); return; }
   if (d.opt === 'cam') { S.prefs.cam = S.prefs.cam === 'arcade' ? 'tele' : 'arcade'; if (window.T3) T3.style = S.prefs.cam; save(); applyPrefs(); RENDER.opts(); SFX.key(); return; }
   if (d.opt) { var o = d.opt; if (o === 'theme') S.prefs.theme = S.prefs.theme === 'princess' ? 'normal' : 'princess'; else S.prefs[o] = !S.prefs[o]; Audio2.setOn(o === 'theme' ? 'x' : o, S.prefs[o]); save(); applyPrefs(); RENDER.opts(); SFX.key(); return; }
   if (d.pick) { pickSel[pickQ[pickI].id] = d.pick; SFX.key(); RENDER.pick(); return; }
