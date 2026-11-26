@@ -1,0 +1,36 @@
+OK bienvenida: ¡Bienvenidos al concurso de triples!
+OK ya: ¡Ya! ¡Arranca el reloj!
+OK adentro: ¡Adentro!
+OK adentro2: ¡Triple!
+OK adentro3: ¡Qué tiro!
+OK limpita: ¡Limpita! ¡Ni tocó el aro!
+OK tablero: ¡De tablero!
+OK bailo: ¡Bailó y entró!
+OK money: ¡Money ball! ¡Vale doble!
+OK fuego: ¡Está on fire!
+OK racha: ¡Imparable!
+OK casi: ¡Uy, casi!
+OK corta: Quedó corta.
+OK larga: Se pasó.
+OK rack: ¡Rack perfecto!
+OK diez: ¡Últimos diez segundos!
+OK tiempo: ¡Tiempo!
+OK record: ¡Nuevo récord!
+OK muybien: ¡Muy bien!
+OK genia: ¡Genia!
+OK moneyrack: Elegí tu rack de money balls.
+OK siguiente: ¡Siguiente tirador!
+OK gano: ¡Y el campeón del concurso es…!
+OK otra: ¿Jugamos otra?
+OK curry: Stephen Curry
+OK doncic: Luka Dóncich
+OK lebron: LeBron James
+OK jordan: Michael Jordan
+OK kobe: Kobe Bryant
+OK shaq: Shaquille O'Neal
+OK manu: Manu Ginóbili
+OK bird: Larry Bird
+OK turno: Le toca a
+OK nombre_emi: Emi
+OK nombre_papa: Papá
+OK nombre_mama: Mamá

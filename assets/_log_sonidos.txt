@@ -1,0 +1,196 @@
+swish | basketball swish -> 9 resultados
+  error bajando 716930 <urlopen error [Errno -2] Name or service not known>
+  error bajando 518048 <urlopen error [Errno -2] Name or service not known>
+  error bajando 381410 <urlopen error [Errno -2] Name or service not known>
+  error bajando 262506 <urlopen error [Errno -2] Name or service not known>
+  error bajando 262508 <urlopen error [Errno -2] Name or service not known>
+  error bajando 262507 <urlopen error [Errno -2] Name or service not known>
+  error bajando 786013 <urlopen error [Errno -2] Name or service not known>
+  error bajando 198032 <urlopen error [Errno -2] Name or service not known>
+swish | swish net -> 7 resultados
+  error bajando 75544 <urlopen error [Errno -2] Name or service not known>
+swish | net swish basketball -> 6 resultados
+== swish 0 candidatos
+aro | basketball rim -> 3 resultados
+  error bajando 244348 <urlopen error [Errno -2] Name or service not known>
+  error bajando 402102 <urlopen error [Errno -2] Name or service not known>
+aro | basketball hitting rim -> 1 resultados
+aro | hoop rim hit -> 0 resultados
+== aro 0 candidatos
+tablero | basketball backboard -> 9 resultados
+  error bajando 324247 <urlopen error [Errno -2] Name or service not known>
+  error bajando 655323 <urlopen error [Errno -2] Name or service not known>
+  error bajando 361656 <urlopen error [Errno -2] Name or service not known>
+  error bajando 675318 <urlopen error [Errno -2] Name or service not known>
+tablero | backboard bank -> 3 resultados
+== tablero 0 candidatos
+pique | basketball bounce -> 15 resultados
+  error bajando 708564 <urlopen error [Errno -2] Name or service not known>
+  error bajando 811910 <urlopen error [Errno -2] Name or service not known>
+  error bajando 453757 <urlopen error [Errno -2] Name or service not known>
+  error bajando 505628 <urlopen error [Errno -2] Name or service not known>
+  error bajando 859910 <urlopen error [Errno -2] Name or service not known>
+  error bajando 319785 <urlopen error [Errno -2] Name or service not known>
+  error bajando 451642 <urlopen error [Errno -2] Name or service not known>
+  error bajando 88498 <urlopen error [Errno -2] Name or service not known>
+pique | basketball dribble single -> 3 resultados
+== pique 0 candidatos
+chicharra | basketball buzzer -> 3 resultados
+  error bajando 264291 <urlopen error [Errno -2] Name or service not known>
+  error bajando 719952 <urlopen error [Errno -2] Name or service not known>
+  error bajando 381411 <urlopen error [Errno -2] Name or service not known>
+chicharra | game buzzer -> 15 resultados
+  error bajando 407483 <urlopen error [Errno -2] Name or service not known>
+  error bajando 395497 <urlopen error [Errno -2] Name or service not known>
+  error bajando 878325 <urlopen error [Errno -2] Name or service not known>
+  error bajando 699248 <urlopen error [Errno -2] Name or service not known>
+  error bajando 410725 <urlopen error [Errno -2] Name or service not known>
+  error bajando 510026 <urlopen error [Errno -2] Name or service not known>
+  error bajando 259290 <urlopen error [Errno -2] Name or service not known>
+chicharra | scoreboard buzzer -> 1 resultados
+  error bajando 828060 <urlopen error [Errno -2] Name or service not known>
+== chicharra 0 candidatos
+festejo | crowd cheer arena -> 6 resultados
+  error bajando 702099 <urlopen error [Errno -2] Name or service not known>
+  error bajando 645337 <urlopen error [Errno -2] Name or service not known>
+  error bajando 629884 <urlopen error [Errno -2] Name or service not known>
+  error bajando 706732 <urlopen error [Errno -2] Name or service not known>
+  error bajando 424297 <urlopen error [Errno -2] Name or service not known>
+  error bajando 398258 <urlopen error [Errno -2] Name or service not known>
+festejo | stadium crowd cheering -> 15 resultados
+  error bajando 691975 <urlopen error [Errno -2] Name or service not known>
+  error bajando 397434 <urlopen error [Errno -2] Name or service not known>
+  error bajando 274515 <urlopen error [Errno -2] Name or service not known>
+  error bajando 757800 <urlopen error [Errno -2] Name or service not known>
+  error bajando 397435 <urlopen error [Errno -2] Name or service not known>
+  error bajando 754580 <urlopen error [Errno -2] Name or service not known>
+  error bajando 203457 <urlopen error [Errno -2] Name or service not known>
+festejo | crowd cheer -> 15 resultados
+  error bajando 651646 <urlopen error [Errno -2] Name or service not known>
+  error bajando 346689 <urlopen error [Errno -2] Name or service not known>
+  error bajando 264377 <urlopen error [Errno -2] Name or service not known>
+  error bajando 574850 <urlopen error [Errno -2] Name or service not known>
+  error bajando 678542 <urlopen error [Errno -2] Name or service not known>
+  error bajando 678543 <urlopen error [Errno -2] Name or service not known>
+  error bajando 102108 <urlopen error [Errno -2] Name or service not known>
+  error bajando 221567 <urlopen error [Errno -2] Name or service not known>
+== festejo 0 candidatos
+uhh | crowd ooh -> 13 resultados
+  error bajando 826789 <urlopen error [Errno -2] Name or service not known>
+  error bajando 346682 <urlopen error [Errno -2] Name or service not known>
+  error bajando 264376 <urlopen error [Errno -2] Name or service not known>
+  error bajando 264499 <urlopen error [Errno -2] Name or service not known>
+  error bajando 62835 <urlopen error [Errno -2] Name or service not known>
+  error bajando 764124 <urlopen error [Errno -2] Name or service not known>
+  error bajando 764233 <urlopen error [Errno -2] Name or service not known>
+  error bajando 764015 <urlopen error [Errno -2] Name or service not known>
+uhh | crowd aww -> 3 resultados
+  error bajando 324897 <urlopen error [Errno -2] Name or service not known>
+  error bajando 124996 <urlopen error [Errno -2] Name or service not known>
+  error bajando 547589 <urlopen error [Errno -2] Name or service not known>
+uhh | crowd disappointed -> 9 resultados
+  error bajando 764328 <urlopen error [Errno -2] Name or service not known>
+  error bajando 763884 <urlopen error [Errno -2] Name or service not known>
+  error bajando 764110 <urlopen error [Errno -2] Name or service not known>
+  error bajando 764001 <urlopen error [Errno -2] Name or service not known>
+  error bajando 764219 <urlopen error [Errno -2] Name or service not known>
+  error bajando 619007 <urlopen error [Errno -2] Name or service not known>
+  error bajando 627218 <urlopen error [Errno -2] Name or service not known>
+  error bajando 744098 <urlopen error [Errno -2] Name or service not known>
+== uhh 0 candidatos
+ambiente | basketball arena crowd ambience -> 1 resultados
+ambiente | indoor stadium crowd ambience -> 0 resultados
+ambiente | crowd murmur arena -> 0 resultados
+== ambiente 0 candidatos
+aplauso | crowd applause -> 15 resultados
+  error bajando 459162 <urlopen error [Errno -2] Name or service not known>
+  error bajando 752710 <urlopen error [Errno -2] Name or service not known>
+  error bajando 583130 <urlopen error [Errno -2] Name or service not known>
+  error bajando 707871 <urlopen error [Errno -2] Name or service not known>
+  error bajando 118337 <urlopen error [Errno -2] Name or service not known>
+  error bajando 875909 <urlopen error [Errno -2] Name or service not known>
+  error bajando 637468 <urlopen error [Errno -2] Name or service not known>
+  error bajando 455659 <urlopen error [Errno -2] Name or service not known>
+aplauso | applause stadium -> 15 resultados
+  error bajando 252298 <urlopen error [Errno -2] Name or service not known>
+  error bajando 733383 <urlopen error [Errno -2] Name or service not known>
+  error bajando 862957 <urlopen error [Errno -2] Name or service not known>
+  error bajando 424295 <urlopen error [Errno -2] Name or service not known>
+  error bajando 881549 <urlopen error [Errno -2] Name or service not known>
+  error bajando 130568 <urlopen error [Errno -2] Name or service not known>
+== aplauso 0 candidatos
+lanzar | whoosh swing -> 15 resultados
+  error bajando 422513 <urlopen error [Errno -2] Name or service not known>
+  error bajando 876166 <urlopen error [Errno -2] Name or service not known>
+  error bajando 178832 <urlopen error [Errno -2] Name or service not known>
+  error bajando 733891 <urlopen error [Errno -2] Name or service not known>
+  error bajando 369698 <urlopen error [Errno -2] Name or service not known>
+  error bajando 389590 <urlopen error [Errno -2] Name or service not known>
+  error bajando 427979 <urlopen error [Errno -2] Name or service not known>
+  error bajando 719637 <urlopen error [Errno -2] Name or service not known>
+lanzar | ball throw whoosh -> 1 resultados
+  error bajando 632700 <urlopen error [Errno -2] Name or service not known>
+lanzar | fast whoosh -> 15 resultados
+  error bajando 877978 <urlopen error [Errno -2] Name or service not known>
+  error bajando 19307 <urlopen error [Errno -2] Name or service not known>
+  error bajando 434872 <urlopen error [Errno -2] Name or service not known>
+  error bajando 449996 <urlopen error [Errno -2] Name or service not known>
+  error bajando 181803 <urlopen error [Errno -2] Name or service not known>
+  error bajando 683101 <urlopen error [Errno -2] Name or service not known>
+  error bajando 369011 <urlopen error [Errno -2] Name or service not known>
+== lanzar 0 candidatos
+bocina | air horn -> 15 resultados
+  error bajando 81262 <urlopen error [Errno -2] Name or service not known>
+  error bajando 131930 <urlopen error [Errno -2] Name or service not known>
+  error bajando 157869 <urlopen error [Errno -2] Name or service not known>
+  error bajando 649860 <urlopen error [Errno -2] Name or service not known>
+  error bajando 870747 <urlopen error [Errno -2] Name or service not known>
+  error bajando 774253 <urlopen error [Errno -2] Name or service not known>
+  error bajando 578987 <urlopen error [Errno -2] Name or service not known>
+  error bajando 607382 <urlopen error [Errno -2] Name or service not known>
+bocina | stadium horn -> 3 resultados
+  error bajando 554508 <urlopen error [Errno -2] Name or service not known>
+  error bajando 705658 <urlopen error [Errno -2] Name or service not known>
+  error bajando 653781 <urlopen error [Errno -2] Name or service not known>
+== bocina 0 candidatos
+organo | stadium organ charge -> 0 resultados
+organo | organ charge -> 0 resultados
+== organo 0 candidatos
+moneda | coin pickup -> 15 resultados
+  error bajando 608433 <urlopen error [Errno -2] Name or service not known>
+  error bajando 876168 <urlopen error [Errno -2] Name or service not known>
+  error bajando 347174 <urlopen error [Errno -2] Name or service not known>
+  error bajando 538146 <urlopen error [Errno -2] Name or service not known>
+  error bajando 341979 <urlopen error [Errno -2] Name or service not known>
+  error bajando 478647 <urlopen error [Errno -2] Name or service not known>
+  error bajando 350876 <urlopen error [Errno -2] Name or service not known>
+  error bajando 705327 <urlopen error [Errno -2] Name or service not known>
+moneda | coins collect -> 15 resultados
+  error bajando 670065 <urlopen error [Errno -2] Name or service not known>
+  error bajando 566201 <urlopen error [Errno -2] Name or service not known>
+  error bajando 420996 <urlopen error [Errno -2] Name or service not known>
+  error bajando 420995 <urlopen error [Errno -2] Name or service not known>
+  error bajando 770106 <urlopen error [Errno -2] Name or service not known>
+  error bajando 369856 <urlopen error [Errno -2] Name or service not known>
+  error bajando 877908 <urlopen error [Errno -2] Name or service not known>
+  error bajando 877907 <urlopen error [Errno -2] Name or service not known>
+== moneda 0 candidatos
+click | ui click -> 15 resultados
+  error bajando 546974 <urlopen error [Errno -2] Name or service not known>
+  error bajando 253168 <urlopen error [Errno -2] Name or service not known>
+  error bajando 881019 <urlopen error [Errno -2] Name or service not known>
+  error bajando 467951 <urlopen error [Errno -2] Name or service not known>
+  error bajando 343020 <urlopen error [Errno -2] Name or service not known>
+  error bajando 488534 <urlopen error [Errno -2] Name or service not known>
+  error bajando 703884 <urlopen error [Errno -2] Name or service not known>
+  error bajando 736912 <urlopen error [Errno -2] Name or service not known>
+click | button pop -> 15 resultados
+  error bajando 623990 <urlopen error [Errno -2] Name or service not known>
+  error bajando 867762 <urlopen error [Errno -2] Name or service not known>
+  error bajando 643564 <urlopen error [Errno -2] Name or service not known>
+  error bajando 789790 <urlopen error [Errno -2] Name or service not known>
+  error bajando 72104 <urlopen error [Errno -2] Name or service not known>
+  error bajando 668790 <urlopen error [Errno -2] Name or service not known>
+  error bajando 668118 <urlopen error [Errno -2] Name or service not known>
+  error bajando 528731 <urlopen error [Errno -2] Name or service not known>
+== click 0 candidatos
