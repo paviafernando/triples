@@ -19,6 +19,7 @@ function toast(t, ms) { var e = $('#toast'); e.innerHTML = t; e.classList.add('s
 var KEY = 'triples-v1';
 var S = (function () { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } })();
 S.prefs = S.prefs || { theme: 'normal', sfx: true, crowd: true, voice: true };
+if (S.prefs.music == null) S.prefs.music = true;
 if (!S.prefs.cam) S.prefs.cam = 'arcade';
 window.T3 = window.T3 || {}; window.T3.style = S.prefs.cam;
 S.profiles = S.profiles || {};
@@ -37,7 +38,9 @@ S.roster = S.roster.filter(function (id) { return S.profiles[id]; });
 
 /* ================= SONIDO ================= */
 var AC = null, noiseBuf = null, crowdNode = null;
-function ac() { try { if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); } catch (e) {} return AC; }
+function ac() { try { if (!AC) { AC = new (window.AudioContext || window.webkitAudioContext)(); Audio2.on.sfx = S.prefs.sfx; Audio2.on.crowd = S.prefs.crowd; Audio2.on.music = S.prefs.music; Audio2.init(AC); Audio2.music(musicFor()); } if (AC.state === 'suspended') AC.resume(); } catch (e) {} return AC; }
+function musicFor() { if (cur === 'game' && G) { if (celeb) return 'celeb'; var p = G.players[G.turn]; return p && p.streak >= 3 ? 'fire' : 'game'; } return 'menu'; }
+function syncMusic() { if (AC) Audio2.music(musicFor()); }
 function noise() { if (!noiseBuf) { noiseBuf = AC.createBuffer(1, AC.sampleRate * 2, AC.sampleRate); var d = noiseBuf.getChannelData(0); for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; } var s = AC.createBufferSource(); s.buffer = noiseBuf; return s; }
 function tone(f, d, type, v, when, f2) {
   if (!S.prefs.sfx || !ac()) return;
@@ -54,23 +57,24 @@ function nz(d, type, f, q, v, when, f2) {
   s.connect(bq); bq.connect(g); g.connect(AC.destination); s.start(t, Math.random()); s.stop(t + d + 0.05);
 }
 var SFX = {
-  key: function () { tone(520, 0.06, 'sine', 0.08); },
+  key: function () { if (Audio2.play('click', 0.5)) return; tone(520, 0.06, 'sine', 0.08); },
   ok: function () { tone(660, 0.1, 'triangle', 0.12); tone(990, 0.12, 'triangle', 0.1, 0.07); },
-  release: function () { nz(0.18, 'bandpass', 900, 1.5, 0.45, 0, 2800); tone(220, 0.08, 'sine', 0.08); },
-  swish: function () { nz(0.35, 'bandpass', 2600, 0.8, 0.5, 0, 1400); nz(0.25, 'highpass', 5000, 0.7, 0.18, 0.05); },
-  rim: function (k) { k = k || 0.7; [610, 1190, 1730, 2410].forEach(function (f, i) { tone(f, 0.35 - i * 0.05, 'sine', 0.09 * k, 0); }); nz(0.05, 'highpass', 3000, 1, 0.2 * k); },
-  board: function () { nz(0.18, 'lowpass', 400, 1, 0.5); tone(110, 0.16, 'sine', 0.2); },
-  floor: function (k) { tone(95, 0.14, 'sine', 0.3 * (k || 0.6), 0, 60); nz(0.06, 'lowpass', 600, 1, 0.2 * (k || 0.6)); },
+  release: function () { if (Audio2.play('lanzar', 0.7)) return; nz(0.18, 'bandpass', 900, 1.5, 0.45, 0, 2800); tone(220, 0.08, 'sine', 0.08); },
+  swish: function () { if (Audio2.play('swish', 1)) return; nz(0.35, 'bandpass', 2600, 0.8, 0.5, 0, 1400); nz(0.25, 'highpass', 5000, 0.7, 0.18, 0.05); },
+  rim: function (k) { k = k || 0.7; if (Audio2.play(Math.random() < 0.5 ? 'aro' : 'aro2', 0.35 + k * 0.65, 0.95 + Math.random() * 0.1)) return; [610, 1190, 1730, 2410].forEach(function (f, i) { tone(f, 0.35 - i * 0.05, 'sine', 0.09 * k, 0); }); nz(0.05, 'highpass', 3000, 1, 0.2 * k); },
+  board: function () { if (Audio2.play('tablero', 1)) return; nz(0.18, 'lowpass', 400, 1, 0.5); tone(110, 0.16, 'sine', 0.2); },
+  floor: function (k) { if (Audio2.play('pique', 0.3 + (k || 0.6) * 0.7, 0.95 + Math.random() * 0.1)) return; tone(95, 0.14, 'sine', 0.3 * (k || 0.6), 0, 60); nz(0.06, 'lowpass', 600, 1, 0.2 * (k || 0.6)); },
   buzzer: function () { tone(170, 1.1, 'sawtooth', 0.12); tone(173, 1.1, 'square', 0.06); },
-  cheer: function (k) { nz(1.8 * (k || 1), 'bandpass', 1100, 0.6, 0.35 * (k || 1), 0); nz(1.5 * (k || 1), 'bandpass', 2200, 0.8, 0.15, 0.1); },
-  aww: function () { nz(0.9, 'bandpass', 700, 1.2, 0.22, 0, 350); },
-  coin: function () { tone(988, 0.07, 'square', 0.06); tone(1319, 0.12, 'square', 0.06, 0.07); },
+  cheer: function (k) { Audio2.excite(Math.min(1, 0.45 + (k || 1) * 0.5)); if (Audio2.play((k || 1) >= 0.85 ? 'festejo_grande' : 'festejo', Math.min(1, 0.55 + (k || 1) * 0.4))) return; nz(1.8 * (k || 1), 'bandpass', 1100, 0.6, 0.35 * (k || 1), 0); nz(1.5 * (k || 1), 'bandpass', 2200, 0.8, 0.15, 0.1); },
+  aww: function () { Audio2.excite(0.45); if (Audio2.play(Math.random() < 0.5 ? 'uhh' : 'uhh2', 0.8)) return; nz(0.9, 'bandpass', 700, 1.2, 0.22, 0, 350); },
+  coin: function () { if (Audio2.play('moneda', 0.6)) return; tone(988, 0.07, 'square', 0.06); tone(1319, 0.12, 'square', 0.06, 0.07); },
   money: function () { [1047, 1319, 1568, 2093].forEach(function (f, i) { tone(f, 0.15, 'square', 0.06, i * 0.07); }); },
   win: function () { [523, 659, 784, 1047, 784, 1047].forEach(function (f, i) { tone(f, 0.16, 'square', 0.07, i * 0.11); }); },
   tick: function () { tone(1400, 0.05, 'square', 0.08); },
   arm: function () { tone(880, 0.08, 'sine', 0.12); }
 };
 function crowdAmb(on) {
+  if (window.Audio2) { Audio2.on.crowd = S.prefs.crowd; Audio2.on.sfx = S.prefs.sfx; if (ac()) Audio2.crowd(on); return; }
   try {
     if (!on || !S.prefs.crowd || !S.prefs.sfx || !ac()) { if (crowdNode) { crowdNode.s.stop(); crowdNode = null; } return; }
     if (crowdNode) return;
@@ -142,6 +146,7 @@ function show(id, push) {
   if (push !== false && cur !== id) stack.push(cur);
   $$('.screen').forEach(function (s) { s.classList.toggle('hidden', s.id !== id); });
   cur = id;
+  syncMusic();
   if (RENDER[id]) RENDER[id]();
   setTimeout(function () { var f = $('#' + id + ' .big'); if (f && !IS_TOUCH) try { f.focus({ preventScroll: true }); } catch (e) {} }, 30);
   broadcast();
@@ -243,6 +248,7 @@ RENDER.opts = function () {
     ['theme', o.theme === 'princess' ? '👑 Modo princesa' : '🏀 Modo normal', true],
     ['sfx', o.sfx ? '🔊 Sonidos' : '🔇 Sonidos', o.sfx],
     ['crowd', o.crowd ? '🏟️ Público' : '🤫 Público', o.crowd],
+    ['music', o.music ? '🎶 Música' : '🔇 Música', o.music],
     ['voice', o.voice ? '🗣️ Voz' : '🤐 Voz', o.voice]
   ].map(function (x) { return '<button class="pill' + (x[2] ? ' on' : '') + '" data-opt="' + x[0] + '" data-k="' + (i++) + '">' + x[1] + '</button>'; }).join('') +
     (Sim.supported() && IS_TOUCH ? '<button class="pill" data-act="calib" data-k="5">📱 Calibrar simulación</button>' : '');
@@ -464,7 +470,7 @@ function P() { return G.players[G.turn]; }
 function beginTurn() {
   var p = P();
   G.spot = G.mode === 'conc' ? 0 : (G.spot || 2); G.ball = 0; G.time = DIFFS[G.diff].time; G.running = false;
-  G.racks = newRacks(-1); p.score = 0; p.made = 0; p.att = 0; p.streak = 0;
+  G.racks = newRacks(-1); p.score = 0; p.made = 0; p.att = 0; p.streak = 0; Audio2.setBase(0.25); syncMusic();
   G.shooter = { pos: Court.spotPos(G.spot, G.diff), look: p.look, pose: shotPose(p.look, 0, 0), hasBall: false, money: false };
   Court.setSpot(G.spot, G.diff, true); Court.clearBall();
   portrait($('#hudPortrait'), p.look, null, p.star && p.star.id);
@@ -556,6 +562,7 @@ function shotResult(made, b, spot, idx, money) {
   var pts = made ? (money ? 2 : 1) : 0;
   if (made) {
     p.made++; p.streak++; p.score += pts; p.best = Math.max(p.best, p.streak);
+    Audio2.setBase(Math.min(0.7, 0.25 + p.streak * 0.07)); syncMusic();
     p.swishRun = b.swish ? p.swishRun + 1 : 0;
     var coins = money ? 2 : 1; p.coins += coins; if (pr) pr.coins += coins;
     if (b.swish) { SFX.swish(); } else SFX.swish();
@@ -571,6 +578,7 @@ function shotResult(made, b, spot, idx, money) {
     vibPad(p, made);
   } else {
     p.streak = 0; p.swishRun = 0;
+    Audio2.setBase(0.25); syncMusic();
     SFX.aww();
     var L = G.lastIn || { pe: 0, ae: 0 }, why = '';
     if (Math.abs(L.ae) > 0.75 && Math.abs(L.ae) / 0.8 > Math.abs(L.pe) / 0.007) why = L.ae > 0 ? 'Se fue a la derecha ➡️' : '⬅️ Se fue a la izquierda';
@@ -697,6 +705,7 @@ function finish() {
 /* ---------- festejo ---------- */
 var celeb = null, celebId = null;
 function startCeleb(p, done) {
+  setTimeout(syncMusic, 0);
   G.phase = 'celeb';
   var look = p.look;
   celeb = { look: look, t0: performance.now(), done: done, name: CELEBS[look.celeb] ? CELEBS[look.celeb].n : '' };
@@ -711,7 +720,7 @@ function startCeleb(p, done) {
   broadcast();
 }
 function endCeleb() {
-  if (!celeb) return; var d = celeb.done; celeb = null;
+  if (!celeb) return; var d = celeb.done; celeb = null; syncMusic();
   document.body.classList.remove('celebrating');
   if (window.T3 && T3.ready) T3.celebrate(false);
   $('#celeb').classList.add('hidden'); $('#celebTxt').classList.add('hidden');
@@ -777,7 +786,7 @@ function stepGame(dt) {
   if (G.running && G.mode === 'conc' && G.phase !== 'celeb' && !ovOpen()) {
     var before = G.time; G.time = Math.max(0, G.time - dt);
     if (Math.ceil(before) !== Math.ceil(G.time) && G.time <= 5 && G.time > 0) SFX.tick();
-    if (before > 10 && G.time <= 10) voz('diez', true);
+    if (before > 10 && G.time <= 10) { voz('diez', true); Audio2.setBase(0.65); }
     if (G.time <= 0 && before > 0) {
       G.running = false;
       if (G.phase === 'flight' || G.phase === 'shoot') { G.buzzer = true; SFX.buzzer(); }
@@ -996,7 +1005,7 @@ function act(a, el) {
       break;
     case 'resume': hideOv(); updateHUD(); break;
     case 'inputCycle': cycleGameInput(); if (ovOpen()) act('pause'); break;
-    case 'toggleSfx': S.prefs.sfx = !S.prefs.sfx; save(); crowdAmb(S.prefs.sfx); act('pause'); break;
+    case 'toggleSfx': S.prefs.sfx = !S.prefs.sfx; Audio2.setOn('sfx', S.prefs.sfx); save(); crowdAmb(S.prefs.sfx); act('pause'); break;
     case 'toggleCam': S.prefs.cam = S.prefs.cam === 'arcade' ? 'tele' : 'arcade'; if (window.T3) T3.style = S.prefs.cam; save(); applyPrefs(); act('pause'); break;
     case 'toggleTheme': S.prefs.theme = S.prefs.theme === 'princess' ? 'normal' : 'princess'; save(); applyPrefs(); act('pause'); break;
     case 'quit': hideOv(); stopSimLocal(); crowdAmb(false); G = null; stack = []; show('start', false); break;
@@ -1026,7 +1035,7 @@ document.addEventListener('click', function (e) {
   if (d.mode) { S.mode = d.mode; save(); RENDER.mode(); SFX.key(); return; }
   if (d.diff) { S.diff = d.diff; save(); RENDER.mode(); SFX.key(); return; }
   if (d.opt === 'cam') { S.prefs.cam = S.prefs.cam === 'arcade' ? 'tele' : 'arcade'; if (window.T3) T3.style = S.prefs.cam; save(); applyPrefs(); RENDER.opts(); SFX.key(); return; }
-  if (d.opt) { var o = d.opt; if (o === 'theme') S.prefs.theme = S.prefs.theme === 'princess' ? 'normal' : 'princess'; else S.prefs[o] = !S.prefs[o]; save(); applyPrefs(); RENDER.opts(); SFX.key(); return; }
+  if (d.opt) { var o = d.opt; if (o === 'theme') S.prefs.theme = S.prefs.theme === 'princess' ? 'normal' : 'princess'; else S.prefs[o] = !S.prefs[o]; Audio2.setOn(o === 'theme' ? 'x' : o, S.prefs[o]); save(); applyPrefs(); RENDER.opts(); SFX.key(); return; }
   if (d.pick) { pickSel[pickQ[pickI].id] = d.pick; SFX.key(); RENDER.pick(); return; }
   if (d.tab) { edTab = +d.tab; RENDER.edit(); return; }
   if (d.ed) { edCycle(d.ed, +d.dir); return; }

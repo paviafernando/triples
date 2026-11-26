@@ -2,11 +2,12 @@
 import io, os, re, subprocess, urllib.request, zipfile
 UA = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) Chrome/124 Safari/537.36'}
 OUT = 'assets/locutor/kenney'; os.makedirs(OUT, exist_ok=True)
-log = open('assets/locutor/_log_kenney.txt', 'w')
+log = open('assets/locutor/_log_kenney.txt', 'w'); log.write('inicio\n'); log.flush()
 for page in ['voiceover-pack', 'voiceover-pack-fighter']:
     try:
         h = urllib.request.urlopen(urllib.request.Request('https://kenney.nl/assets/' + page, headers=UA), timeout=40).read().decode('utf-8', 'replace')
-        m = re.search(r'href="([^"]+\.zip)"', h)
+        log.write(f'{page}: pagina {len(h)} bytes\n'); log.flush()
+        m = re.search(r'(https?://[^"\']+\.zip|/[^"\']+\.zip)', h)
         if not m: log.write(f'{page}: sin zip\n'); continue
         url = m.group(1) if m.group(1).startswith('http') else 'https://kenney.nl' + m.group(1)
         data = urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=120).read()
