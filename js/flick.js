@@ -132,3 +132,61 @@ Flick.prototype.draw = function (c, dt, o) {
   if (b && o.drawBall) { c.save(); c.translate(b.x, b.y); c.rotate(this.active ? Math.atan2(this.vx, this.vy) * 0.5 : 0); c.scale(b.sx || 1, b.sy || 1); c.rotate(b.rot || 0); o.drawBall(c, 0, 0, r); c.restore(); }
 };
 Flick.prototype.busy = function () { return this.active || this.sparks.length > 0 || (this.ball && this.ball.fly) || (performance.now() / 1000 - this.relT) < 0.3; };
+
+/* ---------- Tirachinas: apoyás, tirás hacia ABAJO (como estirar una gomera) y soltás.
+   Cuánto estirás = fuerza; si estirás para un costado, apunta para el otro. Se puede ajustar antes de soltar. */
+function Pull() { this.active = false; this.sparks = []; this.relT = -9; this.power = 0; this.ball = null; }
+Pull.IDEAL = 0.22; // estiramiento justo (fracción del alto)
+Pull.prototype.start = function (x, y, H) { this.H = H; this.x0 = x; this.y0 = y; this.x = x; this.y = y; this.active = true; this.power = 0; this.t0 = performance.now(); this.ticks = {}; };
+Pull.prototype.move = function (x, y) {
+  if (!this.active) return; this.x = x; this.y = y;
+  var d = Math.max(0, (y - this.y0)) / this.H; this.power = Math.min(2, d / Pull.IDEAL);
+  var self = this; [0.5, 0.9, 1.12].forEach(function (v, i) { if (self.power >= v && !self.ticks[i]) { self.ticks[i] = 1; try { navigator.vibrate && navigator.vibrate(i === 2 ? 25 : 8); } catch (e) {} } });
+};
+Pull.prototype.dev = function () { return Math.atan2(-(this.x - this.x0), Math.max(1, this.y - this.y0)) * 180 / Math.PI; };
+Pull.prototype.end = function () {
+  if (!this.active) return null; this.active = false; this.relT = performance.now() / 1000;
+  if (this.power < 0.2) return null;
+  for (var i = 0; i < 20; i++) { var an = -Math.PI / 2 + (Math.random() - 0.5) * 1.6, s = 200 + Math.random() * 300; this.sparks.push({ x: this.x0, y: this.y0, vx: Math.cos(an) * s, vy: Math.sin(an) * s, life: 0.6, max: 0.6 }); }
+  this.ball = { x: this.x, y: this.y, vx: (this.x0 - this.x) * 8, vy: (this.y0 - this.y) * 9, fly: true };
+  var held = (performance.now() - this.t0) / 1000;
+  return { power: this.power, pe: (this.power - 1) * 0.06, ae: this.dev() * 0.12, spin: -(6 + Math.min(1.6, this.power) * 7), rot: 0, held: held };
+};
+Pull.prototype.cancel = function () { this.active = false; };
+Pull.prototype.preview = function () { return this.active && this.power > 0.05 ? { pe: (this.power - 1) * 0.06, power: this.power, ae: this.dev() * 0.12 } : null; };
+Pull.prototype.busy = function () { return this.active || this.sparks.length > 0 || (this.ball && this.ball.fly); };
+Pull.prototype.draw = function (c, dt, o) {
+  var r = o.r, ax = this.active ? this.x0 : o.ballX, ay = this.active ? this.y0 : o.ballY, now = performance.now() / 1000;
+  if (this.active) {
+    var bx = this.x, by = this.y, pw = this.power, z = o.zone || [0.9, 1.1], good = pw >= z[0] && pw <= z[1];
+    var col = good ? '#3cff8a' : pw < z[0] ? '#ffd23f' : '#ff4d4d';
+    // horquilla
+    c.save(); c.lineCap = 'round';
+    c.strokeStyle = '#6b3b16'; c.lineWidth = r * 0.35;
+    c.beginPath(); c.moveTo(ax - r * 1.6, ay - r * 0.6); c.lineTo(ax - r * 1.1, ay + r * 0.4); c.moveTo(ax + r * 1.6, ay - r * 0.6); c.lineTo(ax + r * 1.1, ay + r * 0.4); c.stroke();
+    // gomas
+    c.strokeStyle = col; c.lineWidth = Math.max(3, r * (0.32 - Math.min(0.2, pw * 0.08)));
+    c.beginPath(); c.moveTo(ax - r * 1.6, ay - r * 0.6); c.lineTo(bx, by); c.lineTo(ax + r * 1.6, ay - r * 0.6); c.stroke();
+    // flecha de dirección (para dónde va a salir)
+    var dx = ax - bx, dy = ay - by, L = Math.hypot(dx, dy) || 1, len = r * (2 + pw * 2.4);
+    var ex = ax + dx / L * len, ey = ay + dy / L * len;
+    c.strokeStyle = col; c.lineWidth = r * 0.28; c.shadowColor = col; c.shadowBlur = good ? 20 : 6;
+    c.beginPath(); c.moveTo(ax, ay - r); c.lineTo(ex, ey); c.stroke();
+    var a = Math.atan2(ey - ay, ex - ax); c.fillStyle = col;
+    c.beginPath(); c.moveTo(ex + Math.cos(a) * r * 0.8, ey + Math.sin(a) * r * 0.8); c.lineTo(ex + Math.cos(a + 2.4) * r * 0.7, ey + Math.sin(a + 2.4) * r * 0.7); c.lineTo(ex + Math.cos(a - 2.4) * r * 0.7, ey + Math.sin(a - 2.4) * r * 0.7); c.fill();
+    c.shadowBlur = 0;
+    // barra de fuerza al costado
+    var bh = r * 6, bxx = ax + r * 2.6, byy = ay - bh / 2;
+    c.fillStyle = 'rgba(0,0,0,.5)'; c.fillRect(bxx, byy, r * 0.6, bh);
+    c.fillStyle = 'rgba(60,220,120,.5)'; c.fillRect(bxx, byy + bh * (1 - z[1] / 2), r * 0.6, bh * (z[1] - z[0]) / 2);
+    c.fillStyle = col; c.fillRect(bxx, byy + bh * (1 - Math.min(2, pw) / 2), r * 0.6, bh * Math.min(2, pw) / 2);
+    var lbl = pw < 0.3 ? '' : good ? '¡JUSTO!' : pw < z[0] ? 'MÁS' : '¡FUERTE!'; if (lbl && window.T) lbl = T(lbl);
+    if (lbl) { c.font = '900 ' + Math.round(r * 0.75) + 'px Impact, "Arial Black", sans-serif'; c.textAlign = 'center'; c.fillStyle = col; c.strokeStyle = 'rgba(0,0,0,.6)'; c.lineWidth = 4; c.strokeText(lbl, ax, ay - r * 2.6); c.fillText(lbl, ax, ay - r * 2.6); }
+    c.restore();
+    if (o.drawBall) { c.save(); c.translate(bx, by); c.scale(1 - pw * 0.08, 1 + pw * 0.08); o.drawBall(c, 0, 0, r); c.restore(); }
+  } else {
+    if (this.ball && this.ball.fly) { var b = this.ball, k = now - this.relT; b.x += b.vx * dt; b.y += b.vy * dt; var s2 = Math.max(0, 1 - k * 2.5); if (s2 <= 0) b.fly = false; else if (o.drawBall) { c.save(); c.translate(b.x, b.y); c.scale(s2, s2); o.drawBall(c, 0, 0, r); c.restore(); } }
+    else if (o.drawBall) { var bob = Math.sin(now * 4) * r * 0.08; c.save(); c.globalAlpha = 0.35; c.strokeStyle = '#fff'; c.setLineDash([6, 6]); c.lineWidth = 3; c.beginPath(); c.moveTo(ax, ay + r * 1.4); c.lineTo(ax, ay + r * 4); c.stroke(); c.setLineDash([]); c.restore(); c.save(); c.translate(ax, ay + bob); o.drawBall(c, 0, 0, r); c.restore(); }
+  }
+  for (var s = this.sparks.length - 1; s >= 0; s--) { var q = this.sparks[s]; q.life -= dt; if (q.life <= 0) { this.sparks.splice(s, 1); continue; } q.x += q.vx * dt; q.y += q.vy * dt; q.vy += 500 * dt; var kk = q.life / q.max; c.fillStyle = 'rgba(255,240,180,' + kk + ')'; c.beginPath(); c.arc(q.x, q.y, Math.max(0.5, r * 0.12 * kk), 0, 7); c.fill(); }
+};

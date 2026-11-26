@@ -143,6 +143,7 @@ var Arcade = (function () {
     var from = Court.handWorld(G.shooter), tgt = [RIM.x, RIM.y, RIM.z - 0.03];
     var sol = Court.solveShot(from, tgt, (G.diff === 'facil' ? 54 : 50) * Math.PI / 180);
     var v = sol.v * (1 + G.aim.pe * (G.aim.k || 1)), hv = v * Math.cos(sol.th), vy = v * Math.sin(sol.th);
+    sol.yaw += (G.aim.ae || 0) * (G.aim.k || 1) * Math.PI / 180;
     var frac = G.diff === 'facil' ? 1 : 0.42, tEnd = 2.2, pts = [];
     for (var t = 0.06; t < tEnd; t += 0.045) {
       var p = [from[0] + Math.sin(sol.yaw) * hv * t, from[1] + vy * t - 4.905 * t * t, from[2] + Math.cos(sol.yaw) * hv * t];

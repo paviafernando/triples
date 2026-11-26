@@ -1,4 +1,4 @@
-/* Triples — modo simulación: el celu en la palma (pantalla contra la mano) como si fuera la pelota.
+/* Triples — modo simulación: el celu agarrado normal (palma atrás, pantalla mirándote) como si fuera la pelota.
    1) Calibración: se guarda la inclinación de la "posición de tiro" y hacia dónde está el aro (brújula).
    2) Cuando el celu queda quieto en esa posición → vibra (y hace "tic"): está armado.
    3) El empujón del tiro (acelerómetro) se integra para estimar la velocidad de la mano; cuando frena → soltó.
@@ -52,7 +52,7 @@ var Sim = (function () {
     if (lm < 2.5) for (var i = 0; i < 3; i++) g[i] = g[i] * 0.88 + aig[i] * 0.12;
     var still = lm < 1.3 && rot < 45;
     var ang = cfg.ref ? angle(g, cfg.ref) : 0;
-    S.live.ang = Math.round(ang); S.live.lin = Math.round(lm * 10) / 10; S.live.rot = Math.round(rot);
+    S.live.ang = Math.round(ang); S.live.dir = cfg.ref ? Math.atan2(g[1] - cfg.ref[1] * len(g) / (len(cfg.ref) || 1), g[0] - cfg.ref[0] * len(g) / (len(cfg.ref) || 1)) : 0; S.live.lin = Math.round(lm * 10) / 10; S.live.rot = Math.round(rot);
     var poseOK = !!cfg.ref && ang < 32 * cfg.sens;
     S.live.ok = poseOK;
     if (cb.raw) cb.raw({ g: g, lin: lin, lm: lm, rot: rot, still: still, ang: ang });
@@ -63,7 +63,7 @@ var Sim = (function () {
         else S._t0 = 0;
         break;
       case 'armed':
-        if (lm > 6.5 / cfg.sens) { set('push'); vel = [0, 0, 0]; peakA = 0; maxSp = 0; peakRot = 0; pushT0 = now; }
+        if (lm > 6.5 / cfg.sens || (rot > 260 / cfg.sens && lm > 2.5)) { set('push'); vel = [0, 0, 0]; peakA = 0; maxSp = 0; peakRot = 0; pushT0 = now; }
         else if (!poseOK && lm < 3) { if (!S._t1) S._t1 = now; if (now - S._t1 > 450) { S._t1 = 0; set('idle'); if (cb.disarm) cb.disarm(); } }
         else { S._t1 = 0; if (still) pushAlpha = alpha; }
         break;

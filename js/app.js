@@ -24,7 +24,7 @@ if (!S.prefs.cam) S.prefs.cam = 'arcade';
 window.T3 = window.T3 || {}; window.T3.style = S.prefs.cam;
 S.profiles = S.profiles || {};
 S.roster = S.roster || [];
-S.mode = S.mode || 'prac'; S.diff = S.diff || 'facil'; S.input = S.input || (IS_TOUCH ? 'swipe' : 'meter'); S.rival = S.rival || 'no'; S.rotate = S.rotate !== false;
+S.mode = S.mode || 'prac'; S.diff = S.diff || 'facil'; S.input = S.input || (IS_TOUCH ? 'pull' : 'meter'); S.rival = S.rival || 'no'; S.rotate = S.rotate !== false;
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 function newProfile(name, av, id) {
   id = id || 'p' + Math.random().toString(36).slice(2, 9);
@@ -273,7 +273,7 @@ RENDER.start = function () {
   $('#who').classList.toggle('editing', editMode);
   var n = 1, html = '';
   locals.forEach(function (p) {
-    var k = n <= 6 ? ' data-k="' + (n++) + '"' : '';
+    var k = n <= 5 ? ' data-k="' + (n++) + '"' : '';
     html += '<button class="wb' + (ids[p.id] ? ' on' : '') + '" ' + (editMode ? 'data-edit' : 'data-toggle') + '="' + p.id + '"' + k + '><span class="av">' + esc(p.av) + '</span><span class="ck">' + (editMode ? '✏️' : ids[p.id] ? '✓' : '') + '</span><span class="nm">' + esc(p.name) + '</span><small>' + p.coins + ' 🪙 · 🏆 ' + bestOf(p) + '</small></button>';
   });
   phones.forEach(function (p) { html += '<div class="wb on"><span class="av">' + esc(p.av) + '</span><span class="ck">📱</span><span class="nm">' + esc(p.name) + '</span><small>' + ((S.profiles[p.id] || {}).coins || 0) + ' 🪙</small></div>'; });
@@ -302,7 +302,7 @@ function openNewPlayer(id) {
 }
 
 /* ================= MODO ================= */
-var INPUTS = { swipe: '👆 Deslizar', meter: '⏱️ Medidor', sim: '📱 Simulación' };
+var INPUTS = { pull: '🏹 Tirachinas', swipe: '👆 Latigazo', meter: '⏱️ Medidor', sim: '📱 Simulación' };
 RENDER.mode = function () {
   $('#modes').innerHTML = [['prac', '🎯', 'Práctica', 'Elegí la posición y tirá todo lo que quieras. Rack perfecto = festejo.'], ['conc', '🏆', 'Concurso', '5 racks contra reloj. La última de cada rack es la money ball (vale 2).']]
     .map(function (m, i) { return '<button class="card' + (S.mode === m[0] ? ' on' : '') + '" data-mode="' + m[0] + '" data-k="' + (i + 1) + '"><span class="e">' + m[1] + '</span><b>' + m[2] + '</b><small>' + m[3] + '</small></button>'; }).join('');
@@ -647,7 +647,7 @@ function gameDigit(dig) {
   return false;
 }
 function cycleGameInput() {
-  var list = ['meter', 'swipe'].concat(Sim.supported() && IS_TOUCH ? ['sim'] : []);
+  var list = ['pull', 'swipe', 'meter'].concat(Sim.supported() && IS_TOUCH ? ['sim'] : []);
   var i = list.indexOf(G.input); G.input = list[(i + 1) % list.length]; S.input = G.input; save();
   if (G.input === 'sim') startSimLocal(); else stopSimLocal();
   toast('Tirar: ' + INPUTS[G.input]); updateHUD();
@@ -768,6 +768,7 @@ function updateHUD() {
 }
 function hintText() {
   if (!G) return '';
+  if (G.input === 'pull') return 'Apoyá el dedo, estirá hacia ABAJO como una gomera y soltá: más estirado = más fuerte';
   if (G.input === 'swipe') return IS_TOUCH ? 'Tirá con un latigazo hacia arriba: rápido = fuerte, llená el anillo hasta la zona verde' : 'Arrastrá rápido hacia arriba con el mouse · o usá el 0 / espacio';
   if (G.input === 'meter') return IS_TOUCH ? 'Mantené apretado y soltá en la zona verde' : 'Apretá 0 para tirar y otra vez (o soltá) en la zona verde';
   return '';
@@ -779,6 +780,7 @@ function loop(now) {
   var dt = Math.min(0.05, (now - lastNow) / 1000); lastNow = now;
   if (cur === 'game' && G) { stepGame(dt); renderGame(now / 1000); }
   if (cur === 'edit') drawEditor(now);
+  drawTutos(now);
   drawCeleb(now);
   requestAnimationFrame(loop);
 }
@@ -853,34 +855,36 @@ function renderGame(t) {
   }
   // gesto de tiro (estela + anillo de potencia)
   var dtF = Math.min(0.05, t - (G._lf || t)); G._lf = t;
-  if (G.input === 'swipe' && (G.phase === 'ready' || G.phase === 'set' || flick.busy())) {
+  if ((G.input === 'swipe' || G.input === 'pull') && (G.phase === 'ready' || G.phase === 'set' || gest().busy())) {
     var pr = S.prefs.theme === 'princess', mon = isMoney(G.spot, G.ball), pP = P();
-    flick.draw(ctx, dtF, { ballX: w / 2, ballY: h * 0.8, r: Math.min(w, h) * 0.055, fire: (pP.streak || 0) >= 3, zone: aimZone(),
+    gest().draw(ctx, dtF, { ballX: w / 2, ballY: h * 0.8, r: Math.min(w, h) * 0.055, fire: (pP.streak || 0) >= 3, zone: aimZone(),
       drawBall: function (c2, x, y, r) { Court.drawBallScreen(c2, x, y, r, 0, mon, pr); } });
   }
-  G.aim = flick.preview();
+  G.aim = (G.input === 'swipe' || G.input === 'pull') ? gest().preview() : null;
   document.body.classList.toggle('flicking', flick.active);
   if (G.aim) { var sk0 = P().sk, D0 = DIFFS[G.diff]; G.aim.k = (1.25 - sk0.tiro / 100 * 0.5) * D0.help * (G.diff === 'facil' ? 0.8 : 1); }
 }
 function aimZone() { return G.diff === 'facil' ? [0.72, 1.28] : G.diff === 'pro' ? [0.94, 1.06] : [0.88, 1.12]; }
-var flick = new Flick();
+var flickG = new Flick(), pullG = new Pull();
+function gest() { return G && G.input === 'pull' ? pullG : flickG; }
+var flick = { get active() { return gest().active; }, get y0() { return gest().y0; } };
 
 /* ---------- toque / mouse en la cancha ---------- */
 cv.addEventListener('pointerdown', function (e) {
   ac(); if (!G || G.input === 'sim') return;
   var dpr = cv.width / cv.clientWidth, x = e.clientX * dpr, y = e.clientY * dpr;
-  if (G.input === 'swipe') { if (!canShoot()) return; flick.start(x, y, cv.height); try { cv.setPointerCapture(e.pointerId); } catch (er) {} }
+  if (G.input === 'swipe' || G.input === 'pull') { if (!canShoot()) return; gest().start(x, y, cv.height); try { cv.setPointerCapture(e.pointerId); } catch (er) {} }
   else { if (G.meter) { meterRelease(); meterTap = false; } else if (canShoot()) { meterStart(); meterTap = true; keyDownAt = performance.now(); } }
 });
 cv.addEventListener('pointermove', function (e) {
   if (!G || !flick.active) return; var dpr = cv.width / cv.clientWidth;
   var evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
-  for (var i = 0; i < evs.length; i++) flick.move(evs[i].clientX * dpr, evs[i].clientY * dpr);
-  if (G.phase === 'ready' && flick.y0 - e.clientY * dpr > cv.height * 0.05) armShot();
+  for (var i = 0; i < evs.length; i++) gest().move(evs[i].clientX * dpr, evs[i].clientY * dpr);
+  if (G.phase === 'ready' && Math.abs(gest().y0 - e.clientY * dpr) > cv.height * 0.04) armShot();
 });
 function flickUp() {
   if (!G || !flick.active) return false;
-  var r = flick.end();
+  var r = gest().end();
   if (!r) { if (G.phase === 'set') G.phase = 'ready'; return true; }
   shootWith({ pe: r.pe, ae: r.ae, kind: 'swipe', spin: r.spin, rot: r.rot });
   return true;
@@ -890,7 +894,7 @@ cv.addEventListener('pointerup', function () {
   if (flickUp()) return;
   if (G.meter && meterTap && performance.now() - keyDownAt > 200) { meterRelease(); meterTap = false; }
 });
-cv.addEventListener('pointercancel', function () { if (flick.active) { flick.cancel(); if (G && G.phase === 'set') G.phase = 'ready'; } });
+cv.addEventListener('pointercancel', function () { if (flick.active) { gest().cancel(); if (G && G.phase === 'set') G.phase = 'ready'; } });
 
 /* ---------- simulación con el celu en este mismo dispositivo ---------- */
 var simHold = null;
@@ -903,7 +907,7 @@ function startSimLocal() {
       disarm: function () { $('#simShade').classList.remove('armed'); $('#simTxt').textContent = '✋ Posición de tiro'; if (G && G.phase === 'set') G.phase = 'ready'; },
       shot: function (s) { $('#simShade').classList.remove('armed'); $('#simTxt').textContent = '🏀 ¡Salió!'; if (G && (G.phase === 'ready' || G.phase === 'set')) shootWith({ pe: s.pe, ae: s.ae, kind: 'sim', spin: s.spin }); }
     });
-    $('#simTxt').textContent = '✋ Posición de tiro'; $('#simSub').textContent = 'Palma sobre la pantalla, levantá el celu como la pelota. Vibra cuando estás listo: ¡tirá!';
+    $('#simTxt').textContent = '✋ Posición de tiro'; $('#simSub').textContent = 'Celu a la frente, quieto hasta que vibra… ¡y tirá!';
   });
 }
 function stopSimLocal() { Sim.stop(); }
@@ -922,16 +926,16 @@ function renderCalib() {
   var st = $('#calStep'), b = $('#calBtns'), dot = $('#calDot');
   dot.classList.remove('ok');
   if (calStep === 0) {
-    dot.textContent = '✋';
-    st.innerHTML = 'Agarrá el celu con la <b>palma sobre la pantalla</b>, como si fuera la pelota. Así podés tirar de verdad.';
+    dot.textContent = '📱'; tutoT0 = performance.now();
+    st.innerHTML = 'Agarrá el celu <b>como siempre</b>: la palma atrás y la pantalla mirándote. Vas a tirar con el celu como si fuera la pelota (¡sin soltarlo!).';
     b.innerHTML = '<button class="big" data-act="calGo" data-k="0">Empezar</button><button class="pill" data-act="calClose" data-k="9">Cancelar</button>';
   } else if (calStep === 1) {
     dot.textContent = '🏀';
-    st.innerHTML = 'Levantalo a tu <b>posición de tiro</b>, mirando hacia el aro (la tele), y quedate <b>quieto</b>. Vas a escuchar “tic” y vibra.';
+    st.innerHTML = 'Subilo a la <b>frente</b>, como la pelota antes de tirar, mirando al aro (la tele), y quedate <b>quieto</b> hasta que se llene el círculo.';
     b.innerHTML = '<button class="pill" data-act="calClose" data-k="9">Cancelar</button>';
   } else if (calStep === 2) {
     dot.textContent = calSpeeds.length + '/3';
-    st.innerHTML = 'Ahora hacé <b>3 tiros buenos</b> (sin soltar el celu 😅). Volvé a la posición de tiro antes de cada uno.';
+    st.innerHTML = 'Ahora hacé <b>3 tiros buenos</b> con el brazo y la muñeca. Antes de cada uno volvé a la frente y esperá el ¡bzz!';
     b.innerHTML = '<button class="pill" data-act="calClose" data-k="9">Cancelar</button>';
   } else {
     dot.textContent = '✅'; dot.classList.add('ok');
@@ -963,6 +967,35 @@ function calGo() {
 function showOv(html) { $('#ov').innerHTML = html; $('#ov').classList.remove('hidden'); setTimeout(function () { var b = $('#ov .big'); if (b && !IS_TOUCH) b.focus(); }, 60); broadcast(); }
 function hideOv() { $('#ov').classList.add('hidden'); $('#ov').innerHTML = ''; broadcast(); }
 
+/* ================= TUTORIAL ================= */
+var TUTO = {
+  pull: { n: '🏹 Tirachinas', tips: ['Apoyá el dedo en cualquier lado de la pantalla.', 'Estirá hacia ABAJO, como una gomera: cuanto más estirás, más fuerte.', 'Para apuntar, estirá un poquito para el costado contrario (la flecha te muestra adónde va).', 'Cuando la barra está en verde, soltá.'] },
+  swipe: { n: '👆 Latigazo', tips: ['Apoyá el dedo y hacé un latigazo rápido hacia arriba.', 'No hace falta dibujar la curva: la estela es solo un efecto.', 'La fuerza sale de la VELOCIDAD del dedo; la dirección, del final del gesto.', 'Un golpe de muñeca al final le da más efecto a la pelota.'] },
+  meter: { n: '⏱️ Medidor', tips: ['Apretá 0 (o tocá y mantené) y la barra empieza a subir.', 'Soltá (o apretá otra vez) cuando esté en la zona verde.', 'Ideal para la tele con el control remoto.'] },
+  sim: { n: '📱 Simulación', tips: ['Agarrá el celu como siempre: la palma atrás y la pantalla mirándote.', 'Subilo a la frente, como la pelota antes de tirar, y quedate quieto: vibra y hace "tic".', 'Tirá con el brazo y la muñeca como un tiro de verdad (¡sin soltarlo!).', 'La primera vez se calibra: tu posición y 3 tiros.'] }
+};
+var tutoMode = null, tutoT0 = 0;
+function tutoModes() { return ['pull', 'swipe', 'meter'].concat(Sim.supported() && IS_TOUCH ? ['sim'] : []); }
+function openTuto(m) {
+  tutoMode = m || (tutoModes().indexOf(S.input) >= 0 ? S.input : tutoModes()[0]); tutoT0 = performance.now();
+  var md = TUTO[tutoMode];
+  showOv('<h2>🎓 Cómo tirar</h2><div class="row">' + tutoModes().map(function (k, i) { return '<button class="pill' + (k === tutoMode ? ' on' : '') + '" data-tuto="' + k + '" data-k="' + (i + 1) + '">' + TUTO[k].n + '</button>'; }).join('') + '</div>' +
+    '<canvas id="tutoCv" width="720" height="420" style="width:min(92vw,620px);height:auto;border-radius:22px;box-shadow:0 10px 30px rgba(0,0,0,.4)"></canvas>' +
+    '<ol class="tips">' + md.tips.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ol>' +
+    '<div class="row"><button class="big" data-act="tutoUse" data-k="0">✔ Usar este</button><button class="pill" data-act="tutoClose" data-k="9">↩ Volver</button></div>');
+}
+function drawTutos(now) {
+  var t = (now - tutoT0) / 1000, cvT = document.getElementById('tutoCv');
+  if (cvT && tutoMode) Tuto.demo(cvT.getContext('2d'), cvT.width, cvT.height, tutoMode, t);
+  var mini = document.getElementById('tutoMini');
+  if (mini && cur === 'start' && mini.offsetParent) { var m = tutoModes().indexOf(S.input) >= 0 ? S.input : 'meter'; Tuto.demo(mini.getContext('2d'), mini.width, mini.height, m, now / 1000); var nm = $('#tutoName'); if (nm && nm.getAttribute('data-m') !== m) { nm.setAttribute('data-m', m); nm.innerHTML = 'Tirás con: ' + TUTO[m].n; $('#tutoTxt').innerHTML = TUTO[m].tips[1]; } }
+  var cg = document.getElementById('calCv');
+  if (cg && !$('#calib').classList.contains('hidden')) {
+    if (calStep === 0) Tuto.demo(cg.getContext('2d'), cg.width, cg.height, 'sim', (now - tutoT0) / 1000);
+    else Tuto.gauge(cg.getContext('2d'), cg.width, cg.height, Sim.live, calStep, calStep === 1 ? Math.min(1, calStill0 ? (performance.now() - calStill0) / 1300 : 0) : calSpeeds.length / 3);
+  }
+}
+
 /* ================= ACCIONES ================= */
 function act(a, el) {
   ac();
@@ -980,7 +1013,7 @@ function act(a, el) {
     case 'resetPlayer': if (editId && confirmAct('¿Reiniciar los puntajes de ' + S.profiles[editId].name + '?')) { var p0 = S.profiles[editId]; p0.coins = 0; p0.best = {}; p0.prac = { made: 0, att: 0, streak: 0 }; p0.ach = {}; p0.sk = { tiro: 70, rango: 70, ritmo: 70, clutch: 70 }; save(); toast('Puntajes reiniciados'); } break;
     case 'delPlayer': if (editId && confirmAct('¿Borrar a ' + S.profiles[editId].name + '?')) { delete S.profiles[editId]; S.roster = S.roster.filter(function (x) { return x !== editId; }); save(); stack = []; show('start', false); } break;
     case 'toPick': startPicking(); break;
-    case 'cycleInput': { var l = ['meter', 'swipe'].concat(Sim.supported() && IS_TOUCH ? ['sim'] : []); S.input = l[(l.indexOf(S.input) + 1) % l.length]; save(); RENDER.mode(); if (S.input === 'sim') toast('📱 Agarrá el celu con la palma en la pantalla y tirá como si fuera la pelota'); break; }
+    case 'cycleInput': { var l = ['pull', 'swipe', 'meter'].concat(Sim.supported() && IS_TOUCH ? ['sim'] : []); S.input = l[(l.indexOf(S.input) + 1) % l.length]; save(); RENDER.mode(); if (S.input === 'sim') toast('📱 Agarrá el celu normal, subilo a la frente y tirá como si fuera la pelota'); break; }
     case 'cycleRival': { var ids = ['no'].concat(STARS.filter(function (s) { return Arcade.has(s.id); }).map(function (s) { return s.id; })); S.rival = ids[(ids.indexOf(S.rival) + 1) % ids.length]; save(); RENDER.mode(); break; }
     case 'toggleRotate': S.rotate = !S.rotate; save(); RENDER.mode(); break;
     case 'editMe': {
@@ -1013,6 +1046,9 @@ function act(a, el) {
     case 'again': hideOv(); G.turn = 0; G.results = []; beginTurn(); break;
     case 'rot': gameDigit('6'); break;
     case 'calib': openCalib(); break;
+    case 'tuto': openTuto(); break;
+    case 'tutoClose': tutoMode = null; hideOv(); break;
+    case 'tutoUse': S.input = tutoMode; save(); if (G) { G.input = S.input; if (S.input === 'sim') startSimLocal(); else stopSimLocal(); updateHUD(); } tutoMode = null; hideOv(); toast('Tirar: ' + INPUTS[S.input]); if (cur === 'mode') RENDER.mode(); break;
     case 'calGo': calGo(); break;
     case 'calClose': closeCalib(); break;
     case 'calRedo': calStep = 0; Sim.stop(); renderCalib(); break;
@@ -1040,6 +1076,7 @@ document.addEventListener('click', function (e) {
   if (d.tab) { edTab = +d.tab; RENDER.edit(); return; }
   if (d.ed) { edCycle(d.ed, +d.dir); return; }
   if (d.up) { var pr = S.profiles[edPid], s = d.up, cost = upCost(pr.sk[s]); if (pr.coins < cost) { toast('Te faltan ' + (cost - pr.coins) + ' 🪙. ¡Embocá más!'); return; } pr.coins -= cost; pr.sk[s] = Math.min(95, pr.sk[s] + 3); save(); SFX.money(); RENDER.edit(); return; }
+  if (d.tuto) { openTuto(d.tuto); SFX.key(); return; }
   if (d.money != null) { setMoneyRack(+d.money); return; }
   if (d.spot != null) { gameDigit(String(+d.spot + 1)); return; }
 });
@@ -1131,20 +1168,20 @@ function startPad(c0) {
     else if (st.mine) { s.textContent = '⭐ ¡Te toca! ' + (st.score != null ? st.score + ' pts' : ''); s.classList.add('turn'); }
     else if (st.myTurn) s.textContent = 'Tira ' + st.turnName + ' (podés tirar vos)';
     else s.textContent = 'Turno de ' + st.turnName;
-    $('#pModes').innerHTML = [['swipe', '👆 Deslizar'], ['meter', '⏱️ Botón'], ['sim', '📱 Simulación']].filter(function (m) { return m[0] !== 'sim' || Sim.supported(); }).map(function (m) { return '<button class="pill' + (mode === m[0] ? ' on' : '') + '" data-pm="' + m[0] + '">' + m[1] + '</button>'; }).join('');
+    $('#pModes').innerHTML = [['pull', '🏹 Gomera'], ['swipe', '👆 Latigazo'], ['meter', '⏱️ Botón'], ['sim', '📱 Simular']].filter(function (m) { return m[0] !== 'sim' || Sim.supported(); }).map(function (m) { return '<button class="pill' + (mode === m[0] ? ' on' : '') + '" data-pm="' + m[0] + '">' + m[1] + '</button>'; }).join('');
     var shoot = inGame && st.myTurn;
-    $('#pSwipe').classList.toggle('hidden', !(shoot && mode === 'swipe'));
+    $('#pSwipe').classList.toggle('hidden', !(shoot && (mode === 'swipe' || mode === 'pull')));
     $('#pMeter').classList.toggle('hidden', !(shoot && mode === 'meter'));
     $('#pSim').classList.toggle('hidden', !(shoot && mode === 'sim'));
     $('#pModes').classList.toggle('hidden', !shoot);
     $('#pKeys').classList.toggle('hidden', !!(shoot && mode === 'sim' && Sim.running()));
     if (mode !== 'sim' || !shoot) { if (Sim.running()) Sim.stop(); }
     if (shoot && mode === 'sim') renderSim();
-    if (shoot && mode === 'swipe' && !sw) { var r = area.getBoundingClientRect(); if (r.height) placeBand(r.top + r.height * 0.84 - 45); }
+    if (false) { var r = area.getBoundingClientRect(); if (r.height) placeBand(r.top + r.height * 0.84 - 45); }
   };
   var renderSim = function () {
     var box = $('#pSim');
-    if (!Sim.running()) { box.classList.remove('armed'); box.innerHTML = '<div style="font-size:60px">📱✋</div><b style="font-size:20px">Agarrá el celu con la palma sobre la pantalla y tirá como si fuera la pelota</b><button class="big" id="pSimGo">▶ Activar</button>' + (Sim.calibrated() ? '<button class="pill" id="pSimCal">🔁 Calibrar</button>' : ''); $('#pSimGo').onclick = simGo; if ($('#pSimCal')) $('#pSimCal').onclick = function () { Sim.ask().then(function () { openCalib(function () { simGo(); }); }); }; }
+    if (!Sim.running()) { box.classList.remove('armed'); box.innerHTML = '<div style="font-size:60px">📱</div><b style="font-size:20px">Agarrá el celu normal, subilo a la frente y tirá como si fuera la pelota</b><button class="big" id="pSimGo">▶ Activar</button>' + (Sim.calibrated() ? '<button class="pill" id="pSimCal">🔁 Calibrar</button>' : ''); $('#pSimGo').onclick = simGo; if ($('#pSimCal')) $('#pSimCal').onclick = function () { Sim.ask().then(function () { openCalib(function () { simGo(); }); }); }; }
   };
   var simGo = function () {
     Sim.ask().then(function (ok) {
@@ -1162,7 +1199,8 @@ function startPad(c0) {
     });
   };
   // deslizar en el celu
-  var sw = null, area = $('#pSwipe'), pcv = $('#pSwipeCv'), pctx = pcv.getContext('2d'), pf = new Flick(), pLast = 0;
+  var sw = null, area = $('#pSwipe'), pcv = $('#pSwipeCv'), pctx = pcv.getContext('2d'), pfF = new Flick(), pfP = new Pull(), pLast = 0;
+  var PF = function () { return mode === 'pull' ? pfP : pfF; };
   var pScale = function () { return pcv.width / pcv.clientWidth; };
   var fitP = function () { var dpr = Math.min(2, devicePixelRatio || 1); pcv.width = Math.round(pcv.clientWidth * dpr); pcv.height = Math.round(pcv.clientHeight * dpr); };
   var padLoop = function (now) {
@@ -1170,20 +1208,20 @@ function startPad(c0) {
       if (pcv.width !== Math.round(pcv.clientWidth * Math.min(2, devicePixelRatio || 1))) fitP();
       var dt = Math.min(0.05, (now - (pLast || now)) / 1000); pLast = now;
       pctx.clearRect(0, 0, pcv.width, pcv.height);
-      pf.draw(pctx, dt, { ballX: pcv.width / 2, ballY: pcv.height * 0.78, r: Math.min(pcv.width, pcv.height) * 0.09, fire: false, zone: [0.88, 1.12], drawBall: function (c2, x, y, r) { Court.drawBallScreen(c2, x, y, r, 0, false, false); } });
+      PF().draw(pctx, dt, { ballX: pcv.width / 2, ballY: pcv.height * 0.78, r: Math.min(pcv.width, pcv.height) * 0.09, fire: false, zone: [0.88, 1.12], drawBall: function (c2, x, y, r) { Court.drawBallScreen(c2, x, y, r, 0, false, false); } });
     }
     requestAnimationFrame(padLoop);
   };
   requestAnimationFrame(padLoop);
-  area.addEventListener('pointerdown', function (e) { ac(); var k = pScale(), r = pcv.getBoundingClientRect(); sw = 1; pf.start((e.clientX - r.left) * k, (e.clientY - r.top) * k, innerHeight * k); try { area.setPointerCapture(e.pointerId); } catch (er) {} });
-  area.addEventListener('pointermove', function (e) { if (!sw) return; var k = pScale(), r = pcv.getBoundingClientRect(), evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e]; for (var i = 0; i < evs.length; i++) pf.move((evs[i].clientX - r.left) * k, (evs[i].clientY - r.top) * k); });
+  area.addEventListener('pointerdown', function (e) { ac(); var k = pScale(), r = pcv.getBoundingClientRect(); sw = 1; PF().start((e.clientX - r.left) * k, (e.clientY - r.top) * k, innerHeight * k); try { area.setPointerCapture(e.pointerId); } catch (er) {} });
+  area.addEventListener('pointermove', function (e) { if (!sw) return; var k = pScale(), r = pcv.getBoundingClientRect(), evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e]; for (var i = 0; i < evs.length; i++) PF().move((evs[i].clientX - r.left) * k, (evs[i].clientY - r.top) * k); });
   area.addEventListener('pointerup', function () {
     if (!sw) return; sw = null;
-    var res = pf.end(); if (!res) return;
+    var res = PF().end(); if (!res) return;
     SFX.release(); vib(20);
     send({ t: 'shot', kind: 'swipe', pe: res.pe, ae: res.ae, spin: res.spin });
   });
-  area.addEventListener('pointercancel', function () { sw = null; pf.cancel(); });
+  area.addEventListener('pointercancel', function () { sw = null; PF().cancel(); });
   var placeBand = function () {};
   // botón (medidor en la tele)
   var pm = $('#pMeter');
@@ -1192,7 +1230,7 @@ function startPad(c0) {
   $('#pad').addEventListener('click', function (e) {
     var b = e.target.closest ? e.target.closest('button') : null; if (!b) return;
     if (b.dataset.pk) { vib(15); SFX.key(); send({ t: 'key', k: b.dataset.pk }); }
-    if (b.dataset.pm) { mode = b.dataset.pm; localStorage.setItem('tr-padmode', mode); if (mode !== 'sim') Sim.stop(); render(); if (mode === 'sim') toast('📱 Palma sobre la pantalla, celu en posición de tiro… ¡y tirá!', 4000); }
+    if (b.dataset.pm) { mode = b.dataset.pm; localStorage.setItem('tr-padmode', mode); if (mode !== 'sim') Sim.stop(); render(); if (mode === 'sim') toast('📱 Celu a la frente, quieto hasta que vibra… ¡y tirá!', 4000); }
   });
   var askProfile = function () {
     if (me.av) return connect0();
