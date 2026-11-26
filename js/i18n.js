@@ -34,6 +34,7 @@ var EN = [
   ['Conectando con la tele…', 'Connecting to the TV…'], ['(podés tirar vos)', '(you can shoot)'],
   ['Cambia de posición en cada rack', 'Changes spot every rack'], ['Se queda en la misma posición', 'Stays on the same spot'],
   ['Saliste del modo simulación', 'You left simulation mode'], ['Hace falta permiso para usar los sensores', 'Sensor permission is needed'], ['Hace falta permiso para los sensores', 'Sensor permission is needed'],
+  ['Código: tocá los íconos (1 · 2 · 3)', 'Code: tap the icons (1 · 2 · 3)'], ['¡A jugar!', 'Let\'s play!'], ['¡MENÚ SECRETO DESTRABADO!', 'SECRET MENU UNLOCKED!'], ['¡ARRANCÁS ON FIRE!', 'YOU START ON FIRE!'], ['¡MODO PRINCESA!', 'PRINCESS MODE!'], ['Ver el menú secreto', 'Open the secret menu'], ['Menú secreto', 'Secret menu'], ['Pelota de oro: ', 'Golden ball: '], ['El reloj', 'The clock'], ['El aro', 'The hoop'], ['rival', 'rival'],
   ['¿Reiniciar los puntajes de ', 'Reset scores for '], ['¿Borrar a ', 'Delete '], ['Puntajes reiniciados', 'Scores reset'],
   ['¡Embocá más!', 'Score more!'], ['Te faltan ', 'You need '],
   ['Cambiar de posición: ', 'Change spot: '], ['Calibrar simulación', 'Calibrate simulation'], ['Calibrar de nuevo', 'Calibrate again'], ['Invertir lados', 'Flip sides'], ['Sensibilidad', 'Sensitivity'], ['Brújula', 'Compass'],

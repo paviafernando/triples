@@ -336,13 +336,14 @@ RENDER.pick = function () {
   var p = pickQ[pickI]; if (!p) return;
   var sel = pickSel[p.id];
   $('#pickTitle').innerHTML = (pickQ.length > 1 ? esc(p.av) + ' ' + esc(p.name) + ', ' : '') + '¿con quién tirás?';
-  var opts = STARS.filter(function (s) { return Arcade.has(s.id); }).map(function (s) { return { id: s.id, name: s.short, tag: s.tag }; });
+  var opts = STARS.filter(function (s) { return Arcade.has(s.id) && (!s.secret || S.secret); }).map(function (s) { return { id: s.id, name: s.short, tag: s.tag }; });
   if (!opts.some(function (o) { return o.id === sel; }) && opts.length) { sel = pickSel[p.id] = opts[0].id; }
   $('#pgrid').innerHTML = opts.map(function (o, i) {
     var sk = playerSkills(p.id, o.id);
     return '<button class="pc' + (sel === o.id ? ' on' : '') + '" data-pick="' + o.id + '" data-k="' + (i + 1) + '"><canvas width="240" height="240" data-face="' + o.id + '"></canvas><b>' + esc(o.id === 'me' ? (S.profiles[p.id] ? S.profiles[p.id].name : 'Yo') : o.name) + '</b><small>' + esc(o.tag) + '</small>' + skBars(sk) + '</button>';
   }).join('');
   $$('#pgrid canvas').forEach(function (cv) { var fid = cv.getAttribute('data-face'); portrait(cv, playerLook(p.id, fid), null, fid); });
+  $('#pickSecret').innerHTML = S.secret ? '<div class="secretBox"><img class="ic" src="' + SATURNO + '" alt=""> <b>Menú secreto</b><button class="pill' + (S.goldBall ? ' on' : '') + '" data-act="goldBall" data-k="9"><img class="ic" src="/assets/ui/pelota_oro.webp" alt=""> Pelota de oro: ' + (S.goldBall ? 'sí' : 'no') + '</button></div>' : '';
 };
 function portrait(cv, look, bg, id) {
   if (id && Arcade.portrait(cv, id)) return;
@@ -454,6 +455,58 @@ document.addEventListener('arcadeready', function () { if (RENDER[cur] && cur !=
 function sizeCanvas() { var dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = Math.round(cv.clientWidth * dpr); cv.height = Math.round(cv.clientHeight * dpr); }
 window.addEventListener('resize', function () { if (cur === 'game') sizeCanvas(); if (cur === 'edit') sizeEdCanvas(); });
 
+/* ---------- Portada VS (estilo pelea) con código de 3 íconos ---------- */
+var SATURNO = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g" cx="40%" cy="35%"><stop offset="0" stop-color="#ffe9a8"/><stop offset="1" stop-color="#e09a2e"/></radialGradient></defs><g transform="rotate(-18 50 50)"><path d="M4 50 A46 13 0 0 1 96 50" fill="none" stroke="#9b6be8" stroke-width="7"/></g><circle cx="50" cy="50" r="27" fill="url(#g)" stroke="#5a2a00" stroke-width="3"/><path d="M28 42 Q50 37 72 42" stroke="#c97a1e" stroke-width="4" fill="none"/><path d="M25 55 Q50 51 75 55" stroke="#c97a1e" stroke-width="3" fill="none"/><g transform="rotate(-18 50 50)"><path d="M4 50 A46 13 0 0 0 96 50" fill="none" stroke="#d6b4ff" stroke-width="7"/></g></svg>');
+var VS_ICONS = [
+  { k: 'pelota', src: '/assets/ui/pelota.webp' }, { k: 'estrella', src: '/assets/ui/estrella.webp' }, { k: 'fuego', src: '/assets/ui/pro.webp' },
+  { k: 'corona', src: '/assets/ui/princesa.webp' }, { k: 'moneda', src: '/assets/ui/moneda.webp' }, { k: 'saturno', src: SATURNO }
+];
+var VS_CODES = {
+  'saturno,saturno,saturno': { msg: '🪐 ¡MENÚ SECRETO DESTRABADO!', run: function () { var nuevo = !S.secret; S.secret = true; save(); return nuevo; } },
+  'fuego,fuego,fuego': { msg: '🔥 ¡ARRANCÁS ON FIRE!', run: function () { vs.fire = true; return true; } },
+  'corona,corona,corona': { msg: '👑 ¡MODO PRINCESA!', run: function () { S.prefs.theme = S.prefs.theme === 'princess' ? 'normal' : 'princess'; save(); applyPrefs(); return true; } }
+};
+var vs = { code: [0, 0, 0], t: 0, timer: null, fire: false, done: {} };
+function vsFace(cv, look, id) { portrait(cv, look, null, id); }
+function openVs() {
+  vs.code = [0, 0, 0]; vs.fire = false; vs.done = {}; vs.t = 9;
+  show('vs');
+  var ps = pickQ.map(function (p) { var sel = pickSel[p.id] || 'me', st = sel === 'me' ? null : starById(sel); return { p: p, sel: sel, st: st }; });
+  $('#vsL').innerHTML = ps.map(function (x, i) { return '<div class="vsP" style="animation-delay:' + (i * 0.12) + 's"><canvas width="260" height="260" data-vs="' + i + '"></canvas><b>' + esc(x.st ? x.st.short : x.p.name) + '</b><small>' + esc(x.p.av + ' ' + x.p.name) + '</small></div>'; }).join('');
+  ps.forEach(function (x, i) { var cv = $('#vsL [data-vs="' + i + '"]'); if (cv) vsFace(cv, playerLook(x.p.id, x.sel), x.st ? x.st.id : null); });
+  var rival = S.mode === 'conc' && S.rival !== 'no' ? starById(S.rival) : null;
+  if (rival) { $('#vsR').innerHTML = '<div class="vsP"><canvas width="260" height="260" id="vsRc"></canvas><b>' + esc(rival.short) + '</b><small>🤖 rival</small></div>'; vsFace($('#vsRc'), rival.look, rival.id); }
+  else $('#vsR').innerHTML = '<div class="vsP"><canvas width="260" height="260" id="vsRc"></canvas><b>' + (S.mode === 'conc' ? 'El reloj' : 'El aro') + '</b><small>' + (S.mode === 'conc' ? '🏆 Concurso' : '🎯 Práctica') + '</small></div>', vsHoop($('#vsRc'));
+  vsRenderCode(); $('#vsMsg').textContent = ''; $('#vsBtns').innerHTML = '<button class="big" data-act="vsGo" data-k="0">▶ ¡A jugar!</button>';
+  SFX.buzzer(); voz(['bienvenida'], true);
+  clearInterval(vs.timer); vs.timer = setInterval(function () { vs.t -= 0.1; var b = $('#vsBar i'); if (b) b.style.width = Math.max(0, vs.t / 9 * 100) + '%'; if (vs.t <= 0) vsStart(); }, 100);
+  broadcast();
+}
+function vsHoop(cv) {
+  var c = cv.getContext('2d'), w = cv.width, h = cv.height; c.clearRect(0, 0, w, h);
+  var im = window.BALL_IMGS && window.BALL_IMGS.pelota;
+  c.fillStyle = '#fff'; c.fillRect(w * 0.22, h * 0.18, w * 0.56, h * 0.36); c.strokeStyle = '#d33'; c.lineWidth = 6; c.strokeRect(w * 0.38, h * 0.3, w * 0.24, h * 0.18);
+  c.strokeStyle = '#ff5a14'; c.lineWidth = 9; c.beginPath(); c.ellipse(w / 2, h * 0.56, w * 0.17, h * 0.04, 0, 0, 7); c.stroke();
+  c.strokeStyle = 'rgba(255,255,255,.9)'; c.lineWidth = 3; for (var i = -3; i <= 3; i++) { c.beginPath(); c.moveTo(w / 2 + i * w * 0.05, h * 0.58); c.lineTo(w / 2 + i * w * 0.03, h * 0.78); c.stroke(); }
+  if (im) c.drawImage(im, w * 0.58, h * 0.62, w * 0.24, w * 0.24);
+}
+function vsRenderCode() {
+  $('#vsCode').innerHTML = vs.code.map(function (v, i) { return '<button class="vsSlot" data-slot="' + i + '" data-k="' + (i + 1) + '"><img src="' + VS_ICONS[v].src + '" alt=""></button>'; }).join('');
+}
+function vsTap(i) {
+  vs.code[i] = (vs.code[i] + 1) % VS_ICONS.length; SFX.key();
+  vs.t = Math.max(vs.t, 5);
+  vsRenderCode(); var sl = $('#vsCode [data-slot="' + i + '"]'); if (sl) { sl.classList.add('bump'); setTimeout(function () { sl.classList.remove('bump'); }, 150); if (!IS_TOUCH) sl.focus(); }
+  var key = vs.code.map(function (v) { return VS_ICONS[v].k; }).join(','), c = VS_CODES[key];
+  if (c && !vs.done[key]) {
+    vs.done[key] = true; c.run(); $('#vsMsg').textContent = T(c.msg); SFX.cheer(1); vs.t = Math.max(vs.t, 6);
+    if (key === 'saturno,saturno,saturno') { vs.t = 99; $('#vsBtns').innerHTML = '<button class="big" data-act="vsSecret" data-k="9">🪐 Ver el menú secreto</button><button class="big" data-act="vsGo" data-k="0">▶ ¡A jugar!</button>'; }
+  }
+}
+function vsStop() { clearInterval(vs.timer); vs.timer = null; }
+function vsStart() { if (cur !== 'vs') { vsStop(); return; } vsStop(); startGame(); }
+document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-slot]'); if (b && cur === 'vs') vsTap(+b.getAttribute('data-slot')); });
+
 function newRacks(moneySpot) { var r = []; for (var i = 0; i < 5; i++) r.push({ res: [], left: 5, money: i === moneySpot }); return r; }
 function startGame() {
   var ps = pickQ.map(function (p) {
@@ -472,7 +525,7 @@ function P() { return G.players[G.turn]; }
 function beginTurn() {
   var p = P();
   G.spot = G.mode === 'conc' ? 0 : (G.spot || 2); G.ball = 0; G.time = DIFFS[G.diff].time; G.running = false;
-  G.racks = newRacks(-1); p.score = 0; p.made = 0; p.att = 0; p.streak = 0; Audio2.setBase(0.25); syncMusic();
+  G.racks = newRacks(-1); p.score = 0; p.made = 0; p.att = 0; p.streak = (G.turn === 0 && vs.fire && !p.fired) ? 3 : 0; p.fired = true; Audio2.setBase(0.25); syncMusic();
   G.shooter = { pos: Court.spotPos(G.spot, G.diff), look: p.look, pose: shotPose(p.look, 0, 0), hasBall: false, money: false };
   Court.setSpot(G.spot, G.diff, true); Court.clearBall();
   portrait($('#hudPortrait'), p.look, null, p.star && p.star.id);
@@ -1014,7 +1067,7 @@ function act(a, el) {
     case 'delPlayer': if (editId && confirmAct('¿Borrar a ' + S.profiles[editId].name + '?')) { delete S.profiles[editId]; S.roster = S.roster.filter(function (x) { return x !== editId; }); save(); stack = []; show('start', false); } break;
     case 'toPick': startPicking(); break;
     case 'cycleInput': { var l = ['pull', 'swipe', 'meter'].concat(Sim.supported() && IS_TOUCH ? ['sim'] : []); S.input = l[(l.indexOf(S.input) + 1) % l.length]; save(); RENDER.mode(); if (S.input === 'sim') toast('📱 Agarrá el celu normal, subilo a la frente y tirá como si fuera la pelota'); break; }
-    case 'cycleRival': { var ids = ['no'].concat(STARS.filter(function (s) { return Arcade.has(s.id); }).map(function (s) { return s.id; })); S.rival = ids[(ids.indexOf(S.rival) + 1) % ids.length]; save(); RENDER.mode(); break; }
+    case 'cycleRival': { var ids = ['no'].concat(STARS.filter(function (s) { return Arcade.has(s.id) && (!s.secret || S.secret); }).map(function (s) { return s.id; })); S.rival = ids[(ids.indexOf(S.rival) + 1) % ids.length]; save(); RENDER.mode(); break; }
     case 'toggleRotate': S.rotate = !S.rotate; save(); RENDER.mode(); break;
     case 'editMe': {
       var who = cur === 'pick' && pickQ[pickI] ? pickQ[pickI].id : (roster()[0] || {}).id;
@@ -1022,9 +1075,12 @@ function act(a, el) {
       openEditor(who); break;
     }
     case 'opts': show('opts'); break;
+    case 'goldBall': S.goldBall = !S.goldBall; window.GOLD_BALL = S.goldBall; save(); SFX.coin(); RENDER.pick(); break;
+    case 'vsGo': vsStart(); break;
+    case 'vsSecret': vsStop(); pickI = 0; show('pick'); break;
     case 'pickOk': {
       pickI++; SFX.ok();
-      if (pickI >= pickQ.length) { startGame(); } else RENDER.pick();
+      if (pickI >= pickQ.length) { openVs(); } else RENDER.pick();
       break;
     }
     case 'edDone': save(); back(); break;
@@ -1268,7 +1324,7 @@ function startPad(c0) {
 }
 
 /* ================= ARRANQUE ================= */
-applyPrefs();
+applyPrefs(); window.GOLD_BALL = !!S.goldBall;
 var padCode = (QS.get('c') || '').replace(/\D/g, '').slice(0, 4);
 if (padCode.length === 4) startPad(padCode);
 else {

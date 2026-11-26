@@ -46,5 +46,5 @@
   if (window.LANG === 'en') { var ph = document.querySelectorAll('[placeholder],[title]'); for (var i = 0; i < ph.length; i++) { if (ph[i].placeholder) ph[i].placeholder = T(ph[i].placeholder); if (ph[i].title) ph[i].title = T(ph[i].title); } }
   // pelotas dibujadas para la cancha
   var BALLS = window.BALL_IMGS = {};
-  ['pelota', 'pelota_money', 'pelota_arcoiris', 'pelota_fuego'].forEach(function (k) { var im = new Image(); im.onload = function () { BALLS[k] = im; }; im.src = ICON(k); });
+  ['pelota', 'pelota_money', 'pelota_arcoiris', 'pelota_fuego', 'pelota_oro'].forEach(function (k) { var im = new Image(); im.onload = function () { BALLS[k] = im; }; im.src = ICON(k); });
 })();
