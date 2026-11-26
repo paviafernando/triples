@@ -35,3 +35,4 @@ turno | Le toca a...
 nombre_emi | ¡Emi!
 nombre_papa | ¡Papá!
 nombre_mama | ¡Mamá!
+# Thu Nov 26 10:51:04 -03 2026
