@@ -79,7 +79,7 @@ function crowdAmb(on) {
   } catch (e) {}
 }
 /* Locutor: frases pregrabadas (voz neuronal es_AR) en assets/voz/*.mp3 */
-var VOZ = {}, vozQ = [], vozBusy = false, vozAvail = ['bienvenida','ya','adentro','adentro2','adentro3','limpita','tablero','bailo','money','fuego','racha','casi','corta','larga','rack','diez','tiempo','record','muybien','genia','moneyrack','siguiente','gano','otra','curry','doncic','lebron','jordan','kobe','shaq','manu','bird','turno','nombre_emi','nombre_papa','nombre_mama'];
+var VOZ = {}, vozQ = [], vozBusy = false, vozAvail = [], vozViejas = ['bienvenida','ya','adentro','adentro2','adentro3','limpita','tablero','bailo','money','fuego','racha','casi','corta','larga','rack','diez','tiempo','record','muybien','genia','moneyrack','siguiente','gano','otra','curry','doncic','lebron','jordan','kobe','shaq','manu','bird','turno','nombre_emi','nombre_papa','nombre_mama'];
 function vozBuf(id) {
   if (VOZ[id] !== undefined) return VOZ[id];
   VOZ[id] = null;
@@ -243,8 +243,7 @@ RENDER.opts = function () {
     ['theme', o.theme === 'princess' ? '👑 Modo princesa' : '🏀 Modo normal', true],
     ['sfx', o.sfx ? '🔊 Sonidos' : '🔇 Sonidos', o.sfx],
     ['crowd', o.crowd ? '🏟️ Público' : '🤫 Público', o.crowd],
-    ['voice', o.voice ? '🗣️ Voz' : '🤐 Voz', o.voice],
-    ['cam', o.cam === 'arcade' ? '🕹️ Cámara arcade' : '📺 Cámara de atrás', true]
+    ['voice', o.voice ? '🗣️ Voz' : '🤐 Voz', o.voice]
   ].map(function (x) { return '<button class="pill' + (x[2] ? ' on' : '') + '" data-opt="' + x[0] + '" data-k="' + (i++) + '">' + x[1] + '</button>'; }).join('') +
     (Sim.supported() && IS_TOUCH ? '<button class="pill" data-act="calib" data-k="5">📱 Calibrar simulación</button>' : '');
   $('#optInfo').textContent = S.prefs.theme === 'princess' ? 'En modo princesa la money ball es un arcoíris 🌈' : 'La money ball (la última de cada rack) es la blanca, azul y roja y vale 2.';
@@ -306,7 +305,7 @@ RENDER.mode = function () {
   var rivalName = S.rival === 'no' ? 'Sin rival' : '🤖 ' + starById(S.rival).short;
   $('#moreOpts').innerHTML = '<button class="pill" data-act="cycleInput" data-k="6">Tirar: ' + INPUTS[S.input] + '</button>' +
     (S.mode === 'conc' ? '<button class="pill" data-act="cycleRival" data-k="7">Rival: ' + rivalName + '</button>' : '<button class="pill' + (S.rotate ? ' on' : '') + '" data-act="toggleRotate" data-k="7">🔄 Cambiar de posición: ' + (S.rotate ? 'sí' : 'no') + '</button>') +
-    '<button class="pill" data-act="editMe" data-k="8">🧑‍🎨 Mi jugador</button><button class="pill" data-act="opts" data-k="9">⚙️ Opciones</button>';
+    '<button class="pill" data-act="opts" data-k="9">⚙️ Opciones</button>';
 };
 function starById(id) { for (var i = 0; i < STARS.length; i++) if (STARS[i].id === id) return STARS[i]; return null; }
 
@@ -316,7 +315,7 @@ function startPicking() {
   var ps = allPlayers();
   if (!ps.length) return openNewPlayer();
   pickQ = ps; pickI = 0; pickSel = {};
-  ps.forEach(function (p) { var pr = S.profiles[p.id]; pickSel[p.id] = (pr && pr.pick) || 'me'; });
+  ps.forEach(function (p) { var pr = S.profiles[p.id]; pickSel[p.id] = (pr && pr.pick && pr.pick !== 'me') ? pr.pick : 'lebron'; });
   show('pick');
 }
 function playerLook(pid, sel) {
@@ -329,15 +328,16 @@ RENDER.pick = function () {
   var p = pickQ[pickI]; if (!p) return;
   var sel = pickSel[p.id];
   $('#pickTitle').innerHTML = (pickQ.length > 1 ? esc(p.av) + ' ' + esc(p.name) + ', ' : '') + '¿con quién tirás?';
-  var opts = [{ id: 'me', name: 'Mi jugador', tag: 'Lo armás vos y lo mejorás con monedas' }].concat(STARS.map(function (s) { return { id: s.id, name: s.short, tag: s.tag }; }));
+  var opts = STARS.filter(function (s) { return Arcade.has(s.id); }).map(function (s) { return { id: s.id, name: s.short, tag: s.tag }; });
+  if (!opts.some(function (o) { return o.id === sel; }) && opts.length) { sel = pickSel[p.id] = opts[0].id; }
   $('#pgrid').innerHTML = opts.map(function (o, i) {
     var sk = playerSkills(p.id, o.id);
     return '<button class="pc' + (sel === o.id ? ' on' : '') + '" data-pick="' + o.id + '" data-k="' + (i + 1) + '"><canvas width="240" height="240" data-face="' + o.id + '"></canvas><b>' + esc(o.id === 'me' ? (S.profiles[p.id] ? S.profiles[p.id].name : 'Yo') : o.name) + '</b><small>' + esc(o.tag) + '</small>' + skBars(sk) + '</button>';
   }).join('');
-  $$('#pgrid canvas').forEach(function (cv) { portrait(cv, playerLook(p.id, cv.getAttribute('data-face'))); });
+  $$('#pgrid canvas').forEach(function (cv) { var fid = cv.getAttribute('data-face'); portrait(cv, playerLook(p.id, fid), null, fid); });
 };
-function portrait(cv, look, bg) {
-  if (window.T3 && T3.ready && T3.portrait(cv, look)) return;
+function portrait(cv, look, bg, id) {
+  if (id && Arcade.portrait(cv, id)) return;
   var c = cv.getContext('2d'), w = cv.width, h = cv.height; c.clearRect(0, 0, w, h);
   c.save(); c.beginPath(); c.arc(w / 2, h / 2, w / 2, 0, 7); c.clip();
   c.fillStyle = bg || 'rgba(255,255,255,.14)'; c.fillRect(0, 0, w, h);
@@ -442,7 +442,7 @@ function drawEditor(now) {
 /* ================= PARTIDA ================= */
 var G = null;
 var cv = $('#cv'), ctx = cv.getContext('2d');
-document.addEventListener('t3ready', function () { if (RENDER[cur] && cur !== 'game') RENDER[cur](); if (G) portrait($('#hudPortrait'), P().look); });
+document.addEventListener('arcadeready', function () { if (RENDER[cur] && cur !== 'game') RENDER[cur](); if (G) portrait($('#hudPortrait'), P().look, null, P().star && P().star.id); });
 function sizeCanvas() { var dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = Math.round(cv.clientWidth * dpr); cv.height = Math.round(cv.clientHeight * dpr); }
 window.addEventListener('resize', function () { if (cur === 'game') sizeCanvas(); if (cur === 'edit') sizeEdCanvas(); });
 
@@ -467,7 +467,7 @@ function beginTurn() {
   G.racks = newRacks(-1); p.score = 0; p.made = 0; p.att = 0; p.streak = 0;
   G.shooter = { pos: Court.spotPos(G.spot, G.diff), look: p.look, pose: shotPose(p.look, 0, 0), hasBall: false, money: false };
   Court.setSpot(G.spot, G.diff, true); Court.clearBall();
-  portrait($('#hudPortrait'), p.look);
+  portrait($('#hudPortrait'), p.look, null, p.star && p.star.id);
   updateHUD();
   if (G.mode === 'conc') {
     G.phase = 'intro';
@@ -611,7 +611,7 @@ function afterRack() {
     if (G.spot >= 4) { endTurn(); return; }
     G.spot++; G.ball = 0; moveTo(G.spot);
   } else {
-    if (G.players.length > 1) { G.turn = (G.turn + 1) % G.players.length; var p = P(); G.shooter.look = p.look; portrait($('#hudPortrait'), p.look); toast('Turno de ' + esc(p.av) + ' ' + esc(p.name)); voz(['turno', nameClip(p.name)], true); }
+    if (G.players.length > 1) { G.turn = (G.turn + 1) % G.players.length; var p = P(); G.shooter.look = p.look; portrait($('#hudPortrait'), p.look, null, p.star && p.star.id); toast('Turno de ' + esc(p.av) + ' ' + esc(p.name)); voz(['turno', nameClip(p.name)], true); }
     G.racks[G.spot] = { res: [], left: 5, money: false };
     G.ball = 0;
     if (S.rotate) { G.spot = (G.spot + 1) % 5; G.racks[G.spot] = { res: [], left: 5, money: false }; moveTo(G.spot); }
@@ -653,7 +653,7 @@ function endTurn() {
   if (pr) { pr.best = pr.best || {}; if (p.score > (pr.best[G.diff] || 0)) { pr.best[G.diff] = p.score; rec = true; } }
   if (p.score >= 20) ach(p, 'c20'); if (p.score >= 25) ach(p, 'c25'); if (p.score >= 30) ach(p, 'c30');
   save();
-  G.results.push({ id: p.id, name: p.name, av: p.av, label: p.label, look: p.look, score: p.score, made: p.made, att: p.att });
+  G.results.push({ id: p.id, name: p.name, av: p.av, label: p.label, look: p.look, starId: p.star && p.star.id, score: p.score, made: p.made, att: p.att });
   SFX.buzzer(); setTimeout(function () { SFX.win(); }, 1100); confetti(rec ? 120 : 50);
   voz(['tiempo', rec ? 'record' : null], true);
   var last = G.turn >= G.players.length - 1;
@@ -676,7 +676,7 @@ function cpuContest(star) {
     var r = Court.simulate({ from: from, pe: pe, ae: ae, arc: 50, magnet: D.magnet });
     if (r.made) { made++; score += money ? 2 : 1; }
   }
-  return { id: 'cpu', name: star.short, av: '🤖', label: star.short, look: star.look, score: score, made: made, att: 25, cpu: true };
+  return { id: 'cpu', name: star.short, av: '🤖', label: star.short, look: star.look, starId: star.id, score: score, made: made, att: 25, cpu: true };
 }
 function finish() {
   if (G.mode === 'prac' || (G.players.length === 1 && !G.cpu)) { hideOv(); G.turn = 0; G.ball = 0; beginTurn(); return; }
@@ -689,19 +689,19 @@ function finish() {
     (res.length > 3 ? '<p class="sub">' + res.slice(3).map(function (r, i) { return (i + 4) + '. ' + esc(r.av) + ' ' + esc(r.name) + ' ' + r.score; }).join(' · ') + '</p>' : '') +
     '<div class="row"><button class="big" data-act="again" data-k="0">🔁 ¡Otra!</button><button class="pill" data-act="quit" data-k="9">🏠 Inicio</button></div>';
   showOv(html);
-  $$('#ov [data-pod]').forEach(function (cv2) { portrait(cv2, res[+cv2.getAttribute('data-pod')].look); });
+  $$('#ov [data-pod]').forEach(function (cv2) { var rr = res[+cv2.getAttribute('data-pod')]; portrait(cv2, rr.look, null, rr.starId); });
   var w = res[0]; voz(['gano', w.cpu ? (starById(S.rival) || {}).id : nameClip(w.name)], true);
   SFX.win(); confetti(140);
 }
 
 /* ---------- festejo ---------- */
-var celeb = null;
+var celeb = null, celebId = null;
 function startCeleb(p, done) {
   G.phase = 'celeb';
   var look = p.look;
   celeb = { look: look, t0: performance.now(), done: done, name: CELEBS[look.celeb] ? CELEBS[look.celeb].n : '' };
   document.body.classList.add('celebrating');
-  if (window.T3 && T3.ready) T3.celebrate(true, look); else $('#celeb').classList.remove('hidden');
+  celebId = p.star && p.star.id; $('#celeb').classList.remove('hidden');
   $('#celebTxt').classList.remove('hidden');
   $('#celebTxt').innerHTML = '¡RACK PERFECTO!<small>' + (CELEBS[look.celeb] ? CELEBS[look.celeb].e + ' ' + celeb.name : '') + '</small>';
   var cc = $('#celeb'), dpr = Math.min(2, window.devicePixelRatio || 1); cc.width = innerWidth * dpr; cc.height = innerHeight * dpr;
@@ -720,8 +720,8 @@ function endCeleb() {
 function drawCeleb(now) {
   if (!celeb) return;
   var cc = $('#celeb'), c = cc.getContext('2d'), w = cc.width, h = cc.height, t = (now - celeb.t0) / 1000;
-  if (t > (window.T3 && T3.ready ? 4.2 : 3.6)) { endCeleb(); return; }
-  if (window.T3 && T3.ready) return;
+  if (t > 3.8) { endCeleb(); return; }
+  if (celebId && Arcade.celeb(c, w, h, celebId, t)) return;
   var pr = S.prefs.theme === 'princess';
   var g = c.createRadialGradient(w / 2, h * 0.55, 10, w / 2, h * 0.55, Math.max(w, h) * 0.7);
   g.addColorStop(0, pr ? '#ffd1ea' : '#3d55b8'); g.addColorStop(1, pr ? '#6a2a6a' : '#070b1d'); c.fillStyle = g; c.fillRect(0, 0, w, h);
@@ -821,9 +821,8 @@ function stepGame(dt) {
 }
 function renderGame(t) {
   var w = cv.width, h = cv.height;
-  if (window.T3 && T3.ready && T3.renderGame(G, P(), t, w, h)) {
-    ctx.clearRect(0, 0, w, h);
-    G.shooter.ballScreen = null;
+  if (Arcade.render(ctx, w, h, G, P(), t, Math.min(0.05, t - (G._lt || t)))) {
+    G._lt = t;
   } else {
     var rk = G.racks.map(function (r, i) { return { left: i === G.spot ? Math.max(0, 5 - G.ball - (G.shooter.hasBall || G.phase === 'set' ? 1 : 0) - (G.phase === 'shoot' || G.phase === 'flight' || G.phase === 'result' ? 1 : 0)) : (r.res.length ? 0 : 5), money: r.money }; });
     Court.render(ctx, w, h, t, { princess: S.prefs.theme === 'princess', diff: G.diff, racks: rk, spot: G.spot, shooter: G.shooter });
@@ -974,7 +973,7 @@ function act(a, el) {
     case 'delPlayer': if (editId && confirmAct('¿Borrar a ' + S.profiles[editId].name + '?')) { delete S.profiles[editId]; S.roster = S.roster.filter(function (x) { return x !== editId; }); save(); stack = []; show('start', false); } break;
     case 'toPick': startPicking(); break;
     case 'cycleInput': { var l = ['meter', 'swipe'].concat(Sim.supported() && IS_TOUCH ? ['sim'] : []); S.input = l[(l.indexOf(S.input) + 1) % l.length]; save(); RENDER.mode(); if (S.input === 'sim') toast('📱 Agarrá el celu con la palma en la pantalla y tirá como si fuera la pelota'); break; }
-    case 'cycleRival': { var ids = ['no'].concat(STARS.map(function (s) { return s.id; })); S.rival = ids[(ids.indexOf(S.rival) + 1) % ids.length]; save(); RENDER.mode(); break; }
+    case 'cycleRival': { var ids = ['no'].concat(STARS.filter(function (s) { return Arcade.has(s.id); }).map(function (s) { return s.id; })); S.rival = ids[(ids.indexOf(S.rival) + 1) % ids.length]; save(); RENDER.mode(); break; }
     case 'toggleRotate': S.rotate = !S.rotate; save(); RENDER.mode(); break;
     case 'editMe': {
       var who = cur === 'pick' && pickQ[pickI] ? pickQ[pickI].id : (roster()[0] || {}).id;

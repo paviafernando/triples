@@ -40,7 +40,7 @@ var CELEBS = {
   corazon: { e: '🫶', n: 'Corazón' },
   noche: { e: '😴', n: 'Noche, noche', only: true },
   oreja: { e: '👂', n: '¡No los escucho!', only: true },
-  tiza: { e: '🌫️', n: 'Lluvia de tiza', only: true },
+  tiza: { e: '👑', n: '¡El Rey!', only: true },
   hombros: { e: '🤷', n: 'Encogida de hombros', only: true },
   mamba: { e: '🐍', n: 'Mentón de Mamba', only: true },
   shimmy: { e: '🕺', n: 'Shimmy', only: true },
