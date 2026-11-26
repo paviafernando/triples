@@ -19,10 +19,11 @@ jobs:
           VOICE_EN: ${{ vars.VOICE_EN }}
           VOICE_ES: ${{ vars.VOICE_ES }}
           MODEL: ${{ vars.MODEL }}
-        run: python tools/voz/elevenlabs.py
+        run: python tools/voz/elevenlabs.py || echo "falló el script" >> assets/voz/_log.txt
       - name: Guardar
+        if: always()
         run: |
           git config user.name "triples-bot"; git config user.email "actions@users.noreply.github.com"
-          git add assets/voz
+          mkdir -p assets/voz && git add -A assets/voz || true
           git commit -m "Relator: frases generadas (automático)" || echo "nada nuevo"
           for i in 1 2 3; do git pull --rebase -X theirs origin main && git push && break; sleep 5; done

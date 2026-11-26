@@ -2,8 +2,14 @@
 Secret: ELEVENLABS_API_KEY. Opcionales (Variables del repo): VOICE_EN, VOICE_ES (voice_id), MODEL (eleven_v3 por defecto).
 Solo regenera las frases nuevas o cambiadas (guarda un hash por frase)."""
 import os, json, re, sys, hashlib, subprocess, urllib.request, urllib.error
+os.makedirs('assets/voz', exist_ok=True)
+LOG = open('assets/voz/_log.txt', 'w')
+_print = print
+def print(*a):
+    _print(*a); LOG.write(' '.join(str(x) for x in a) + '\n'); LOG.flush()
 KEY = os.environ.get('ELEVENLABS_API_KEY', '').strip()
-if not KEY: print('Falta el secret ELEVENLABS_API_KEY'); sys.exit(0)
+if not KEY: print('FALTA el secret ELEVENLABS_API_KEY en GitHub (Settings > Secrets and variables > Actions)'); sys.exit(0)
+print('clave OK, largo', len(KEY))
 MODEL = os.environ.get('MODEL', '').strip() or 'eleven_v3'
 H = {'xi-api-key': KEY, 'Content-Type': 'application/json', 'Accept': 'audio/mpeg'}
 def api(path, data=None, accept_json=True):
@@ -12,7 +18,8 @@ def api(path, data=None, accept_json=True):
 def pick_voice(lang):
     v = os.environ.get('VOICE_' + lang.upper(), '').strip()
     if v: return v
-    vs = api('/v1/voices')['voices']
+    try: vs = api('/v1/voices')['voices']
+    except urllib.error.HTTPError as e: print('ERROR al listar voces', e.code, e.read()[:300]); raise
     def score(x):
         lab = json.dumps(x.get('labels', {})).lower() + ' ' + (x.get('name') or '').lower() + ' ' + (x.get('description') or '').lower()
         s = 0
