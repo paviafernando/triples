@@ -1,0 +1,17 @@
+{
+  "_info": "Locutores grabados por personas en Freesound (CC0 o CC-BY con crédito). Varios candidatos por frase.",
+  "onfire":   ["he's on fire announcer", "on fire announcer", "on fire voice"],
+  "boom":     ["boomshakalaka", "boom shakalaka", "boom announcer"],
+  "triple":   ["three pointer announcer", "from downtown announcer", "basketball announcer"],
+  "golazo":   ["gol relator", "goal spanish shout", "golazo", "gooool"],
+  "wow":      ["what a shot announcer", "amazing announcer", "incredible announcer"],
+  "excelente":["excellent announcer", "awesome announcer male", "great shot announcer"],
+  "combo":    ["combo announcer", "combo voice"],
+  "perfecto": ["perfect announcer", "perfect voice game"],
+  "ganador":  ["winner announcer", "you win announcer", "champion announcer"],
+  "ya":       ["ready go announcer", "go announcer", "let's go announcer"],
+  "tiempo":   ["time up announcer", "time's up announcer", "game over announcer"],
+  "money":    ["money announcer", "cha ching voice"],
+  "uhh":      ["oh no announcer", "ohhh announcer", "so close announcer"],
+  "multitud": ["crowd chanting", "crowd yelling yeah", "crowd goes wild"]
+}

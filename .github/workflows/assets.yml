@@ -9,7 +9,7 @@ permissions:
 jobs:
   assets:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 2 }
@@ -20,7 +20,11 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
           pip install -q piper-tts
       - name: Sonidos CC0 de Freesound
-        run: python tools/assets/fetch_sounds.py || echo "falló sonidos" >> assets/_log_sonidos.txt
+        run: python tools/assets/fetch_sounds.py tools/assets/sonidos.json assets/sfx/candidatos 4 || true
+      - name: Locutores grabados (Freesound CC0 / CC-BY)
+        run: python tools/assets/fetch_sounds.py tools/assets/locutor.json assets/locutor/candidatos 6 by || true
+      - name: Voces de anuncio de Kenney (CC0)
+        run: mkdir -p assets/locutor && python tools/assets/kenney.py || true
       - name: Voz del locutor (Piper es_AR)
         run: |
           if [ ! -f assets/voz/adentro.mp3 ] || git diff --name-only HEAD~1 HEAD | grep -q voz.txt; then python tools/assets/make_voice.py || echo "falló voz" >> assets/_log_voz.txt; fi
@@ -30,5 +34,5 @@ jobs:
           git config user.name "triples-bot"
           git config user.email "actions@users.noreply.github.com"
           git add assets
-          git commit -m "Assets: sonidos CC0 y voz del locutor (automático)" || echo "nada nuevo"
-          git push
+          git commit -m "Assets: sonidos y locutores (automático)" || echo "nada nuevo"
+          for i in 1 2 3; do git pull --rebase -X theirs origin main && git push && break; sleep 5; done
