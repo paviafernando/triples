@@ -342,7 +342,13 @@ var Court = (function () {
       sh.ballScreen = [bx, by, r];
     }
   }
-  function drawBallScreen(c, x, y, r, rot, money, princess) {
+  function drawBallScreen(c, x, y, r, rot, money, princess, fire) {
+    var BI = window.BALL_IMGS || {}, key = fire ? 'pelota_fuego' : money ? (princess ? 'pelota_arcoiris' : 'pelota_money') : 'pelota';
+    if (BI[key]) {
+      c.save(); c.translate(x, y);
+      if (fire) { c.drawImage(BI[key], -r * 2.2, -r * 1.1, r * 2.2 * 1.2, r * 2.2 * 1.2 * BI[key].height / BI[key].width); c.restore(); return; }
+      c.rotate(rot); var s = r * 2.15; c.drawImage(BI[key], -s / 2, -s / 2, s, s); c.restore(); return;
+    }
     c.save(); c.translate(x, y); c.rotate(rot);
     if (money) {
       var cols = princess ? ['#ff4d6d', '#ff9f1c', '#ffe14d', '#3cd070', '#3fa7ff', '#9b5cff'] : ['#d6213a', '#ffffff', '#1d4fbf', '#ffffff', '#d6213a', '#1d4fbf'];

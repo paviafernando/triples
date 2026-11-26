@@ -164,7 +164,7 @@ var Arcade = (function () {
     c.clearRect(0, 0, w, h); c.save(); c.beginPath(); c.arc(w / 2, h / 2, w / 2, 0, 7); c.clip();
     c.fillStyle = 'rgba(255,255,255,.16)'; c.fillRect(0, 0, w, h);
     // la cabeza ocupa ~45% de arriba del cuadro de frente
-    var sw = fr.w * 0.62, sx = (fr.w - sw) / 2, sh = sw;
+    var sw = Math.min(fr.w * 0.9, fr.h * 0.42), sx = (fr.w - sw) / 2, sh = sw;
     var s2 = im.naturalWidth / fr.w;
     c.drawImage(im, sx * s2, 0, sw * s2, sh * s2, w * 0.04, h * 0.06, w * 0.92, h * 0.92);
     c.restore(); return true;

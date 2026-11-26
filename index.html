@@ -206,6 +206,28 @@ body.princess .ov{background:rgba(70,20,70,.86)}
 #pKeys button{height:52px;border-radius:14px;background:var(--panel);font-size:22px;font-weight:900}
 .dot{width:12px;height:12px;border-radius:50%;background:#ffb020;display:inline-block}
 .dot.ok{background:var(--ok)}
+
+/* íconos dibujados y fondo del menú */
+.ic{height:1.3em;width:auto;vertical-align:-.3em;display:inline-block;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.ia{height:1.6em;vertical-align:-.45em}
+.av .ic,.av .ia{width:100%;height:100%;vertical-align:0;filter:none}
+.wb .av,.avb,#avPrev,#pad header .av{background:transparent!important;box-shadow:none}
+.wb.on .av{box-shadow:0 0 0 5px var(--accent),0 8px 22px rgba(0,0,0,.3)!important;border-radius:50%}
+.avb .ia{width:100%;height:100%;vertical-align:0}
+.card .e .ic{height:1.6em}
+.pill .ic{height:1.55em;vertical-align:-.45em}
+.big .ic{height:1.2em;vertical-align:-.22em}
+.ib .ic{height:1.6em;vertical-align:0}
+.logoimg{width:min(86vw,560px);max-height:30vh;object-fit:contain;height:auto;filter:drop-shadow(0 10px 18px rgba(0,0,0,.55));animation:logoPulse 2.6s ease-in-out infinite}
+@keyframes logoPulse{50%{-webkit-transform:scale(1.04) rotate(-1.5deg);transform:scale(1.04) rotate(-1.5deg)}}
+html,body{background:#120b2e url(/assets/ui/fondo-menu.webp) center/cover no-repeat fixed}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(rgba(12,8,40,.35),rgba(12,8,40,.72));pointer-events:none;z-index:0}
+body.princess::before{background:linear-gradient(rgba(120,30,100,.35),rgba(80,20,80,.7))}
+.screen{z-index:1}
+.whoBox,.card,.pc,.erow,.pill{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.whoBox{background:rgba(20,16,60,.55)}
+.card,.pc{background:rgba(20,16,60,.6)}
+.big{background:linear-gradient(#ffb22e,#ff7a00);text-shadow:0 2px 0 rgba(0,0,0,.2);border:3px solid #2b1600}
 </style>
 </head>
 <body>
@@ -213,8 +235,7 @@ body.princess .ov{background:rgba(70,20,70,.86)}
 <!-- ============ INICIO ============ -->
 <section class="screen" id="start">
   <div class="corner l"><button class="ib hidden hubBtn" data-act="hub" data-k="9" title="Todos los juegos">🏠</button></div>
-  <div class="logo">🏀</div>
-  <h1 class="title">TRI<span>PLES</span></h1>
+  <img class="logoimg" src="/assets/ui/logo.webp" alt="Triples" data-noicon>
   <div class="whoBox">
     <h2 id="whoTitle">¿Quién juega?</h2>
     <p class="sub" id="whoHint"></p>
@@ -253,7 +274,7 @@ body.princess .ov{background:rgba(70,20,70,.86)}
   <div class="corner l"><button class="ib" data-act="back" title="Volver">↩</button></div>
   <h2 id="pickTitle">¿Con quién tirás?</h2>
   <div class="pgrid" id="pgrid"></div>
-  <div class="row"><button class="pill" data-act="editMe">✏️ Editar mi jugador</button><button class="big" data-act="pickOk" data-k="0">✔ Listo</button></div>
+  <div class="row"><button class="big" data-act="pickOk" data-k="0">✔ Listo</button></div>
 </section>
 
 <!-- ============ EDITOR ============ -->
@@ -322,6 +343,7 @@ body.princess .ov{background:rgba(70,20,70,.86)}
 <script src="/js/avatar.js"></script>
 <script src="/js/court.js"></script>
 <script src="/js/sensors.js"></script>
+<script src="/js/icons.js"></script>
 <script src="/js/audio.js"></script>
 <script src="/js/arcade.js"></script>
 <script src="/js/app.js"></script>
