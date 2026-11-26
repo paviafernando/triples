@@ -447,10 +447,6 @@ var CELEB_POSES = {
     p.shim = s * 0.35; p.lh = [-(B.sw + 1.0) + s * 0.3, B.sy - 0.6]; p.rh = [B.sw + 1.0 + s * 0.3, B.sy - 0.6];
     p.crouch = 0.35; p.tilt = -s * 0.08; p.mouth = 'grin'; p.eyes = 'happy'; return p;
   },
-  rascada: function (t, B) { // Ogro: se rasca la cabeza, ¿quién, yo?
-    var p = standPose(B), w = Math.sin(t * 10);
-    p.rh = [0.6 + w * 0.2, B.hy + 1.4]; p.lh = [-(B.sw + 1.4), B.sy - 0.2]; p.tilt = 0.12; p.mouth = 'grin'; p.eyes = 'wide'; return p;
-  },
   murcielago: function (t, B) { // Manu: el murciélago en pleno partido
     var p = standPose(B), k = (t % 2.8) / 2.8;
     var bx = lerp(5, -1.2, clamp(k / 0.45, 0, 1)), by = B.hy + 2.2 + Math.sin(t * 14) * 0.25;

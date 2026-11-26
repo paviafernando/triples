@@ -35,4 +35,3 @@ turno | Up next...
 nombre_emi | Emi!
 nombre_papa | Dad!
 nombre_mama | Mom!
-ogro | The Ogre!
