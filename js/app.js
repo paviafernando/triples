@@ -78,8 +78,41 @@ function crowdAmb(on) {
     s.connect(bq); bq.connect(g); g.connect(AC.destination); s.start(); crowdNode = { s: s, g: g };
   } catch (e) {}
 }
+/* Locutor: frases pregrabadas (voz neuronal es_AR) en assets/voz/*.mp3 */
+var VOZ = {}, vozQ = [], vozBusy = false, vozAvail = ['bienvenida','ya','adentro','adentro2','adentro3','limpita','tablero','bailo','money','fuego','racha','casi','corta','larga','rack','diez','tiempo','record','muybien','genia','moneyrack','siguiente','gano','otra','curry','doncic','lebron','jordan','kobe','shaq','manu','bird','turno','nombre_emi','nombre_papa','nombre_mama'];
+function vozBuf(id) {
+  if (VOZ[id] !== undefined) return VOZ[id];
+  VOZ[id] = null;
+  if (!ac() || vozAvail.indexOf(id) < 0) return null;
+  fetch('/assets/voz/' + id + '.mp3').then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); }).then(function (b) { return new Promise(function (res, rej) { AC.decodeAudioData(b, res, rej); }); }).then(function (buf) { VOZ[id] = buf; }).catch(function () { VOZ[id] = false; });
+  return null;
+}
+function nameClip(n) { var k = 'nombre_' + String(n || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, ''); return vozAvail.indexOf(k) >= 0 ? k : null; }
+function voz(ids, force) {
+  if (!S.prefs.voice || !ac()) return;
+  ids = (Array.isArray(ids) ? ids : [ids]).filter(Boolean);
+  if (!ids.length) return;
+  if (force) { vozQ = []; }
+  else if (vozBusy && vozQ.length > 1) return; // no amontonar frases
+  ids.forEach(function (id) { vozBuf(id); });
+  vozQ = vozQ.concat(ids); if (!vozBusy) vozNext();
+}
+function vozNext() {
+  var id = vozQ.shift(); if (!id) { vozBusy = false; return; }
+  vozBusy = true;
+  var tries = 0;
+  (function wait() {
+    var b = VOZ[id];
+    if (b === false || tries > 40) { vozNext(); return; }
+    if (!b) { tries++; setTimeout(wait, 50); return; }
+    var src = AC.createBufferSource(), g = AC.createGain(); g.gain.value = 0.9; src.buffer = b; src.connect(g); g.connect(AC.destination);
+    src.onended = function () { setTimeout(vozNext, 60); }; src.start();
+  })();
+}
+document.addEventListener('pointerdown', function () { if (ac()) vozAvail.forEach(function (id) { vozBuf(id); }); }, { once: true });
 var voice = null;
 function say(t, rate) {
+  if (!S.prefs.robot) return; // la voz robótica del navegador queda apagada: usamos las frases grabadas
   if (!S.prefs.voice || !('speechSynthesis' in window)) return;
   try {
     speechSynthesis.cancel();
@@ -440,16 +473,16 @@ function beginTurn() {
     G.phase = 'intro';
     showOv('<div class="res-e">🏆</div><h1>' + esc(p.av) + ' ' + esc(p.name) + '</h1><p class="sub">tira con <b>' + esc(p.label) + '</b> · ' + DIFFS[G.diff].time + ' segundos · ' + DIFFS[G.diff].e + ' ' + DIFFS[G.diff].n + '</p><h2>Elegí tu rack de money balls 💰</h2><p class="sub">Todas las pelotas de ese rack valen 2</p><div class="row">' +
       SPOTS.map(function (s, i) { return '<button class="pill' + (i === 4 ? ' on' : '') + '" data-money="' + i + '" data-k="' + (i + 1) + '">' + (i + 1) + ' · ' + s.n + '</button>'; }).join('') + '</div><button class="big" data-money="4" data-k="0">▶ ¡A tirar!</button>');
-    say('Turno de ' + p.name + ' con ' + p.label + '. Elegí tu rack de money balls.');
+    voz(['turno', nameClip(p.name), p.star ? p.star.id : null, 'moneyrack'], true);
   } else {
     G.phase = 'pickup'; G.phaseT = 0;
-    if (G.players.length > 1) say('Turno de ' + p.name);
+    if (G.players.length > 1) voz(['turno', nameClip(p.name), p.star ? p.star.id : null], true); else voz(['bienvenida'], true);
   }
   broadcast();
 }
 function setMoneyRack(i) {
   hideOv(); G.racks = newRacks(i); G.running = true; G.phase = 'pickup'; G.phaseT = 0;
-  bigMsg('¡YA!'); SFX.buzzer(); updateHUD(); broadcast();
+  bigMsg('¡YA!'); SFX.buzzer(); voz('ya', true); updateHUD(); broadcast();
 }
 function isMoney(spot, idx) { var r = G.racks[spot]; return r.money || idx === 4; }
 function pickupTime() { var r = P().sk.ritmo; return G.mode === 'conc' ? 0.95 - r / 100 * 0.6 : 0.6; }
@@ -532,7 +565,9 @@ function shotResult(made, b, spot, idx, money) {
     if (p.streak === 3) { txt = '¡ESTÁ ON FIRE!'; }
     bigMsg(txt, money ? 'MONEY BALL' : p.streak >= 3 ? '🔥 ' + p.streak + ' seguidas' : '');
     ach(p, 'first'); if (money) ach(p, 'money'); if (p.streak >= 10) ach(p, 'streak10'); if (p.swishRun >= 5) ach(p, 'swish5'); if (G.lastIn && G.lastIn.kind === 'sim') ach(p, 'sim');
-    if (G.diff === 'facil' && Math.random() < 0.35) say(pick(['¡Muy bien!', '¡Adentro!', '¡Golazo de tres!', '¡Genia!', '¡Qué tiro!']));
+    if (money) voz('money'); else if (p.streak === 3) voz('fuego', true); else if (p.streak === 6) voz('racha', true);
+    else if (b.touched > 2) voz('bailo'); else if (b.board && Math.random() < 0.7) voz('tablero'); else if (b.swish && Math.random() < 0.4) voz('limpita');
+    else if (Math.random() < (G.diff === 'facil' ? 0.6 : 0.3)) voz(pick(G.diff === 'facil' ? ['muybien', 'adentro', 'genia', 'adentro3'] : ['adentro', 'adentro2', 'adentro3']));
     vibPad(p, made);
   } else {
     p.streak = 0; p.swishRun = 0;
@@ -541,6 +576,7 @@ function shotResult(made, b, spot, idx, money) {
     if (Math.abs(L.ae) > 0.75 && Math.abs(L.ae) / 0.8 > Math.abs(L.pe) / 0.007) why = L.ae > 0 ? 'Se fue a la derecha ➡️' : '⬅️ Se fue a la izquierda';
     else if (L.pe < -0.005) why = 'Quedó corta ⬇️'; else if (L.pe > 0.005) why = 'Se pasó de largo ⬆️'; else why = 'Uhh, casi…';
     bigMsg(b.touched ? '¡Casi!' : '¡Afuera!', why);
+    if (b.touched && Math.random() < 0.4) voz('casi'); else if (Math.random() < 0.25) voz(L.pe < -0.005 ? 'corta' : L.pe > 0.005 ? 'larga' : null);
     vibPad(p, false);
   }
   if (pr && G.mode === 'prac') { pr.prac.att++; if (made) pr.prac.made++; pr.prac.streak = Math.max(pr.prac.streak || 0, p.streak); }
@@ -575,7 +611,7 @@ function afterRack() {
     if (G.spot >= 4) { endTurn(); return; }
     G.spot++; G.ball = 0; moveTo(G.spot);
   } else {
-    if (G.players.length > 1) { G.turn = (G.turn + 1) % G.players.length; var p = P(); G.shooter.look = p.look; portrait($('#hudPortrait'), p.look); toast('Turno de ' + esc(p.av) + ' ' + esc(p.name)); say('Turno de ' + p.name); }
+    if (G.players.length > 1) { G.turn = (G.turn + 1) % G.players.length; var p = P(); G.shooter.look = p.look; portrait($('#hudPortrait'), p.look); toast('Turno de ' + esc(p.av) + ' ' + esc(p.name)); voz(['turno', nameClip(p.name)], true); }
     G.racks[G.spot] = { res: [], left: 5, money: false };
     G.ball = 0;
     if (S.rotate) { G.spot = (G.spot + 1) % 5; G.racks[G.spot] = { res: [], left: 5, money: false }; moveTo(G.spot); }
@@ -619,7 +655,7 @@ function endTurn() {
   save();
   G.results.push({ id: p.id, name: p.name, av: p.av, label: p.label, look: p.look, score: p.score, made: p.made, att: p.att });
   SFX.buzzer(); setTimeout(function () { SFX.win(); }, 1100); confetti(rec ? 120 : 50);
-  say(p.name + ', hiciste ' + p.score + ' puntos' + (rec ? '. ¡Nuevo récord!' : ''));
+  voz(['tiempo', rec ? 'record' : null], true);
   var last = G.turn >= G.players.length - 1;
   showOv('<div class="res-e">' + (p.score >= 25 ? '🔥' : p.score >= 15 ? '🏀' : '👏') + '</div><h1>' + esc(p.av) + ' ' + esc(p.name) + ': ' + p.score + ' puntos</h1>' +
     (rec ? '<h2 style="color:var(--yel)">🏆 ¡Nuevo récord!</h2>' : '') +
@@ -654,7 +690,7 @@ function finish() {
     '<div class="row"><button class="big" data-act="again" data-k="0">🔁 ¡Otra!</button><button class="pill" data-act="quit" data-k="9">🏠 Inicio</button></div>';
   showOv(html);
   $$('#ov [data-pod]').forEach(function (cv2) { portrait(cv2, res[+cv2.getAttribute('data-pod')].look); });
-  var w = res[0]; say((w.cpu ? 'Ganó ' + w.name + ', la compu' : '¡Ganó ' + w.name + '!') + ' con ' + w.score + ' puntos');
+  var w = res[0]; voz(['gano', w.cpu ? (starById(S.rival) || {}).id : nameClip(w.name)], true);
   SFX.win(); confetti(140);
 }
 
@@ -670,7 +706,7 @@ function startCeleb(p, done) {
   $('#celebTxt').innerHTML = '¡RACK PERFECTO!<small>' + (CELEBS[look.celeb] ? CELEBS[look.celeb].e + ' ' + celeb.name : '') + '</small>';
   var cc = $('#celeb'), dpr = Math.min(2, window.devicePixelRatio || 1); cc.width = innerWidth * dpr; cc.height = innerHeight * dpr;
   SFX.cheer(1.4); setTimeout(function () { SFX.win(); }, 200); confetti(100);
-  say('¡Rack perfecto!');
+  voz('rack', true);
   vibPad(p, true, true);
   broadcast();
 }
@@ -741,6 +777,7 @@ function stepGame(dt) {
   if (G.running && G.mode === 'conc' && G.phase !== 'celeb' && !ovOpen()) {
     var before = G.time; G.time = Math.max(0, G.time - dt);
     if (Math.ceil(before) !== Math.ceil(G.time) && G.time <= 5 && G.time > 0) SFX.tick();
+    if (before > 10 && G.time <= 10) voz('diez', true);
     if (G.time <= 0 && before > 0) {
       G.running = false;
       if (G.phase === 'flight' || G.phase === 'shoot') { G.buzzer = true; SFX.buzzer(); }
