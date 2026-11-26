@@ -1,91 +1,142 @@
-onfire | he's on fire announcer -> 0 resultados
-onfire | on fire announcer -> 0 resultados
-onfire | on fire voice -> 0 resultados
+onfire | he's on fire -> 0 resultados
+onfire | on fire announcer voice -> 0 resultados
+onfire | heating up announcer -> 0 resultados
 == onfire 0 candidatos
 boom | boomshakalaka -> 0 resultados
-boom | boom shakalaka -> 0 resultados
-boom | boom announcer -> 5 resultados
-  preview 861572 'https://freesound.orghttps://cdn.freesound.org/previews/861/861572_15636277-lq.mp3'
-  error bajando 861572 'https://freesound.orghttps://cdn.freesound.org/previews/861/861572_15636277-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK boom_1.mp3 861572 Dailight Fireworks for Luminarie Ligh Festival in Scorrano, Puglia, Italy by bassimat 8:01.038
-  preview 879277 'https://freesound.orghttps://cdn.freesound.org/previews/879/879277_19512113-lq.mp3'
-  error bajando 879277 'https://freesound.orghttps://cdn.freesound.org/previews/879/879277_19512113-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK boom_2.mp3 879277 Dun Dun Dun Timpani by Qvantor 0:05.612
-  preview 641665 'https://freesound.orghttps://cdn.freesound.org/previews/641/641665_9782868-lq.mp3'
-  error bajando 641665 'https://freesound.orghttps://cdn.freesound.org/previews/641/641665_9782868-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK boom_3.mp3 641665 two trains and a level crossing.wav by soundofsong 4:06.375
-  preview 816081 'https://freesound.orghttps://cdn.freesound.org/previews/816/816081_17566383-lq.mp3'
-  error bajando 816081 'https://freesound.orghttps://cdn.freesound.org/previews/816/816081_17566383-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK boom_4.mp3 816081 Homer the Golden Retriever by LumaEros 0:03.242
-  saltado (licencia) 876915
-== boom 4 candidatos
-triple | three pointer announcer -> 0 resultados
-triple | from downtown announcer -> 9 resultados
+boom | boom shakalaka voice -> 0 resultados
+boom | boom baby announcer -> 0 resultados
+== boom 0 candidatos
+downtown | from downtown announcer -> 9 resultados
   preview 123904 'https://freesound.orghttps://cdn.freesound.org/previews/123/123904_1490361-lq.mp3'
   error bajando 123904 'https://freesound.orghttps://cdn.freesound.org/previews/123/123904_1490361-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK triple_1.mp3 123904 subway - downtown local 6 announcement.wav by taknation 0:08.656
+  OK downtown_1.mp3 123904 subway - downtown local 6 announcement.wav by taknation 0:08.656
   preview 611082 'https://freesound.orghttps://cdn.freesound.org/previews/611/611082_6970469-lq.mp3'
   error bajando 611082 'https://freesound.orghttps://cdn.freesound.org/previews/611/611082_6970469-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK triple_2.mp3 611082 MTA Platform Announcement in Spanish by ericnorcross81 0:34.801
+  OK downtown_2.mp3 611082 MTA Platform Announcement in Spanish by ericnorcross81 0:34.801
   preview 51894 'https://freesound.orghttps://cdn.freesound.org/previews/51/51894_7037-lq.mp3'
   error bajando 51894 'https://freesound.orghttps://cdn.freesound.org/previews/51/51894_7037-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK triple_3.mp3 51894 max_ride_04-11-08.flac by tim.kahn 13:17.649
+  OK downtown_3.mp3 51894 max_ride_04-11-08.flac by tim.kahn 13:17.649
   preview 805247 'https://freesound.orghttps://cdn.freesound.org/previews/805/805247_7037-lq.mp3'
   error bajando 805247 'https://freesound.orghttps://cdn.freesound.org/previews/805/805247_7037-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK triple_4.mp3 805247 TRNInt_late night ride home on the train_Tim Kahn_DPA4061st by tim.kahn 11:16.140
-  preview 534693 'https://freesound.orghttps://cdn.freesound.org/previews/534/534693_7446476-lq.mp3'
-  error bajando 534693 'https://freesound.orghttps://cdn.freesound.org/previews/534/534693_7446476-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK triple_5.mp3 534693 subway cross platform.mp3 by bodawei 1:45.986
-  preview 540576 'https://freesound.orghttps://cdn.freesound.org/previews/540/540576_1648170-lq.mp3'
-  error bajando 540576 'https://freesound.orghttps://cdn.freesound.org/previews/540/540576_1648170-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK triple_6.mp3 540576 Covid town Saturday NL 201017_0203.flac by klankbeeld 20:53.839
-== triple 6 candidatos
-golazo | gol relator -> 1 resultados
-  preview 830227 'https://freesound.orghttps://cdn.freesound.org/previews/830/830227_18002698-lq.mp3'
-  error bajando 830227 'https://freesound.orghttps://cdn.freesound.org/previews/830/830227_18002698-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK golazo_1.mp3 830227 Casi gol Valparaiso by _RemezclaTuCiudad_ 0:19.056
-golazo | goal spanish shout -> 5 resultados
-  preview 388336 'https://freesound.orghttps://cdn.freesound.org/previews/388/388336_6205775-lq.mp3'
-  error bajando 388336 'https://freesound.orghttps://cdn.freesound.org/previews/388/388336_6205775-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK golazo_2.mp3 388336 Porra de futbol by Soonus 3:54.574
-  preview 587947 'https://freesound.orghttps://cdn.freesound.org/previews/587/587947_11966684-lq.mp3'
-  error bajando 587947 'https://freesound.orghttps://cdn.freesound.org/previews/587/587947_11966684-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK golazo_3.mp3 587947 Spanish commentator goal sound.wav by Rosa-Orenes256 0:24.726
-  preview 101316 'https://freesound.orghttps://cdn.freesound.org/previews/101/101316_8043-lq.mp3'
-  error bajando 101316 'https://freesound.orghttps://cdn.freesound.org/previews/101/101316_8043-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK golazo_4.mp3 101316 20100711.worldcup.08.goal.wav by dobroide 0:43.635
-  preview 262049 'https://freesound.orghttps://cdn.freesound.org/previews/262/262049_4720629-lq.mp3'
-  error bajando 262049 'https://freesound.orghttps://cdn.freesound.org/previews/262/262049_4720629-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK golazo_5.mp3 262049 Football match by Splifffy 5:00.000
-  preview 18960 'https://freesound.orghttps://cdn.freesound.org/previews/18/18960_8043-lq.mp3'
-  error bajando 18960 'https://freesound.orghttps://cdn.freesound.org/previews/18/18960_8043-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK golazo_6.mp3 18960 20060510.UEFAcup.4thgoal.flac by dobroide 0:18.891
-== golazo 6 candidatos
-wow | what a shot announcer -> 0 resultados
-wow | amazing announcer -> 4 resultados
+  OK downtown_4.mp3 805247 TRNInt_late night ride home on the train_Tim Kahn_DPA4061st by tim.kahn 11:16.140
+== downtown 4 candidatos
+wow | announcer what a shot -> 0 resultados
+wow | amazing announcer male -> 2 resultados
   preview 262470 'https://freesound.orghttps://cdn.freesound.org/previews/262/262470_4157918-lq.mp3'
   error bajando 262470 'https://freesound.orghttps://cdn.freesound.org/previews/262/262470_4157918-lq.mp3' <urlopen error [Errno -2] Name or service not known>
   OK wow_1.mp3 262470 Announcer, Positive.wav by xtrgamr 0:30.374
-  preview 172076 'https://freesound.orghttps://cdn.freesound.org/previews/172/172076_764147-lq.mp3'
-  error bajando 172076 'https://freesound.orghttps://cdn.freesound.org/previews/172/172076_764147-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK wow_2.mp3 172076 Did you see that.mp3 by OGMeek 0:02.809
-  preview 181347 'https://freesound.orghttps://cdn.freesound.org/previews/181/181347_1038806-lq.mp3'
-  error bajando 181347 'https://freesound.orghttps://cdn.freesound.org/previews/181/181347_1038806-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK wow_3.mp3 181347 Amazing by unfa 0:08.057
   preview 207189 'https://freesound.orghttps://cdn.freesound.org/previews/207/207189_339378-lq.mp3'
   error bajando 207189 'https://freesound.orghttps://cdn.freesound.org/previews/207/207189_339378-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK wow_4.mp3 207189 Announcements by Oddworld 0:09.183
-wow | incredible announcer -> 5 resultados
-  preview 418327 'https://freesound.orghttps://cdn.freesound.org/previews/418/418327_6823432-lq.mp3'
-  error bajando 418327 'https://freesound.orghttps://cdn.freesound.org/previews/418/418327_6823432-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK wow_5.mp3 418327 Pre-Fight Match-up Fight Announcer VO (Multiple Takes/Wet) by EvanBoyerman 0:11.522
-  preview 330336 'https://freesound.orghttps://cdn.freesound.org/previews/330/330336_1648170-lq.mp3'
-  error bajando 330336 'https://freesound.orghttps://cdn.freesound.org/previews/330/330336_1648170-lq.mp3' <urlopen error [Errno -2] Name or service not known>
-  OK wow_6.mp3 330336 boxing announcer request BrianWW.mp3 by klankbeeld 2:15.377
-== wow 6 candidatos
-excelente | excellent announcer -> 0 resultados
-excelente | awesome announcer male -> 0 resultados
-excelente | great shot announcer -> 2 resultados
-  saltado (licencia) 456501
+  OK wow_2.mp3 207189 Announcements by Oddworld 0:09.183
+wow | unbelievable announcer -> 1 resultados
+  preview 172076 'https://freesound.orghttps://cdn.freesound.org/previews/172/172076_764147-lq.mp3'
+  error bajando 172076 'https://freesound.orghttps://cdn.freesound.org/previews/172/172076_764147-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK wow_3.mp3 172076 Did you see that.mp3 by OGMeek 0:02.809
+== wow 3 candidatos
+yes | yes announcer male excited -> 0 resultados
+yes | oh yeah announcer -> 2 resultados
+  preview 111983 'https://freesound.orghttps://cdn.freesound.org/previews/111/111983_392324-lq.mp3'
+  error bajando 111983 'https://freesound.orghttps://cdn.freesound.org/previews/111/111983_392324-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK yes_1.mp3 111983 oh ya_Dave_Girtsman.mp3 by Dave_Girtsman 0:01.548
+  preview 278897 'https://freesound.orghttps://cdn.freesound.org/previews/278/278897_4157918-lq.mp3'
+  error bajando 278897 'https://freesound.orghttps://cdn.freesound.org/previews/278/278897_4157918-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK yes_2.mp3 278897 the stupid comedy show on 109.6 on your dial - intro.wav by xtrgamr 0:32.533
+yes | male yell yeah excited -> 1 resultados
+  preview 270301 'https://freesound.orghttps://cdn.freesound.org/previews/270/270301_1038806-lq.mp3'
+  error bajando 270301 'https://freesound.orghttps://cdn.freesound.org/previews/270/270301_1038806-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK yes_3.mp3 270301 Excited Young Male Screams by unfa 2:21.868
+== yes 3 candidatos
+welcome | ladies and gentlemen announcer -> 0 resultados
+welcome | welcome announcer arena -> 1 resultados
+  preview 730466 'https://freesound.orghttps://cdn.freesound.org/previews/730/730466_15857333-lq.mp3'
+  error bajando 730466 'https://freesound.orghttps://cdn.freesound.org/previews/730/730466_15857333-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK welcome_1.mp3 730466 Announcer Pack - Mr. Happy by SoundBiterSFX 1:50.525
+welcome | arena announcer intro -> 0 resultados
+== welcome 1 candidatos
+winner | winner announcer -> 11 resultados
+  preview 432882 'https://freesound.orghttps://cdn.freesound.org/previews/432/432882_4157918-lq.mp3'
+  error bajando 432882 'https://freesound.orghttps://cdn.freesound.org/previews/432/432882_4157918-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK winner_1.mp3 432882 LFS_Vox4.wav by xtrgamr 0:02.107
+  saltado (licencia) 439636
+  preview 435878 'https://freesound.orghttps://cdn.freesound.org/previews/435/435878_1992856-lq.mp3'
+  error bajando 435878 'https://freesound.orghttps://cdn.freesound.org/previews/435/435878_1992856-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK winner_2.mp3 435878 And the winner is Deep Voice by dersuperanton 0:02.000
+  saltado (licencia) 565888
+  preview 473142 'https://freesound.orghttps://cdn.freesound.org/previews/473/473142_3793224-lq.mp3'
+  error bajando 473142 'https://freesound.orghttps://cdn.freesound.org/previews/473/473142_3793224-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK winner_3.mp3 473142 Bingo game being called. by fkunze 2:09.195
+  preview 200811 'https://freesound.orghttps://cdn.freesound.org/previews/200/200811_2641534-lq.mp3'
+  error bajando 200811 'https://freesound.orghttps://cdn.freesound.org/previews/200/200811_2641534-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK winner_4.mp3 200811 F1 Podium.wav by WebbFilmsUK 2:36.144
+== winner 4 candidatos
+go | ready go announcer -> 5 resultados
+  preview 433706 'https://freesound.orghttps://cdn.freesound.org/previews/433/433706_1992856-lq.mp3'
+  error bajando 433706 'https://freesound.orghttps://cdn.freesound.org/previews/433/433706_1992856-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK go_1.mp3 433706 Ready Go Deep Voice by dersuperanton 0:02.025
+  preview 664605 'https://freesound.orghttps://cdn.freesound.org/previews/664/664605_1866382-lq.mp3'
+  error bajando 664605 'https://freesound.orghttps://cdn.freesound.org/previews/664/664605_1866382-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK go_2.mp3 664605 Ready? Let's go! - high by MT4000 0:02.832
+  preview 740491 'https://freesound.orghttps://cdn.freesound.org/previews/740/740491_14219367-lq.mp3'
+  error bajando 740491 'https://freesound.orghttps://cdn.freesound.org/previews/740/740491_14219367-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK go_3.mp3 740491 Timer's ready! by BurningMagma 0:10.924
   preview 818978 'https://freesound.orghttps://cdn.freesound.org/previews/818/818978_5287430-lq.mp3'
   error bajando 818978 'https://freesound.orghttps://cdn.freesound.org/previews/818/818978_5287430-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK go_4.mp3 818978 Surfer dude - kit - Generic lines kit by Sadiquecat 7:15.875
+== go 4 candidatos
+timeup | time up announcer -> 15 resultados
+  preview 407055 'https://freesound.orghttps://cdn.freesound.org/previews/407/407055_1661766-lq.mp3'
+  error bajando 407055 'https://freesound.orghttps://cdn.freesound.org/previews/407/407055_1661766-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK timeup_1.mp3 407055 "Sapo" announcing the buses in Chile by felix.blume 3:29.151
+  preview 340015 'https://freesound.orghttps://cdn.freesound.org/previews/340/340015_5984982-lq.mp3'
+  error bajando 340015 'https://freesound.orghttps://cdn.freesound.org/previews/340/340015_5984982-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK timeup_2.mp3 340015 Dirty Bingo through closed door | Conversations by IESP 0:39.000
+  preview 27220 'https://freesound.orghttps://cdn.freesound.org/previews/27/27220_12368-lq.mp3'
+  error bajando 27220 'https://freesound.orghttps://cdn.freesound.org/previews/27/27220_12368-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK timeup_3.mp3 27220 MUNI.wav by LS 1:00.967
+  preview 481682 'https://freesound.orghttps://cdn.freesound.org/previews/481/481682_1648170-lq.mp3'
+  error bajando 481682 'https://freesound.orghttps://cdn.freesound.org/previews/481/481682_1648170-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK timeup_4.mp3 481682 railway-station NL 160409_01.flac by klankbeeld 7:11.744
+== timeup 4 candidatos
+perfect | perfect announcer -> 14 resultados
+  saltado (licencia) 102779
+  preview 441883 'https://freesound.orghttps://cdn.freesound.org/previews/441/441883_2824651-lq.mp3'
+  error bajando 441883 'https://freesound.orghttps://cdn.freesound.org/previews/441/441883_2824651-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK perfect_1.mp3 441883 BombTest announcement.wav by relaxingasmrsynths 1:24.000
+  preview 828519 'https://freesound.orghttps://cdn.freesound.org/previews/828/828519_1648170-lq.mp3'
+  error bajando 828519 'https://freesound.orghttps://cdn.freesound.org/previews/828/828519_1648170-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK perfect_2.mp3 828519 As Vanouds - Oeteldonkse Binnendieze carnavalsoptocht Verwersstroom-Binnendieze Oude Bogardenstraatje s-Hertogenbosch 734 pm 251002_0045 by klankbeeld 53:24.469
+  preview 802105 'https://freesound.orghttps://cdn.freesound.org/previews/802/802105_6591927-lq.mp3'
+  error bajando 802105 'https://freesound.orghttps://cdn.freesound.org/previews/802/802105_6591927-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK perfect_3.mp3 802105 Funny PSA – Stop Stealing WiFi by SEB_82 0:09.774
+  preview 850559 'https://freesound.orghttps://cdn.freesound.org/previews/850/850559_18454513-lq.mp3'
+  error bajando 850559 'https://freesound.orghttps://cdn.freesound.org/previews/850/850559_18454513-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK perfect_4.mp3 850559 Clase de universidad by Mariayolanda511 1:00.593
+== perfect 4 candidatos
+combo | combo announcer -> 2 resultados
+  preview 319141 'https://freesound.orghttps://cdn.freesound.org/previews/319/319141_195590-lq.mp3'
+  error bajando 319141 'https://freesound.orghttps://cdn.freesound.org/previews/319/319141_195590-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK combo_1.mp3 319141 VG Voice - Announcer.wav by marlonnnnnn 1:11.371
+  preview 646980 'https://freesound.orghttps://cdn.freesound.org/previews/646/646980_5438333-lq.mp3'
+  error bajando 646980 'https://freesound.orghttps://cdn.freesound.org/previews/646/646980_5438333-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK combo_2.mp3 646980 'Noice' said in a deep voice by huw2k8 0:01.774
+combo | double kill announcer -> 3 resultados
+  preview 730465 'https://freesound.orghttps://cdn.freesound.org/previews/730/730465_15857333-lq.mp3'
+  error bajando 730465 'https://freesound.orghttps://cdn.freesound.org/previews/730/730465_15857333-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK combo_3.mp3 730465 Announcer Pack - Warlord by SoundBiterSFX 1:24.914
+  preview 718360 'https://freesound.orghttps://cdn.freesound.org/previews/718/718360_8407562-lq.mp3'
+  error bajando 718360 'https://freesound.orghttps://cdn.freesound.org/previews/718/718360_8407562-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK combo_4.mp3 718360 Old-school arena FPS announcer voice lines by jkerman 1:30.150
+== combo 4 candidatos
+ohno | oh no announcer -> 1 resultados
+ohno | so close announcer -> 15 resultados
+  preview 267701 'https://freesound.orghttps://cdn.freesound.org/previews/267/267701_4486188-lq.mp3'
+  error bajando 267701 'https://freesound.orghttps://cdn.freesound.org/previews/267/267701_4486188-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK ohno_1.mp3 267701 London Underground- evening tube journey on the Jubilee Line.wav by kwahmah_02 11:28.769
+  preview 238303 'https://freesound.orghttps://cdn.freesound.org/previews/238/238303_3683460-lq.mp3'
+  error bajando 238303 'https://freesound.orghttps://cdn.freesound.org/previews/238/238303_3683460-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK ohno_2.mp3 238303 NYC Subway Train Approach Doors Announce Depart.wav by 8ahpu 1:21.177
+  preview 512804 'https://freesound.orghttps://cdn.freesound.org/previews/512/512804_9034501-lq.mp3'
+  error bajando 512804 'https://freesound.orghttps://cdn.freesound.org/previews/512/512804_9034501-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK ohno_3.mp3 512804 200411_1134_FR_CoronavirusWarningVehicle.wav by kevp888 0:36.233
+  preview 563918 'https://freesound.orghttps://cdn.freesound.org/previews/563/563918_1648170-lq.mp3'
+  error bajando 563918 'https://freesound.orghttps://cdn.freesound.org/previews/563/563918_1648170-lq.mp3' <urlopen error [Errno -2] Name or service not known>
