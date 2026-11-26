@@ -1,0 +1,175 @@
+swish | basketball swish -> 9 resultados
+  preview 716930 'https://freesound.orghttps://cdn.freesound.org/previews/716/716930_9589340-lq.mp3'
+  error bajando 716930 'https://freesound.orghttps://cdn.freesound.org/previews/716/716930_9589340-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK swish_1.mp3 716930 Basketball Swish by vhschool2019 0:00.500
+  preview 518048 'https://freesound.orghttps://cdn.freesound.org/previews/518/518048_3663300-lq.mp3'
+  error bajando 518048 'https://freesound.orghttps://cdn.freesound.org/previews/518/518048_3663300-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK swish_2.mp3 518048 Basketball Net Swish Sound.wav by Hann90 0:06.000
+  preview 381410 'https://freesound.orghttps://cdn.freesound.org/previews/381/381410_4838185-lq.mp3'
+  error bajando 381410 'https://freesound.orghttps://cdn.freesound.org/previews/381/381410_4838185-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK swish_3.mp3 381410 Outdoor Basketball Shot.wav by fattirewhitey 0:12.844
+  preview 262506 'https://freesound.orghttps://cdn.freesound.org/previews/262/262506_3719168-lq.mp3'
+  error bajando 262506 'https://freesound.orghttps://cdn.freesound.org/previews/262/262506_3719168-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK swish_4.mp3 262506 Basketball dribbling and shooting by OBXJohn 0:44.213
+== swish 4 candidatos
+aro | basketball rim -> 3 resultados
+  preview 244348 'https://freesound.orghttps://cdn.freesound.org/previews/244/244348_4468535-lq.mp3'
+  error bajando 244348 'https://freesound.orghttps://cdn.freesound.org/previews/244/244348_4468535-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK aro_1.mp3 244348 basketball.wav by reedhos 0:07.347
+  preview 402102 'https://freesound.orghttps://cdn.freesound.org/previews/402/402102_7735738-lq.mp3'
+  error bajando 402102 'https://freesound.orghttps://cdn.freesound.org/previews/402/402102_7735738-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK aro_2.mp3 402102 Second Directed Soundwalk Edited #2.wav by jasondegeorge 1:00.871
+aro | basketball hitting rim -> 1 resultados
+aro | hoop rim hit -> 0 resultados
+== aro 2 candidatos
+tablero | basketball backboard -> 9 resultados
+  preview 324247 'https://freesound.orghttps://cdn.freesound.org/previews/324/324247_4157407-lq.mp3'
+  error bajando 324247 'https://freesound.orghttps://cdn.freesound.org/previews/324/324247_4157407-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK tablero_1.mp3 324247 Basketball backboard.wav by PerMagnusLindborg 0:00.616
+  preview 262507 'https://freesound.orghttps://cdn.freesound.org/previews/262/262507_3719168-lq.mp3'
+  error bajando 262507 'https://freesound.orghttps://cdn.freesound.org/previews/262/262507_3719168-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK tablero_2.mp3 262507 Dribbling basketball by OBXJohn 0:44.832
+  preview 655323 'https://freesound.orghttps://cdn.freesound.org/previews/655/655323_13723333-lq.mp3'
+  error bajando 655323 'https://freesound.orghttps://cdn.freesound.org/previews/655/655323_13723333-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK tablero_3.mp3 655323 basketball through hoop.wav by 21100495 0:11.604
+  preview 262508 'https://freesound.orghttps://cdn.freesound.org/previews/262/262508_3719168-lq.mp3'
+  error bajando 262508 'https://freesound.orghttps://cdn.freesound.org/previews/262/262508_3719168-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK tablero_4.mp3 262508 shooting and dribbling (wav).wav by OBXJohn 0:44.213
+== tablero 4 candidatos
+pique | basketball bounce -> 15 resultados
+  preview 708564 'https://freesound.orghttps://cdn.freesound.org/previews/708/708564_14784213-lq.mp3'
+  error bajando 708564 'https://freesound.orghttps://cdn.freesound.org/previews/708/708564_14784213-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK pique_1.mp3 708564 Basketball Bouncing by Connorisfine 0:13.245
+  preview 811910 'https://freesound.orghttps://cdn.freesound.org/previews/811/811910_7414526-lq.mp3'
+  error bajando 811910 'https://freesound.orghttps://cdn.freesound.org/previews/811/811910_7414526-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK pique_2.mp3 811910 Bouncing basketball by DigPro120 0:05.996
+  preview 453757 'https://freesound.orghttps://cdn.freesound.org/previews/453/453757_612689-lq.mp3'
+  error bajando 453757 'https://freesound.orghttps://cdn.freesound.org/previews/453/453757_612689-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK pique_3.mp3 453757 basketball ext dribble bounce hard surface.flac by kyles 0:23.890
+  preview 505628 'https://freesound.orghttps://cdn.freesound.org/previews/505/505628_6512859-lq.mp3'
+  error bajando 505628 'https://freesound.orghttps://cdn.freesound.org/previews/505/505628_6512859-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK pique_4.mp3 505628 BasketballBounce.wav by Blankened 0:00.254
+== pique 4 candidatos
+chicharra | basketball buzzer -> 3 resultados
+  preview 264291 'https://freesound.orghttps://cdn.freesound.org/previews/264/264291_1218676-lq.mp3'
+  error bajando 264291 'https://freesound.orghttps://cdn.freesound.org/previews/264/264291_1218676-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK chicharra_1.mp3 264291 basketball_crowd_noise_01.wav by joedeshon 8:52.644
+  preview 719952 'https://freesound.orghttps://cdn.freesound.org/previews/719/719952_13087660-lq.mp3'
+  error bajando 719952 'https://freesound.orghttps://cdn.freesound.org/previews/719/719952_13087660-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK chicharra_2.mp3 719952 High school basketball game with crowd noise by blurry_bear 9:45.585
+  preview 381411 'https://freesound.orghttps://cdn.freesound.org/previews/381/381411_4838185-lq.mp3'
+  error bajando 381411 'https://freesound.orghttps://cdn.freesound.org/previews/381/381411_4838185-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK chicharra_3.mp3 381411 Basketball Ambience - Small Gym.wav by fattirewhitey 7:19.372
+chicharra | game buzzer -> 15 resultados
+  preview 407483 'https://freesound.orghttps://cdn.freesound.org/previews/407/407483_7947620-lq.mp3'
+  error bajando 407483 'https://freesound.orghttps://cdn.freesound.org/previews/407/407483_7947620-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK chicharra_4.mp3 407483 buzz.mp3 by Loyalty_Freak_Music 0:00.353
+== chicharra 4 candidatos
+festejo | crowd cheer arena -> 6 resultados
+  preview 702099 'https://freesound.orghttps://cdn.freesound.org/previews/702/702099_15203576-lq.mp3'
+  error bajando 702099 'https://freesound.orghttps://cdn.freesound.org/previews/702/702099_15203576-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK festejo_1.mp3 702099 Hockey arena goal horn with crowd applause by SEF7 0:29.923
+  preview 645337 'https://freesound.orghttps://cdn.freesound.org/previews/645/645337_10678144-lq.mp3'
+  error bajando 645337 'https://freesound.orghttps://cdn.freesound.org/previews/645/645337_10678144-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK festejo_2.mp3 645337 concert crowd cheering by fxcv 1:07.072
+  preview 629884 'https://freesound.orghttps://cdn.freesound.org/previews/629/629884_612689-lq.mp3'
+  error bajando 629884 'https://freesound.orghttps://cdn.freesound.org/previews/629/629884_612689-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK festejo_3.mp3 629884 crowd large cheer arena stadium hockey game Montreal Canadiens Habs chant applause whistle.flac by kyles 0:24.041
+  preview 706732 'https://freesound.orghttps://cdn.freesound.org/previews/706/706732_15203576-lq.mp3'
+  error bajando 706732 'https://freesound.orghttps://cdn.freesound.org/previews/706/706732_15203576-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK festejo_4.mp3 706732 Hockey arena pregame applause.wav by SEF7 0:47.924
+== festejo 4 candidatos
+uhh | crowd ooh -> 13 resultados
+  preview 826789 'https://freesound.orghttps://cdn.freesound.org/previews/826/826789_2730147-lq.mp3'
+  error bajando 826789 'https://freesound.orghttps://cdn.freesound.org/previews/826/826789_2730147-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK uhh_1.mp3 826789 Ooh and Ahhs -- Man impressed by something by jeffjb91 0:52.166
+  preview 346682 'https://freesound.orghttps://cdn.freesound.org/previews/346/346682_2104797-lq.mp3'
+  error bajando 346682 'https://freesound.orghttps://cdn.freesound.org/previews/346/346682_2104797-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK uhh_2.mp3 346682 Crowd awkward laughter.wav by deleted_user_2104797 0:05.257
+  preview 264376 'https://freesound.orghttps://cdn.freesound.org/previews/264/264376_1654262-lq.mp3'
+  error bajando 264376 'https://freesound.orghttps://cdn.freesound.org/previews/264/264376_1654262-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK uhh_3.mp3 264376 small crowd gasp shock surprise by HowardV 0:08.624
+  preview 264499 'https://freesound.orghttps://cdn.freesound.org/previews/264/264499_3890365-lq.mp3'
+  error bajando 264499 'https://freesound.orghttps://cdn.freesound.org/previews/264/264499_3890365-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK uhh_4.mp3 264499 Crowd Ooohs and Ahhhs in Excitement by noah0189 0:25.793
+== uhh 4 candidatos
+ambiente | basketball arena crowd ambience -> 1 resultados
+  preview 424297 'https://freesound.orghttps://cdn.freesound.org/previews/424/424297_3609277-lq.mp3'
+  error bajando 424297 'https://freesound.orghttps://cdn.freesound.org/previews/424/424297_3609277-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK ambiente_1.mp3 424297 Boston Garden Celtics Ambience 2.m4a by Douglas711 2:45.376
+ambiente | indoor stadium crowd ambience -> 0 resultados
+ambiente | crowd murmur arena -> 0 resultados
+== ambiente 1 candidatos
+aplauso | crowd applause -> 15 resultados
+  preview 459162 'https://freesound.orghttps://cdn.freesound.org/previews/459/459162_1442200-lq.mp3'
+  error bajando 459162 'https://freesound.orghttps://cdn.freesound.org/previews/459/459162_1442200-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK aplauso_1.mp3 459162 AMBLM ext day applause people crowd walla open air concert berlin philharmonics international german english by LudwigMueller 10:59.524
+  preview 752710 'https://freesound.orghttps://cdn.freesound.org/previews/752/752710_9250976-lq.mp3'
+  error bajando 752710 'https://freesound.orghttps://cdn.freesound.org/previews/752/752710_9250976-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK aplauso_2.mp3 752710 Voice_Crowd_Small_Expression_Applause_Stereo by Nox_Sound 0:02.886
+  preview 583130 'https://freesound.orghttps://cdn.freesound.org/previews/583/583130_6549161-lq.mp3'
+  error bajando 583130 'https://freesound.orghttps://cdn.freesound.org/previews/583/583130_6549161-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK aplauso_3.mp3 583130 Medium Crowd Applause 01.wav by AudioSea 0:10.631
+  preview 707871 'https://freesound.orghttps://cdn.freesound.org/previews/707/707871_9040800-lq.mp3'
+  error bajando 707871 'https://freesound.orghttps://cdn.freesound.org/previews/707/707871_9040800-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK aplauso_4.mp3 707871 ~100 People Crowd Applause by SykerOfficial 0:36.320
+== aplauso 4 candidatos
+lanzar | whoosh swing -> 15 resultados
+  preview 422513 'https://freesound.orghttps://cdn.freesound.org/previews/422/422513_3302499-lq.mp3'
+  error bajando 422513 'https://freesound.orghttps://cdn.freesound.org/previews/422/422513_3302499-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK lanzar_1.mp3 422513 Swinging staff whoosh (strong) 04.wav by Nightflame 0:00.310
+  preview 876166 'https://freesound.orghttps://cdn.freesound.org/previews/876/876166_19429311-lq.mp3'
+  error bajando 876166 'https://freesound.orghttps://cdn.freesound.org/previews/876/876166_19429311-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK lanzar_2.mp3 876166 Fantasy Sword Swing Whoosh (Game SFX) by Assetsmith 0:00.410
+  preview 178832 'https://freesound.orghttps://cdn.freesound.org/previews/178/178832_84709-lq.mp3'
+  error bajando 178832 'https://freesound.orghttps://cdn.freesound.org/previews/178/178832_84709-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK lanzar_3.mp3 178832 funky phase whoosh pass.2.wav by martian 0:39.627
+  preview 733891 'https://freesound.orghttps://cdn.freesound.org/previews/733/733891_6703998-lq.mp3'
+  error bajando 733891 'https://freesound.orghttps://cdn.freesound.org/previews/733/733891_6703998-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK lanzar_4.mp3 733891 Whoosh Triple by velcronator 0:02.047
+== lanzar 4 candidatos
+bocina | air horn -> 15 resultados
+  preview 81262 'https://freesound.orghttps://cdn.freesound.org/previews/81/81262_94000-lq.mp3'
+  error bajando 81262 'https://freesound.orghttps://cdn.freesound.org/previews/81/81262_94000-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK bocina_1.mp3 81262 FX air in pipes-horn 090720.wav by ra_gun 0:37.095
+  preview 131930 'https://freesound.orghttps://cdn.freesound.org/previews/131/131930_1542102-lq.mp3'
+  error bajando 131930 'https://freesound.orghttps://cdn.freesound.org/previews/131/131930_1542102-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK bocina_2.mp3 131930 Industrial Air Horn by mcpable 0:02.571
+  preview 157869 'https://freesound.orghttps://cdn.freesound.org/previews/157/157869_2859370-lq.mp3'
+  error bajando 157869 'https://freesound.orghttps://cdn.freesound.org/previews/157/157869_2859370-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK bocina_3.mp3 157869 Whelen Horn.wav by Jefflix 0:55.927
+  preview 649860 'https://freesound.orghttps://cdn.freesound.org/previews/649/649860_1661766-lq.mp3'
+  error bajando 649860 'https://freesound.orghttps://cdn.freesound.org/previews/649/649860_1661766-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK bocina_4.mp3 649860 Many pigs in a farm with slight wind, bird, toad and frog singing, train horn at a distance by the end in the countryside in Illinois by felix.blume 9:38.789
+== bocina 4 candidatos
+organo | stadium organ charge -> 0 resultados
+organo | organ charge -> 0 resultados
+== organo 0 candidatos
+moneda | coin pickup -> 15 resultados
+  preview 608433 'https://freesound.orghttps://cdn.freesound.org/previews/608/608433_4284968-lq.mp3'
+  error bajando 608433 'https://freesound.orghttps://cdn.freesound.org/previews/608/608433_4284968-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK moneda_1.mp3 608433 Nintendo Coin Pickup by plasterbrain 0:00.542
+  preview 876168 'https://freesound.orghttps://cdn.freesound.org/previews/876/876168_19429311-lq.mp3'
+  error bajando 876168 'https://freesound.orghttps://cdn.freesound.org/previews/876/876168_19429311-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK moneda_2.mp3 876168 Coin Pickup Loot Sound (Fantasy RPG) by Assetsmith 0:00.166
+  preview 347174 'https://freesound.orghttps://cdn.freesound.org/previews/347/347174_6324381-lq.mp3'
+  error bajando 347174 'https://freesound.orghttps://cdn.freesound.org/previews/347/347174_6324381-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK moneda_3.mp3 347174 Coin Pickup Sound V 0.2 by Davidsraba 0:00.508
+  preview 538146 'https://freesound.orghttps://cdn.freesound.org/previews/538/538146_7724198-lq.mp3'
+  error bajando 538146 'https://freesound.orghttps://cdn.freesound.org/previews/538/538146_7724198-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK moneda_4.mp3 538146 Plingy Coin by Fupicat 0:00.904
+== moneda 4 candidatos
+click | ui click -> 15 resultados
+  preview 546974 'https://freesound.orghttps://cdn.freesound.org/previews/546/546974_12153167-lq.mp3'
+  error bajando 546974 'https://freesound.orghttps://cdn.freesound.org/previews/546/546974_12153167-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK click_1.mp3 546974 UI_Click.wav by finix473 0:00.345
+  preview 253168 'https://freesound.orghttps://cdn.freesound.org/previews/253/253168_4404552-lq.mp3'
+  error bajando 253168 'https://freesound.orghttps://cdn.freesound.org/previews/253/253168_4404552-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK click_2.mp3 253168 SFX UI Button Click by suntemple 0:00.158
+  preview 881019 'https://freesound.orghttps://cdn.freesound.org/previews/881/881019_19205925-lq.mp3'
+  error bajando 881019 'https://freesound.orghttps://cdn.freesound.org/previews/881/881019_19205925-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK click_3.mp3 881019 Low_Hum_UI_Click_38 by SignatureSoundsOrg 0:00.513
+  preview 467951 'https://freesound.orghttps://cdn.freesound.org/previews/467/467951_6769414-lq.mp3'
+  error bajando 467951 'https://freesound.orghttps://cdn.freesound.org/previews/467/467951_6769414-lq.mp3' <urlopen error [Errno -2] Name or service not known>
+  OK click_4.mp3 467951 UI Button Click by benzix2 0:00.123
+== click 4 candidatos
