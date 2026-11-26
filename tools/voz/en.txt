@@ -1,4 +1,4 @@
-# id | frase. Entre corchetes van indicaciones de emoción para ElevenLabs v3 ([excited], [shouting]...).
+# id | frase. Entre corchetes van indicaciones de emoción para ElevenLabs v3 ([excited], [shouting]...). v2
 bienvenida | [excited] Welcome to the three-point contest!
 ya | [shouting] Ready... GO!
 adentro | [excited] BANG!
