@@ -152,6 +152,7 @@ Pull.prototype.end = function () {
   var held = (performance.now() - this.t0) / 1000;
   return { power: this.power, pe: (this.power - 1) * 0.06, ae: this.dev() * 0.12, spin: -(6 + Math.min(1.6, this.power) * 7), rot: 0, held: held };
 };
+if (typeof Image !== 'undefined') { Pull.fork = new Image(); Pull.fork.src = '/assets/ui/t_horquilla.webp'; }
 Pull.prototype.cancel = function () { this.active = false; };
 Pull.prototype.preview = function () { return this.active && this.power > 0.05 ? { pe: (this.power - 1) * 0.06, power: this.power, ae: this.dev() * 0.12 } : null; };
 Pull.prototype.busy = function () { return this.active || this.sparks.length > 0 || (this.ball && this.ball.fly); };
@@ -160,10 +161,12 @@ Pull.prototype.draw = function (c, dt, o) {
   if (this.active) {
     var bx = this.x, by = this.y, pw = this.power, z = o.zone || [0.9, 1.1], good = pw >= z[0] && pw <= z[1];
     var col = good ? '#3cff8a' : pw < z[0] ? '#ffd23f' : '#ff4d4d';
-    // horquilla
+    // horquilla (imagen si está cargada; las puntas quedan en ax±1.6r)
     c.save(); c.lineCap = 'round';
-    c.strokeStyle = '#6b3b16'; c.lineWidth = r * 0.35;
-    c.beginPath(); c.moveTo(ax - r * 1.6, ay - r * 0.6); c.lineTo(ax - r * 1.1, ay + r * 0.4); c.moveTo(ax + r * 1.6, ay - r * 0.6); c.lineTo(ax + r * 1.1, ay + r * 0.4); c.stroke();
+    var FK = Pull.fork;
+    if (FK && FK.complete && FK.naturalWidth) { var fw = r * 3.2 / 0.94, fh = fw * FK.naturalHeight / FK.naturalWidth; c.drawImage(FK, ax - fw / 2, ay - r * 0.6 - fh * 0.06, fw, fh); }
+    else { c.strokeStyle = '#6b3b16'; c.lineWidth = r * 0.35;
+    c.beginPath(); c.moveTo(ax - r * 1.6, ay - r * 0.6); c.lineTo(ax - r * 1.1, ay + r * 0.4); c.moveTo(ax + r * 1.6, ay - r * 0.6); c.lineTo(ax + r * 1.1, ay + r * 0.4); c.stroke(); }
     // gomas
     c.strokeStyle = col; c.lineWidth = Math.max(3, r * (0.32 - Math.min(0.2, pw * 0.08)));
     c.beginPath(); c.moveTo(ax - r * 1.6, ay - r * 0.6); c.lineTo(bx, by); c.lineTo(ax + r * 1.6, ay - r * 0.6); c.stroke();

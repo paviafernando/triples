@@ -2,7 +2,7 @@
 'use strict';
 (function () {
   var M = {
-    '🎯': 'practica', '🏆': 'concurso', '🐣': 'facil', '🏀': 'normal', '🔥': 'pro', '👆': 'deslizar', '⏱️': 'medidor', '⏱': 'medidor',
+    '🎯': 'practica', '🏆': 'concurso', '🐣': 'facil', '🏀': 'normal', '🔥': 'pro', '👆': 'deslizar', '🏹': 't_gomera', '⏱️': 'medidor', '⏱': 'medidor',
     '📱': 'simulacion', '⚙️': 'opciones', '⚙': 'opciones', '👑': 'princesa', '🔊': 'sonido', '🔇': 'mudo', '🤐': 'mudo', '🏟️': 'publico', '🏟': 'publico',
     '🎶': 'musica', '🎵': 'musica', '🗣️': 'voz', '🗣': 'voz', '🏠': 'inicio', '⏸️': 'pausa', '⏸': 'pausa', '⛶': 'pantalla', '🔄': 'rotar', '🪙': 'moneda',
     '🏅': 'medalla', '🤖': 'robot', '➕': 'nuevo', '✏️': 'editar', '✏': 'editar', '⭐': 'estrella', '💰': 'money', '🔒': 'candado', '✔': 'ok', '✓': 'ok',

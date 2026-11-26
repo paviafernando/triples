@@ -2,7 +2,7 @@
 'use strict';
 var Tuto = (function () {
   var U = {}, imgs = {};
-  ['deslizar', 'simulacion', 'medidor'].forEach(function (k) { var im = new Image(); im.onload = function () { imgs[k] = im; }; im.src = '/assets/ui/' + k + '.webp'; });
+  ['deslizar', 'simulacion', 'medidor', 't_mano', 't_gomera', 't_celu', 't_celu_tiro', 't_control'].forEach(function (k) { var im = new Image(); im.onload = function () { imgs[k] = im; }; im.src = '/assets/ui/' + k + '.webp'; });
   var demos = { pull: new Pull(), swipe: new Flick() }, st = {};
   var lerp = function (a, b, k) { return a + (b - a) * k; };
   var ease = function (k) { return k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; };
@@ -39,6 +39,7 @@ var Tuto = (function () {
         P.draw(c, 1 / 60, { ballX: bx, ballY: by, r: r, drawBall: function () {} });
         var kk = Math.min(1, (T0 - rel) / 1.2); flight(c, kk, bx, by, hx, hy, r); if (kk >= 1) label(c, '¡ADENTRO!', w / 2, h * 0.12, r * 1.5);
       }
+      badge(c, imgs.t_gomera, w * 0.1, h * 0.14, r * 2.4);
       label(c, 'estirá hacia abajo', w * 0.5, h * 0.92, r * 1.05, '#fff');
     } else if (mode === 'swipe') {
       var F = demos.swipe, s0 = 0.5, s1 = 0.72;
@@ -70,13 +71,22 @@ var Tuto = (function () {
       var tilt = T0 < a1 ? 0 : Math.min(0.6, (T0 - a1) * 3);
       if (T0 > a0 && T0 < a1) { c.save(); c.strokeStyle = 'rgba(60,255,138,' + (0.5 + 0.5 * Math.sin(T0 * 30)) + ')'; c.lineWidth = 4; c.beginPath(); c.arc(sx, py, r * 2.2, 0, 7); c.stroke(); c.restore(); label(c, 'quieto… ¡bzz!', w * 0.5, h * 0.12, r * 1.2, '#3cff8a'); }
       if (T0 > a1 && T0 < a2 + 0.2) { c.save(); c.strokeStyle = 'rgba(255,255,255,.7)'; c.lineWidth = 3; for (var i = 0; i < 3; i++) { c.beginPath(); c.moveTo(sx - r * 1.5 + i * r, py + r * 2); c.lineTo(sx - r * 1.5 + i * r, py + r * 3.5); c.stroke(); } c.restore(); }
-      if (imgs.simulacion && py < h + r * 3) { c.save(); c.translate(sx, py); c.rotate(-tilt); var s = r * 3.4; c.drawImage(imgs.simulacion, -s / 2, -s / 2, s, s); c.restore(); }
+      var phim = (T0 > a1 ? imgs.t_celu_tiro : imgs.t_celu) || imgs.simulacion;
+      if (phim && py < h + r * 3) { c.save(); c.translate(sx, py); c.rotate(-tilt); var sh = r * 4, sw = sh * phim.width / phim.height; c.drawImage(phim, -sw / 2, -sh / 2, sw, sh); c.restore(); }
       if (T0 > a2) { var k5 = Math.min(1, (T0 - a2) / 1.2); flight(c, k5, sx, high, hx, hy, r); if (k5 >= 1) label(c, '¡ADENTRO!', w / 2, h * 0.12, r * 1.5); }
       label(c, T0 < a0 ? 'subí el celu a la frente' : T0 < a1 ? 'quedate quieto' : '¡tirá como una pelota!', w * 0.6, h * 0.92, r * 1.05, '#fff');
     }
   };
-  function hand(c, x, y, r) { if (!imgs.deslizar) return; var s = r * 3; c.save(); c.globalAlpha = 0.95; c.drawImage(imgs.deslizar, x - s * 0.55, y - s * 0.15, s, s); c.restore(); }
-  function key0(c, x, y, r, down) { c.save(); c.translate(x, y + (down ? 3 : 0)); c.fillStyle = down ? '#c9a000' : '#ffd23f'; c.strokeStyle = '#2b1600'; c.lineWidth = 3; c.beginPath(); c.arc(0, 0, r * 1.1, 0, 7); c.fill(); c.stroke(); c.fillStyle = '#2b1600'; c.font = '900 ' + r * 1.2 + 'px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('0', 0, 2); c.restore(); }
+  function hand(c, x, y, r) {
+    var im = imgs.t_mano;
+    if (im) { var hh = r * 3.6, ww = hh * im.width / im.height; c.save(); c.translate(x, y - r * 0.3); c.rotate(Math.PI); c.drawImage(im, -ww * 0.49, -hh * 0.99, ww, hh); c.restore(); return; }
+    if (!imgs.deslizar) return; var s = r * 3; c.save(); c.globalAlpha = 0.95; c.drawImage(imgs.deslizar, x - s * 0.55, y - s * 0.15, s, s); c.restore();
+  }
+  function badge(c, im, x, y, sz) { if (!im) return; var hh = sz, ww = hh * im.width / im.height; c.save(); c.globalAlpha = 0.9; c.drawImage(im, x - ww / 2, y - hh / 2, ww, hh); c.restore(); }
+  function key0(c, x, y, r, down) {
+    var im = imgs.t_control;
+    if (im) { var hh = r * 5, ww = hh * im.width / im.height; c.save(); c.translate(x, y + (down ? 3 : 0)); if (down) { c.shadowColor = '#ffd23f'; c.shadowBlur = 25; } c.drawImage(im, -ww / 2, -hh / 2, ww, hh); c.restore(); return; }
+    c.save(); c.translate(x, y + (down ? 3 : 0)); c.fillStyle = down ? '#c9a000' : '#ffd23f'; c.strokeStyle = '#2b1600'; c.lineWidth = 3; c.beginPath(); c.arc(0, 0, r * 1.1, 0, 7); c.fill(); c.stroke(); c.fillStyle = '#2b1600'; c.font = '900 ' + r * 1.2 + 'px sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('0', 0, 2); c.restore(); }
 
   /* Gráficos en vivo de la calibración: nivel de burbuja (inclinación vs posición guardada), barra de movimiento y progreso */
   U.gauge = function (c, w, h, L, step, prog) {

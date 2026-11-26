@@ -45,6 +45,7 @@ var CELEBS = {
   mamba: { e: '🐍', n: 'Mentón de Mamba', only: true },
   shimmy: { e: '🕺', n: 'Shimmy', only: true },
   murcielago: { e: '🦇', n: 'El murciélago', only: true },
+  rascada: { e: '🤪', n: '¿Quién, yo?', only: true },
   dedo: { e: '☝️', n: '¿Quién sale segundo?', only: true }
 };
 var CUSTOM_CELEBS = ['baile', 'avion', 'musculos', 'saludo', 'corazon'];
@@ -83,7 +84,10 @@ var STARS = [
     look: mkLook({ skin: 1, hair: 'coronilla', hairColor: 2, eyes: 1, beard: 'no', face: 'larga', height: 198, weight: 93, build: 0, kit: 3, number: 20, jersey: 'GINOBILI', shoes: 1, celeb: 'murcielago' }) },
   { id: 'bird', name: 'Larry Bird', short: 'Bird', tag: 'Ganó 3 concursos de triples seguidos',
     sk: { tiro: 96, rango: 90, ritmo: 84, clutch: 97 },
-    look: mkLook({ skin: 0, hair: 'flequillo', hairColor: 4, eyes: 2, beard: 'bigote', face: 'larga', height: 206, weight: 100, build: 1, kit: 4, number: 33, jersey: 'BIRD', shoes: 0, celeb: 'dedo' }) }
+    look: mkLook({ skin: 0, hair: 'flequillo', hairColor: 4, eyes: 2, beard: 'bigote', face: 'larga', height: 206, weight: 100, build: 1, kit: 4, number: 33, jersey: 'BIRD', shoes: 0, celeb: 'dedo' }) },
+  { id: 'ogro', name: 'El Ogro', short: 'Ogro', tag: 'Monstruo de la cancha: tira raro, pero entra',
+    sk: { tiro: 76, rango: 94, ritmo: 64, clutch: 82 },
+    look: mkLook({ skin: 3, hair: 'rapado', hairColor: 0, beard: 'no', face: 'larga', height: 221, weight: 120, build: 2, kit: 2, number: 0, jersey: 'OGRO', shoes: 2, celeb: 'rascada' }) }
 ];
 
 var CUSTOM_BASE_SK = { tiro: 70, rango: 70, ritmo: 70, clutch: 70 };
