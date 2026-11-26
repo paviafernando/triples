@@ -12,6 +12,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 2 }
       - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
       - name: Herramientas
@@ -21,7 +22,8 @@ jobs:
       - name: Sonidos CC0 de Freesound
         run: python tools/assets/fetch_sounds.py || echo "falló sonidos" >> assets/_log_sonidos.txt
       - name: Voz del locutor (Piper es_AR)
-        run: python tools/assets/make_voice.py || echo "falló voz" >> assets/_log_voz.txt
+        run: |
+          if [ ! -f assets/voz/adentro.mp3 ] || git diff --name-only HEAD~1 HEAD | grep -q voz.txt; then python tools/assets/make_voice.py || echo "falló voz" >> assets/_log_voz.txt; fi
       - name: Guardar en el repo
         if: always()
         run: |

@@ -15,6 +15,9 @@ def get(url, binary=False):
         data = r.read()
     return data if binary else data.decode('utf-8', 'replace')
 
+import glob
+for f in glob.glob(OUT + '/*.mp3'):
+    if os.path.getsize(f) == 0: os.remove(f)
 cfg = json.load(open('tools/assets/sonidos.json', encoding='utf-8'))
 credits = {}
 try: credits = json.load(open('assets/sfx/creditos.json'))
@@ -52,10 +55,19 @@ for cat, queries in cfg.items():
             title = re.search(r'<meta property="og:title" content="([^"]*)"', sp)
             dur = re.search(r'Duration[^0-9]*([0-9:.]+)', sp)
             fn = f'{cat}_{got + 1}.mp3'
-            try:
-                open(os.path.join(OUT, fn), 'wb').write(get(prev, True))
-            except Exception as e:
-                L('  error bajando', sid, e); continue
+            cands = [prev]
+            if prev.startswith('//'): cands = ['https:' + prev]
+            mm = re.search(r'previews/(\d+)/(\d+_\d+)', prev)
+            if mm: cands += [f'https://cdn.freesound.org/previews/{mm.group(1)}/{mm.group(2)}-hq.mp3', f'https://freesound.org/data/previews/{mm.group(1)}/{mm.group(2)}-hq.mp3']
+            data = None
+            for cu in cands:
+                try:
+                    data = get(cu, True)
+                    if len(data) > 2000: break
+                except Exception as e:
+                    L('  error bajando', sid, repr(cu), e); data = None
+            if not data: continue
+            open(os.path.join(OUT, fn), 'wb').write(data)
             author = path.split('/')[2]
             credits[fn] = {'id': sid, 'titulo': html.unescape(title.group(1)) if title else '', 'autor': author, 'url': 'https://freesound.org' + path, 'licencia': 'CC0', 'busqueda': q, 'duracion': dur.group(1) if dur else ''}
             L('  OK', fn, sid, credits[fn]['titulo'], credits[fn]['duracion'])
