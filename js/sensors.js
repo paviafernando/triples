@@ -9,7 +9,7 @@
 var Sim = (function () {
   var S = {}, on = false, cb = {}, st = 'idle', since = 0, lastT = 0;
   var g = null, lin = [0, 0, 0], rot = 0, alpha = null, alphaRel = 0;
-  var vel = [0, 0, 0], peakA = 0, maxSp = 0, maxVel = [0, 0, 0], pushT0 = 0, pushAlpha = 0;
+  var vel = [0, 0, 0], peakA = 0, maxSp = 0, maxVel = [0, 0, 0], pushT0 = 0, pushAlpha = 0, peakRot = 0;
   var KEY = 'triples-sim-v1';
   var cfg = (function () { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } })();
   cfg.ref = cfg.ref || null; cfg.vt = cfg.vt || 2.4; cfg.flip = !!cfg.flip; cfg.compass = cfg.compass !== false; cfg.sens = cfg.sens || 1;
@@ -63,7 +63,7 @@ var Sim = (function () {
         else S._t0 = 0;
         break;
       case 'armed':
-        if (lm > 6.5 / cfg.sens) { set('push'); vel = [0, 0, 0]; peakA = 0; maxSp = 0; pushT0 = now; }
+        if (lm > 6.5 / cfg.sens) { set('push'); vel = [0, 0, 0]; peakA = 0; maxSp = 0; peakRot = 0; pushT0 = now; }
         else if (!poseOK && lm < 3) { if (!S._t1) S._t1 = now; if (now - S._t1 > 450) { S._t1 = 0; set('idle'); if (cb.disarm) cb.disarm(); } }
         else { S._t1 = 0; if (still) pushAlpha = alpha; }
         break;
@@ -71,6 +71,7 @@ var Sim = (function () {
         for (var k = 0; k < 3; k++) vel[k] += lin[k] * dt;
         var sp = len(vel); if (sp > maxSp) { maxSp = sp; maxVel = vel.slice(); }
         if (lm > peakA) peakA = lm;
+        if (rot > peakRot) peakRot = rot;
         var along = (lin[0] * vel[0] + lin[1] * vel[1] + lin[2] * vel[2]) / (sp || 1);
         var el = now - pushT0;
         if ((el > 70 && (lm < peakA * 0.35 || along < -5)) || el > 480) release();
@@ -90,6 +91,7 @@ var Sim = (function () {
     // a entrada del juego: error de fuerza y error lateral (grados)
     shot.pe = (shot.ratio - 1) * 0.065;
     shot.ae = latDeg * 0.15 + (Math.abs(turn) < 60 ? turn * 0.35 : 0);
+    shot.spin = -Math.max(3, Math.min(26, peakRot / 40)); // giro de muñeca (°/s) → efecto de la pelota
     S.live.sp = Math.round(sp * 100) / 100; S.live.last = shot;
     vib(25);
     if (cb.shot) cb.shot(shot);

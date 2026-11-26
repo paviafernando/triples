@@ -50,7 +50,13 @@ Flick.prototype.end = function () {
   var dev = (devEnd * 0.6 + devAll * 0.4) * 180 / Math.PI;
   for (var i = 0; i < 26; i++) { var an = Math.random() * Math.PI * 2, s = 120 + Math.random() * 380; this.sparks.push({ x: last.x, y: last.y, vx: Math.cos(an) * s + this.vx * this.H * 0.15, vy: Math.sin(an) * s - this.vy * this.H * 0.2, life: 0.5 + Math.random() * 0.3, max: 0.8 }); }
   if (this.ball) { this.ball.vx = this.vx * this.H * 0.6; this.ball.vy = -Math.max(0.8, this.vy) * this.H * 0.9; this.ball.fly = true; }
-  this.res = { power: pw, pe: (pw - 1) * 0.07, ae: dev * 0.12 };
+  var vEnd = Math.max(0, this.vy), early = 0, ne = 0;
+  for (var j = this.pts.length - 1; j > 0; j--) { var age = last.t - this.pts[j].t; if (age > 0.12 && age < 0.3) { early += (this.pts[j - 1].y - this.pts[j].y) / this.H / Math.max(0.004, this.pts[j].t - this.pts[j - 1].t); ne++; } }
+  early = ne ? early / ne : vEnd;
+  var snap = Math.max(0, Math.min(2, (vEnd - early) / Flick.IDEAL_V));           // aceleró al final = golpe de muñeca
+  var curve = Math.abs(devEnd - devAll) * 180 / Math.PI;                       // trazo curvo
+  var spin = -(3 + Math.min(2.4, vEnd / Flick.IDEAL_V) * 7 + snap * 6 + Math.min(30, curve) * 0.15);
+  this.res = { power: pw, pe: (pw - 1) * 0.07, ae: dev * 0.12, spin: Math.max(-26, spin), rot: this.ball ? this.ball.rot || 0 : 0 };
   return this.res;
 };
 Flick.prototype.cancel = function () { this.active = false; this.pts = []; this.ghost = []; };
@@ -68,8 +74,9 @@ Flick.prototype.draw = function (c, dt, o) {
     b.x += (last.x - b.x) * Math.min(1, dt * 18); b.y += (last.y - b.y) * Math.min(1, dt * 18);
     var sp = Math.min(1, Math.hypot(this.vx, this.vy) / 4);
     b.sy = 1 + sp * 0.35; b.sx = 1 - sp * 0.2;
+    b.rot = (b.rot || 0) - (this.vy * 9 + this.vx * 5) * dt; // rueda con el dedo
   } else if (b.fly) {
-    b.x += b.vx * dt; b.y += b.vy * dt; b.vy += this.H * 0.4 * dt; b.sx = b.sy = Math.max(0, 1 - (now - this.relT) * 2.2);
+    b.x += b.vx * dt; b.y += b.vy * dt; b.vy += this.H * 0.4 * dt; b.rot = (b.rot || 0) + (this.res ? this.res.spin : -10) * dt; b.sx = b.sy = Math.max(0, 1 - (now - this.relT) * 2.2);
     if (b.sx <= 0) { b.fly = false; this.ball = null; b = null; }
   } else { b = { x: o.ballX, y: o.ballY, sx: 1 + Math.sin(now * 5) * 0.03, sy: 1 - Math.sin(now * 5) * 0.03 }; }
 
@@ -121,6 +128,6 @@ Flick.prototype.draw = function (c, dt, o) {
     c.beginPath(); c.arc(q.x, q.y, Math.max(0.5, r * 0.12 * kk), 0, 7); c.fill();
   }
   // pelota
-  if (b && o.drawBall) { c.save(); c.translate(b.x, b.y); c.rotate(Math.atan2(this.vx, this.vy) * (this.active ? 1 : 0)); c.scale(b.sx || 1, b.sy || 1); o.drawBall(c, 0, 0, r); c.restore(); }
+  if (b && o.drawBall) { c.save(); c.translate(b.x, b.y); c.rotate(this.active ? Math.atan2(this.vx, this.vy) * 0.5 : 0); c.scale(b.sx || 1, b.sy || 1); c.rotate(b.rot || 0); o.drawBall(c, 0, 0, r); c.restore(); }
 };
 Flick.prototype.busy = function () { return this.active || this.sparks.length > 0 || (this.ball && this.ball.fly) || (performance.now() / 1000 - this.relT) < 0.3; };

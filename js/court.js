@@ -114,7 +114,7 @@ var Court = (function () {
     var s = solveShot(p, tgt, (o.arc || 50) * Math.PI / 180);
     var v = s.v * (1 + (o.pe || 0)), yaw = s.yaw + (o.ae || 0) * Math.PI / 180, th = s.th + (o.pa || 0) * Math.PI / 180;
     var hv = v * Math.cos(th);
-    ball = { p: p, v: [Math.sin(yaw) * hv, v * Math.sin(th), Math.cos(yaw) * hv], rot: 0, spin: -8, money: o.money, t: 0, made: false, through: false, touched: 0, board: 0, done: false, magnet: o.magnet || 0, floor: 0, rest: 0 };
+    ball = { p: p, v: [Math.sin(yaw) * hv, v * Math.sin(th), Math.cos(yaw) * hv], rot: o.rot || 0, spin: o.spin != null ? o.spin : -8, money: o.money, t: 0, made: false, through: false, touched: 0, board: 0, done: false, magnet: o.magnet || 0, floor: 0, rest: 0 };
     events = cb || {};
     return ball;
   };
@@ -131,6 +131,9 @@ var Court = (function () {
         b.v = vsub(b.v, vmul(n, (1 + 0.55) * vn));
         // fricción tangencial
         var vt = vsub(b.v, vmul(n, vdot(b.v, n))); b.v = vsub(b.v, vmul(vt, 0.12));
+        var back = Math.max(0, -b.spin) / 20;           // cuánto contraefecto trae
+        b.v[0] *= 1 - back * 0.25; b.v[2] *= 1 - back * 0.25; // rebote más suave
+        b.spin = -b.spin * 0.55 + (Math.random() - 0.5) * 6;  // al pegar en el aro el giro se invierte y se desordena
         b.touched++; rimShake = 1;
         if (events.rim) events.rim(Math.min(1, -vn / 4));
       }
@@ -139,7 +142,7 @@ var Court = (function () {
   }
   function hitBoard(b) {
     if (b.p[2] - BALL_R < BOARD.z && b.p[2] > BOARD.z - 0.3 && b.p[0] > BOARD.x0 - BALL_R && b.p[0] < BOARD.x1 + BALL_R && b.p[1] > BOARD.y0 - BALL_R && b.p[1] < BOARD.y1 + BALL_R && b.v[2] < 0) {
-      b.p[2] = BOARD.z + BALL_R; b.v[2] = -b.v[2] * 0.6; b.v[0] *= 0.9; b.v[1] *= 0.9; b.board++;
+      b.p[2] = BOARD.z + BALL_R; b.v[2] = -b.v[2] * 0.6; b.v[0] *= 0.9; b.v[1] *= 0.9; b.v[1] += b.spin * 0.015; b.spin = -b.spin * 0.5; b.board++;
       if (events.board) events.board();
     }
     // aro unido al tablero (el soporte): si pasa muy atrás, rebota
@@ -158,6 +161,8 @@ var Court = (function () {
       if (b.through) { b.v[0] *= 0.97; b.v[2] *= 0.97; if (b.p[1] > RIM.y - 0.45) b.v[1] = Math.max(b.v[1], -2.2); }
       b.p = vadd(b.p, vmul(b.v, h));
       b.rot += b.spin * h;
+      b.spin *= (1 - 0.12 * h); // el aire frena un poco el giro
+      if (b.through) b.spin *= (1 - 3 * h); // la red lo frena
       if (!b.through) { hitRim(b); hitBoard(b); }
       // ¿entró? cruza el plano del aro bajando, dentro del aro
       if (!b.through && prevY >= RIM.y && b.p[1] < RIM.y && b.v[1] < 0) {
@@ -171,7 +176,8 @@ var Court = (function () {
       // piso
       if (b.p[1] < BALL_R) {
         b.p[1] = BALL_R;
-        if (b.v[1] < -0.6) { b.v[1] = -b.v[1] * 0.62; b.floor++; if (events.floor) events.floor(Math.min(1, -b.v[1] / 5)); }
+        if (b.v[1] < -0.6) { b.v[1] = -b.v[1] * 0.62; b.floor++;
+          var hz = Math.hypot(b.v[0], b.v[2]) || 1, pull = b.spin * 0.03; b.v[0] += b.v[0] / hz * pull; b.v[2] += b.v[2] / hz * pull; b.spin *= 0.6; if (events.floor) events.floor(Math.min(1, -b.v[1] / 5)); }
         else b.v[1] = 0;
         b.v[0] *= 0.85; b.v[2] *= 0.85;
       }

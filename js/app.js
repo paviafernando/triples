@@ -509,7 +509,7 @@ function meterRelease() {
   if (!G || !G.meter) return;
   var m = meterVal(); G.meter = null;
   var e = Math.max(-1, Math.min(1, (m - 1) / 0.3));
-  shootWith({ pe: e * 0.02, ae: (Math.random() < 0.5 ? -1 : 1) * Math.abs(e) * Math.random() * 1.1, kind: 'meter', e: e });
+  shootWith({ pe: e * 0.02, ae: (Math.random() < 0.5 ? -1 : 1) * Math.abs(e) * Math.random() * 1.1, kind: 'meter', e: e, spin: -(6 + (1 - Math.min(1, Math.abs(e))) * 10 + Math.random() * 3) });
 }
 var meterTap = false;
 function shootKeyDown() {
@@ -540,7 +540,7 @@ function shootWith(inp) {
   setTimeout(function () {
     if (G.token !== token) return;
     G.shooter.hasBall = false;
-    Court.launch({ from: from, pe: pe, ae: ae, arc: G.diff === 'facil' ? 54 : 50, money: money, magnet: D.magnet }, {
+    Court.launch({ from: from, pe: pe, ae: ae, arc: G.diff === 'facil' ? 54 : 50, money: money, magnet: D.magnet, spin: inp.spin, rot: inp.rot }, {
       rim: function (k2) { SFX.rim(k2); },
       board: function () { SFX.board(); },
       floor: function (k2) { SFX.floor(k2); },
@@ -880,7 +880,7 @@ function flickUp() {
   if (!G || !flick.active) return false;
   var r = flick.end();
   if (!r) { if (G.phase === 'set') G.phase = 'ready'; return true; }
-  shootWith({ pe: r.pe, ae: r.ae, kind: 'swipe' });
+  shootWith({ pe: r.pe, ae: r.ae, kind: 'swipe', spin: r.spin, rot: r.rot });
   return true;
 }
 cv.addEventListener('pointerup', function () {
@@ -899,7 +899,7 @@ function startSimLocal() {
     Sim.start({
       armed: function () { SFX.arm(); if (canShoot()) armShot(); $('#simShade').classList.add('armed'); $('#simTxt').textContent = '✅ ¡Listo! Tirá'; },
       disarm: function () { $('#simShade').classList.remove('armed'); $('#simTxt').textContent = '✋ Posición de tiro'; if (G && G.phase === 'set') G.phase = 'ready'; },
-      shot: function (s) { $('#simShade').classList.remove('armed'); $('#simTxt').textContent = '🏀 ¡Salió!'; if (G && (G.phase === 'ready' || G.phase === 'set')) shootWith({ pe: s.pe, ae: s.ae, kind: 'sim' }); }
+      shot: function (s) { $('#simShade').classList.remove('armed'); $('#simTxt').textContent = '🏀 ¡Salió!'; if (G && (G.phase === 'ready' || G.phase === 'set')) shootWith({ pe: s.pe, ae: s.ae, kind: 'sim', spin: s.spin }); }
     });
     $('#simTxt').textContent = '✋ Posición de tiro'; $('#simSub').textContent = 'Palma sobre la pantalla, levantá el celu como la pelota. Vibra cuando estás listo: ¡tirá!';
   });
@@ -1099,7 +1099,7 @@ function onPad(conn, d) {
     case 'key': if (/^[0-9]$/.test(d.k)) { if (cur === 'game' && d.k === '0' && !ovOpen()) { shootKeyDown(); setTimeout(shootKeyUp, 60); } else pressDigit(d.k); } else if (d.k === 'back') pressBack(); break;
     case 'armed': if (mine && canShoot()) armShot(); break;
     case 'disarm': if (mine && G.phase === 'set' && !G.meter) G.phase = 'ready'; break;
-    case 'shot': if (mine && G && (G.phase === 'ready' || G.phase === 'set')) shootWith({ pe: +d.pe || 0, ae: +d.ae || 0, kind: d.kind === 'sim' ? 'sim' : 'swipe' }); break;
+    case 'shot': if (mine && G && (G.phase === 'ready' || G.phase === 'set')) shootWith({ pe: +d.pe || 0, ae: +d.ae || 0, kind: d.kind === 'sim' ? 'sim' : 'swipe', spin: d.spin != null ? Math.max(-26, Math.min(0, +d.spin)) : undefined }); break;
     case 'press': if (mine) { if (G.meter) meterRelease(); else if (canShoot()) { meterStart(); meterTap = false; } } break;
     case 'release': if (mine && G.meter) meterRelease(); break;
   }
@@ -1153,7 +1153,7 @@ function startPad(c0) {
       Sim.start({
         armed: function () { SFX.arm(); box.classList.add('armed'); $('#pSimE').textContent = '🏀'; $('#pSimT').textContent = '¡Listo! Tirá'; send({ t: 'armed' }); },
         disarm: function () { box.classList.remove('armed'); $('#pSimE').textContent = '✋'; $('#pSimT').textContent = 'Posición de tiro'; send({ t: 'disarm' }); },
-        shot: function (s) { SFX.release(); box.classList.remove('armed'); $('#pSimE').textContent = '💨'; $('#pSimT').textContent = '¡Salió!'; send({ t: 'shot', kind: 'sim', pe: s.pe, ae: s.ae }); }
+        shot: function (s) { SFX.release(); box.classList.remove('armed'); $('#pSimE').textContent = '💨'; $('#pSimT').textContent = '¡Salió!'; send({ t: 'shot', kind: 'sim', pe: s.pe, ae: s.ae, spin: s.spin }); }
       });
       $('#pKeys').classList.add('hidden');
     });
@@ -1178,7 +1178,7 @@ function startPad(c0) {
     if (!sw) return; sw = null;
     var res = pf.end(); if (!res) return;
     SFX.release(); vib(20);
-    send({ t: 'shot', kind: 'swipe', pe: res.pe, ae: res.ae });
+    send({ t: 'shot', kind: 'swipe', pe: res.pe, ae: res.ae, spin: res.spin });
   });
   area.addEventListener('pointercancel', function () { sw = null; pf.cancel(); });
   var placeBand = function () {};
