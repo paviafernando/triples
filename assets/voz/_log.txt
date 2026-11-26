@@ -1,1 +1,75 @@
-FALTA el secret ELEVENLABS_API_KEY en GitHub (Settings > Secrets and variables > Actions)
+clave OK, largo 51
+en voz elegida: Charlie - Deep, Confident, Energetic IKne3meq5aSn9XLyUdCD
+en OK bienvenida [excited] Welcome to the three-point contest!
+en OK ya [shouting] Ready... GO!
+en OK adentro [excited] BANG!
+en OK adentro2 [shouting] FROM DOWNTOWN!
+en OK adentro3 [shouting] BOOM SHAKALAKA!
+en OK limpita [excited] Nothing but net!
+en OK tablero [excited] Off the glass!
+en OK bailo [excited] It rattles in!
+en OK money [shouting] MONEY BALL! That's two!
+en OK fuego [shouting] HE'S ON FIRE!
+en OK racha [shouting] UNSTOPPABLE!
+en OK casi [disappointed] Ohhh, so close!
+en OK corta Short!
+en OK larga Too long!
+en OK rack [shouting] PERFECT RACK! Are you kidding me?!
+en OK diez [excited] Ten seconds left!
+en OK tiempo [excited] TIME!
+en OK record [shouting] NEW RECORD!
+en OK muybien [excited] Yes!
+en OK genia [excited] What a shooter!
+en OK moneyrack Pick your money ball rack!
+en OK siguiente Next shooter!
+en OK gano [excited] And the winner is...
+en OK otra One more?
+en OK curry Steph Curry!
+en OK doncic Luka Doncic!
+en OK lebron LeBron James!
+en OK jordan Michael Jordan!
+en OK kobe Kobe Bryant!
+en OK shaq Shaquille O'Neal!
+en OK manu Manu Ginobili!
+en OK bird Larry Bird!
+en OK turno Up next...
+en OK nombre_emi Emi!
+en OK nombre_papa Dad!
+en OK nombre_mama Mom!
+es voz elegida: Charlie - Deep, Confident, Energetic IKne3meq5aSn9XLyUdCD
+es OK bienvenida [excited] ¡Bienvenidos al concurso de triples!
+es OK ya [shouting] ¡Preparados... YA!
+es OK adentro [excited] ¡ADENTRO!
+es OK adentro2 [shouting] ¡DE TRES! ¡DE TRES!
+es OK adentro3 [shouting] ¡QUÉ TIRO, POR DIOS!
+es OK limpita [excited] ¡Limpita! ¡Ni tocó el aro!
+es OK tablero [excited] ¡De tablero!
+es OK bailo [excited] ¡Bailó en el aro y entró!
+es OK money [shouting] ¡MONEY BALL! ¡Vale doble!
+es OK fuego [shouting] ¡ESTÁ PRENDIDO FUEGO!
+es OK racha [shouting] ¡NO LO PARA NADIE!
+es OK casi [disappointed] ¡Uhhh, casi!
+es OK corta ¡Corta!
+es OK larga ¡Larga!
+es OK rack [shouting] ¡RACK PERFECTO! ¡Increíble!
+es OK diez [excited] ¡Últimos diez segundos!
+es OK tiempo [excited] ¡TIEMPO!
+es OK record [shouting] ¡NUEVO RÉCORD!
+es OK muybien [excited] ¡Muy bien!
+es OK genia [excited] ¡Qué tirador!
+es OK moneyrack ¡Elegí tu rack de money balls!
+es OK siguiente ¡Siguiente tirador!
+es OK gano [excited] Y el campeón es...
+es OK otra ¿Otra?
+es OK curry ¡Stephen Curry!
+es OK doncic ¡Luka Dóncich!
+es OK lebron ¡LeBron James!
+es OK jordan ¡Michael Jordan!
+es OK kobe ¡Kobe Bryant!
+es OK shaq ¡Shaquille O'Neal!
+es OK manu ¡Manu Ginóbili!
+es OK bird ¡Larry Bird!
+es OK turno Le toca a...
+es OK nombre_emi ¡Emi!
+es OK nombre_papa ¡Papá!
+es OK nombre_mama ¡Mamá!
