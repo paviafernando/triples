@@ -36,3 +36,11 @@ nombre_emi | ¡Emi!
 nombre_papa | ¡Papá!
 nombre_mama | ¡Mamá!
 # Thu Nov 26 10:51:04 -03 2026
+bugs | [excited] ¡Bugs Bunny!
+daffy | [excited] ¡Daffy Duck!
+roadrunner | [excited] ¡El Correcaminos!
+coyote | [disappointed] ¡Wile E. Coyote!
+taz | [shouting] ¡El Demonio de Tasmania!
+tweety | ¡Tweety!
+lola | ¡Lola Bunny!
+monstar | [shouting] ¡Monstar!

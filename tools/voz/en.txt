@@ -35,3 +35,11 @@ turno | Up next...
 nombre_emi | Emi!
 nombre_papa | Dad!
 nombre_mama | Mom!
+bugs | [excited] Bugs Bunny!
+daffy | [excited] Daffy Duck!
+roadrunner | [excited] The Road Runner!
+coyote | [disappointed] Wile E. Coyote!
+taz | [shouting] The Tasmanian Devil!
+tweety | Tweety!
+lola | Lola Bunny!
+monstar | [shouting] Monstar!
