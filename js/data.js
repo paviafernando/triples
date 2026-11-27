@@ -45,7 +45,15 @@ var CELEBS = {
   mamba: { e: '🐍', n: 'Mentón de Mamba', only: true },
   shimmy: { e: '🕺', n: 'Shimmy', only: true },
   murcielago: { e: '🦇', n: 'El murciélago', only: true },
-  dedo: { e: '☝️', n: '¿Quién sale segundo?', only: true }
+  dedo: { e: '☝️', n: '¿Quién sale segundo?', only: true },
+  doc: { e: '🥕', n: '¿Qué hay, doc?', only: true },
+  mio: { e: '🦆', n: '¡Es mío, todo mío!', only: true },
+  meep: { e: '💨', n: 'Meep meep', only: true },
+  acme: { e: '🧨', n: 'Plan Acme', only: true },
+  tornado: { e: '🌪️', n: 'Tornado', only: true },
+  pio: { e: '🐤', n: '¡Pío pío!', only: true },
+  guino: { e: '😉', n: 'Guiño', only: true },
+  monstruo: { e: '👽', n: '¡Monstruo!', only: true }
 };
 var CUSTOM_CELEBS = ['baile', 'avion', 'musculos', 'saludo', 'corazon'];
 
@@ -83,7 +91,31 @@ var STARS = [
     look: mkLook({ skin: 1, hair: 'coronilla', hairColor: 2, eyes: 1, beard: 'no', face: 'larga', height: 198, weight: 93, build: 0, kit: 3, number: 20, jersey: 'GINOBILI', shoes: 1, celeb: 'murcielago' }) },
   { id: 'bird', name: 'Larry Bird', short: 'Bird', tag: 'Ganó 3 concursos de triples seguidos',
     sk: { tiro: 96, rango: 90, ritmo: 84, clutch: 97 },
-    look: mkLook({ skin: 0, hair: 'flequillo', hairColor: 4, eyes: 2, beard: 'bigote', face: 'larga', height: 206, weight: 100, build: 1, kit: 4, number: 33, jersey: 'BIRD', shoes: 0, celeb: 'dedo' }) }
+    look: mkLook({ skin: 0, hair: 'flequillo', hairColor: 4, eyes: 2, beard: 'bigote', face: 'larga', height: 206, weight: 100, build: 1, kit: 4, number: 33, jersey: 'BIRD', shoes: 0, celeb: 'dedo' }) },
+  { id: 'bugs', name: 'Bugs Bunny', short: 'Bugs', tag: '¿Qué hay, doc? Tiro de zanahoria',
+    sk: { tiro: 88, rango: 84, ritmo: 90, clutch: 92 },
+    look: mkLook({ skin: 6, hair: 'corto', beard: 'no', face: 'larga', height: 200, weight: 80, build: 0, kit: 0, number: 1, jersey: 'BUGS', shoes: 0, celeb: 'doc' }) },
+  { id: 'daffy', name: 'Daffy Duck', short: 'Daffy', tag: '¡Es mío! Todo para él',
+    sk: { tiro: 78, rango: 80, ritmo: 84, clutch: 80 },
+    look: mkLook({ skin: 0, hair: 'corto', beard: 'no', face: 'larga', height: 200, weight: 80, build: 1, kit: 0, number: 6, jersey: 'DAFFY', shoes: 0, celeb: 'mio' }) },
+  { id: 'roadrunner', name: 'Road Runner', short: 'Correcaminos', tag: 'Meep meep: el más rápido de la pista',
+    sk: { tiro: 84, rango: 70, ritmo: 99, clutch: 82 },
+    look: mkLook({ skin: 0, hair: 'corto', beard: 'no', face: 'larga', height: 200, weight: 70, build: 0, kit: 0, number: 5, jersey: 'RUNNER', shoes: 0, celeb: 'meep' }) },
+  { id: 'coyote', name: 'Wile E. Coyote', short: 'Coyote', tag: 'Sus planes Acme nunca salen bien',
+    sk: { tiro: 35, rango: 50, ritmo: 60, clutch: 30 },
+    look: mkLook({ skin: 0, hair: 'corto', beard: 'no', face: 'larga', height: 200, weight: 84, build: 1, kit: 0, number: 4, jersey: 'COYOTE', shoes: 0, celeb: 'acme' }) },
+  { id: 'taz', name: 'Taz', short: 'Taz', tag: 'Tornado: mucha fuerza, poca puntería',
+    sk: { tiro: 40, rango: 95, ritmo: 45, clutch: 60 },
+    look: mkLook({ skin: 0, hair: 'corto', beard: 'no', face: 'ancha', height: 200, weight: 110, build: 3, kit: 0, number: 2, jersey: 'TAZ', shoes: 0, celeb: 'tornado' }) },
+  { id: 'tweety', name: 'Tweety', short: 'Tweety', tag: 'Pajarito con mira de francotirador',
+    sk: { tiro: 80, rango: 62, ritmo: 75, clutch: 70 },
+    look: mkLook({ skin: 0, hair: 'corto', beard: 'no', face: 'redonda', height: 170, weight: 70, build: 0, kit: 0, number: 1, jersey: 'TWEETY', shoes: 0, celeb: 'pio' }) },
+  { id: 'lola', name: 'Lola Bunny', short: 'Lola', tag: 'Tiro de Tune Squad, sin miedo',
+    sk: { tiro: 85, rango: 76, ritmo: 84, clutch: 86 },
+    look: mkLook({ skin: 1, hair: 'peinado', hairColor: 2, eyes: 2, beard: 'no', face: 'redonda', height: 185, weight: 66, build: 0, kit: 0, number: 10, jersey: 'LOLA', shoes: 0, celeb: 'guino' }) },
+  { id: 'monstar', name: 'Monstar', short: 'Monstar', tag: 'Monstruo de otro planeta',
+    sk: { tiro: 70, rango: 75, ritmo: 65, clutch: 72 },
+    look: mkLook({ skin: 5, hair: 'rapado', beard: 'no', face: 'cuadrada', height: 210, weight: 110, build: 2, kit: 0, number: 0, jersey: 'MONSTAR', shoes: 0, celeb: 'monstruo' }) }
 ];
 
 var CUSTOM_BASE_SK = { tiro: 70, rango: 70, ritmo: 70, clutch: 70 };
