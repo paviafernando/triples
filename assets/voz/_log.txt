@@ -1,3 +1,19 @@
 clave OK, largo 51
 en voz elegida: Charlie - Deep, Confident, Energetic IKne3meq5aSn9XLyUdCD
+en OK bugs [excited] Bugs Bunny!
+en OK daffy [excited] Daffy Duck!
+en OK roadrunner [excited] The Road Runner!
+en OK coyote [disappointed] Wile E. Coyote!
+en OK taz [shouting] The Tasmanian Devil!
+en OK tweety Tweety!
+en OK lola Lola Bunny!
+en OK monstar [shouting] Monstar!
 es voz elegida: Charlie - Deep, Confident, Energetic IKne3meq5aSn9XLyUdCD
+es OK bugs [excited] ¡Bugs Bunny!
+es OK daffy [excited] ¡Daffy Duck!
+es OK roadrunner [excited] ¡El Correcaminos!
+es OK coyote [disappointed] ¡Wile E. Coyote!
+es OK taz [shouting] ¡El Demonio de Tasmania!
+es OK tweety ¡Tweety!
+es OK lola ¡Lola Bunny!
+es OK monstar [shouting] ¡Monstar!
