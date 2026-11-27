@@ -43,4 +43,4 @@ coyote | [disappointed] ¡Wile E. Coyote!
 taz | [shouting] ¡El Demonio de Tasmania!
 tweety | ¡Tweety!
 lola | ¡Lola Bunny!
-monstar | [shouting] ¡Monstar!
+monstar | [shouting] ¡Blanko!

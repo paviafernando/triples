@@ -113,9 +113,9 @@ var STARS = [
   { id: 'lola', name: 'Lola Bunny', short: 'Lola', tag: 'Tiro de Tune Squad, sin miedo',
     sk: { tiro: 85, rango: 76, ritmo: 84, clutch: 86 },
     look: mkLook({ skin: 1, hair: 'peinado', hairColor: 2, eyes: 2, beard: 'no', face: 'redonda', height: 185, weight: 66, build: 0, kit: 0, number: 10, jersey: 'LOLA', shoes: 0, celeb: 'guino' }) },
-  { id: 'monstar', name: 'Monstar', short: 'Monstar', tag: 'Monstruo de otro planeta',
+  { id: 'monstar', name: 'Blanko', short: 'Blanko', tag: 'Monstruo de otro planeta',
     sk: { tiro: 70, rango: 75, ritmo: 65, clutch: 72 },
-    look: mkLook({ skin: 5, hair: 'rapado', beard: 'no', face: 'cuadrada', height: 210, weight: 110, build: 2, kit: 0, number: 0, jersey: 'MONSTAR', shoes: 0, celeb: 'monstruo' }) }
+    look: mkLook({ skin: 5, hair: 'rapado', beard: 'no', face: 'cuadrada', height: 210, weight: 110, build: 2, kit: 0, number: 0, jersey: 'BLANKO', shoes: 0, celeb: 'monstruo' }) }
 ];
 
 var CUSTOM_BASE_SK = { tiro: 70, rango: 70, ritmo: 70, clutch: 70 };

@@ -42,4 +42,4 @@ coyote | [disappointed] Wile E. Coyote!
 taz | [shouting] The Tasmanian Devil!
 tweety | Tweety!
 lola | Lola Bunny!
-monstar | [shouting] Monstar!
+monstar | [shouting] Blanko!
